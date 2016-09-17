@@ -1,0 +1,84 @@
+/*
+ * Copyright (c) 2016. Héctor de Isidro - hrules6872
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+apply plugin: 'com.android.application'
+
+android {
+  compileSdkVersion androidBuildCompileSDKVersion
+  buildToolsVersion androidBuildToolsVersion
+
+  defaultConfig {
+    applicationId "com.hrules.rest"
+    minSdkVersion androidBuildMinSDKVersion
+    targetSdkVersion androidBuildTargetSDKVersion
+    versionCode appVersionCode
+    versionName appVersionName
+
+    jackOptions.enabled true
+  }
+
+  compileOptions {
+    sourceCompatibility JavaVersion.VERSION_1_8
+    targetCompatibility JavaVersion.VERSION_1_8
+  }
+
+  signingConfigs {
+    release {
+      Properties appSecretProps = new Properties()
+      appSecretProps.load(new FileInputStream(new File('app.secrets.properties')))
+
+      keyAlias appSecretProps['APP_RELEASE_KEYALIAS']
+      keyPassword appSecretProps['APP_RELEASE_KEYPASSWORD']
+      storeFile file(appSecretProps['APP_RELEASE_STOREFILE'])
+      storePassword appSecretProps['APP_RELEASE_STOREPASSWORD']
+    }
+  }
+
+  buildTypes {
+    release {
+      minifyEnabled false
+      signingConfig signingConfigs.release
+    }
+  }
+
+  sourceSets {
+    main {
+      res.srcDirs = ['src/main/res/layout/main',
+                     'src/main/res/layout/notification',
+                     'src/main/res/layout/about',
+                     'src/main/res/layout',
+                     'src/main/res']
+    }
+  }
+}
+
+dependencies {
+  compile fileTree(dir: 'libs', include: ['*.jar'])
+
+  // support
+  compile supportDependencies.appCompat
+  compile supportDependencies.recyclerView
+  compile supportDependencies.supportAnnotations
+  compile supportDependencies.design
+  compile supportDependencies.cardView
+
+  // project
+  compile projectDependencies.butterKnife
+  compile projectDependencies.daRealMVP
+
+  // other
+  annotationProcessor otherDependencies.butterKnifeCompiler
+}

@@ -1,0 +1,122 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  ~ Copyright (c) 2016. Héctor de Isidro - hrules6872
+  ~
+  ~ Licensed under the Apache License, Version 2.0 (the "License");
+  ~ you may not use this file except in compliance with the License.
+  ~ You may obtain a copy of the License at
+  ~
+  ~     http://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~ Unless required by applicable law or agreed to in writing, software
+  ~ distributed under the License is distributed on an "AS IS" BASIS,
+  ~ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~ See the License for the specific language governing permissions and
+  ~ limitations under the License.
+  -->
+
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+  <PreferenceCategory
+      android:title="@string/prefs_alertStyleCategory">
+
+    <CheckBoxPreference
+        android:defaultValue="@bool/prefs_alertSoundDefault"
+        android:key="@string/prefs_alertSoundKey"
+        android:title="@string/prefs_alertSound"/>
+
+    <CheckBoxPreference
+        android:defaultValue="@bool/prefs_alertUseMediaStreamDefault"
+        android:dependency="@string/prefs_alertSoundKey"
+        android:disableDependentsState="true"
+        android:key="@string/prefs_alertUseMediaStreamKey"
+        android:title="@string/prefs_soundUseMediaStream"/>
+
+    <CheckBoxPreference
+        android:defaultValue="@bool/prefs_alertMuteMediaStreamKeyDefault"
+        android:dependency="@string/prefs_alertUseMediaStreamKey"
+        android:key="@string/prefs_alertMuteMediaStreamKey"
+        android:summary="@string/prefs_soundMuteMediaStreamSummary"
+        android:title="@string/prefs_soundMuteMediaStream"/>
+
+    <CheckBoxPreference
+        android:defaultValue="@bool/prefs_alertVibrateDefault"
+        android:key="@string/prefs_alertVibrateKey"
+        android:title="@string/prefs_alertVibrate"/>
+  </PreferenceCategory>
+
+  <PreferenceCategory
+      android:title="@string/prefs_alertTypeCategory">
+
+    <CheckBoxPreference
+        android:defaultValue="@bool/prefs_alertHalfwayDefault"
+        android:key="@string/prefs_alertHalfwayKey"
+        android:summary="@string/prefs_alertHalfwaySummary"
+        android:title="@string/prefs_alertHalfway"/>
+
+    <CheckBoxPreference
+        android:defaultValue="@bool/prefs_alertTenSecondsDefault"
+        android:key="@string/prefs_alertTenSecondsKey"
+        android:title="@string/prefs_alertTenSeconds"/>
+
+    <CheckBoxPreference
+        android:defaultValue="@bool/prefs_alertThreeSecondsDefault"
+        android:key="@string/prefs_alertThreeSecondsKey"
+        android:title="@string/prefs_alertThreeSeconds"/>
+  </PreferenceCategory>
+
+  <PreferenceCategory
+      android:title="@string/prefs_displayCategory">
+
+    <CheckBoxPreference
+        android:defaultValue="@bool/prefs_displayKeepScreenOnDefault"
+        android:key="@string/prefs_displayKeepScreenOnKey"
+        android:title="@string/prefs_displayKeepScreenOn"/>
+
+    <ListPreference
+        android:defaultValue="@integer/prefs_displayOrientationDefault"
+        android:entries="@array/prefs_displayOrientationTitles"
+        android:entryValues="@array/prefs_displayOrientationValues"
+        android:key="@string/prefs_displayOrientationKey"
+        android:negativeButtonText="@null"
+        android:positiveButtonText="@null"
+        android:title="@string/prefs_displayOrientation"/>
+  </PreferenceCategory>
+
+  <PreferenceCategory
+      android:title="@string/prefs_miscCategory">
+
+    <CheckBoxPreference
+        android:defaultValue="@bool/prefs_controlVibrateButtonsDefault"
+        android:key="@string/prefs_controlVibrateButtonsKey"
+        android:title="@string/prefs_controlVibrateButtons"/>
+
+    <CheckBoxPreference
+        android:defaultValue="@bool/prefs_stopwatchAutoStopDefault"
+        android:key="@string/prefs_stopwatchAutoStopKey"
+        android:summary="@string/prefs_stopwatchAutoStopSummary"
+        android:title="@string/prefs_stopwatchAutoStop"/>
+
+  </PreferenceCategory>
+
+  <PreferenceCategory
+      android:title="@string/prefs_infoCategory">
+
+    <Preference
+        android:key="@string/prefs_appRateItKey"
+        android:title="@string/prefs_appRateIt">
+      <intent
+          android:action="android.intent.action.VIEW"
+          android:data="@string/app_playStoreURL"/>
+    </Preference>
+
+    <Preference
+        android:key="@string/prefs_appSendFeedbackKey"
+        android:title="@string/prefs_appSendFeedback">
+    </Preference>
+
+    <Preference
+        android:key="@string/prefs_appAboutKey"
+        android:title="@string/prefs_appAbout"/>
+
+  </PreferenceCategory>
+</PreferenceScreen>

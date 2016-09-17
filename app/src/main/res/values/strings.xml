@@ -1,0 +1,50 @@
+<!--
+  ~ Copyright (c) 2016. Héctor de Isidro - hrules6872
+  ~
+  ~ Licensed under the Apache License, Version 2.0 (the "License");
+  ~ you may not use this file except in compliance with the License.
+  ~ You may obtain a copy of the License at
+  ~
+  ~     http://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~ Unless required by applicable law or agreed to in writing, software
+  ~ distributed under the License is distributed on an "AS IS" BASIS,
+  ~ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~ See the License for the specific language governing permissions and
+  ~ limitations under the License.
+  -->
+
+<resources>
+  <string name="app_name">Rest</string>
+  <string name="app_playStoreURL">https://play.google.com/store/apps/details?id=com.hrules.rest</string>
+
+  <string name="activity_preferencesTitle">Preferences</string>
+  <string name="activity_aboutTitle">About</string>
+
+  <!--text-->
+  <string name="text_timeMinutesSecondsFormatted">%1$02d\' %2$02d\'\'</string>
+  <string name="text_timeMinutesSecondsMilliFormatted">%1$02d\' %2$02d\'\' %3$02d
+  </string>
+  <string name="text_favoriteMinutesSecondsFormatted">%1$02d:%2$02d</string>
+  <string name="text_stopwatchHoursMinutesSecondsMilliFormatted">
+    %1$d:%2$02d:%3$02d.%4$02d
+  </string>
+  <string name="text_notificationStop">Close notification</string>
+  <string name="text_editSeparator">:</string>
+  <string name="text_minAbbrv">min</string>
+  <string name="text_secAbbrv">sec</string>
+  <string name="text_addFavorite">Add current time</string>
+  <string name="text_longClickStopwatch">Press and hold to stop</string>
+  <string name="text_dndWarning">DND mode is ACTIVE\nAlert sounds are muted</string>
+  <string name="text_stopwatchStillRunning">STOPWATCH keeps RUNNING\nYou can enable Auto-stop in Preferences</string>
+
+  <!--menu-->
+  <string name="menu_preferences">Preferences</string>
+  <string name="menu_about">About</string>
+
+  <!--app utils-->
+  <string name="text_appVersionFormatted">version %1$s (%2$s)</string>
+  <string name="feedback_developerEmail">hrules.e@gmail.com</string>
+  <string name="feedback_emailSubject">Feedback about Rest %s</string>
+  <string name="feedback_emailChooserTitle">Send email</string>
+</resources>

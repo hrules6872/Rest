@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+  <bool name="prefs_alertSoundDefault">true</bool>
+  <bool name="prefs_alertUseMediaStreamDefault">false</bool>
+  <bool name="prefs_alertMuteMediaStreamKeyDefault">true</bool>
+  <bool name="prefs_alertVibrateDefault">true</bool>
+
+  <bool name="prefs_alertHalfwayDefault">false</bool>
+  <bool name="prefs_alertTenSecondsDefault">true</bool>
+  <bool name="prefs_alertThreeSecondsDefault">true</bool>
+
+  <bool name="prefs_displayKeepScreenOnDefault">false</bool>
+  <integer name="prefs_displayOrientationDefault">1</integer>
+
+  <bool name="prefs_controlVibrateButtonsDefault">true</bool>
+  <bool name="prefs_stopwatchAutoStopDefault">false</bool>
+</resources>

@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  ~ Copyright (c) 2016. Héctor de Isidro - hrules6872
+  ~
+  ~ Licensed under the Apache License, Version 2.0 (the "License");
+  ~ you may not use this file except in compliance with the License.
+  ~ You may obtain a copy of the License at
+  ~
+  ~     http://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~ Unless required by applicable law or agreed to in writing, software
+  ~ distributed under the License is distributed on an "AS IS" BASIS,
+  ~ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~ See the License for the specific language governing permissions and
+  ~ limitations under the License.
+  -->
+
+<resources>
+  <color name="notification_ripple">#666</color>
+  <color name="notification_countDownText">#ffffff</color>
+  <color name="notification_countDownTextOver">#ff0000</color>
+  <color name="notification_separator">#666</color>
+
+  <!--general-->
+  <color name="colorPrimary">#263238</color>
+  <color name="colorPrimaryDark">#263238</color>
+  <color name="colorAccent">#88ffffff</color>
+  <color name="colorPrimaryPreferences">#263238</color>
+  <color name="colorPrimaryDarkPreferences">#263238</color>
+  <color name="colorAccentPreferences">#607D8B</color>
+  <color name="windowBackground">#263238</color>
+  <color name="countDownText">#ffffff</color>
+  <color name="countDownTextOver">#e53935</color>
+  <color name="textColorPrimary">#B0BEC5</color>
+  <color name="textColorSecondary">#607D8B</color>
+  <color name="fab_stop_background">#fff</color>
+  <color name="fab_replay_background">#fff</color>
+  <color name="fab_play_background">#388E3C</color>
+  <color name="fab_stop_over_background">@color/countDownTextOver</color>
+  <color name="fab_play_disabled_background">#aaa</color>
+
+</resources>

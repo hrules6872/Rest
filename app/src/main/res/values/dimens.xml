@@ -1,0 +1,45 @@
+<!--
+  ~ Copyright (c) 2016. Héctor de Isidro - hrules6872
+  ~
+  ~ Licensed under the Apache License, Version 2.0 (the "License");
+  ~ you may not use this file except in compliance with the License.
+  ~ You may obtain a copy of the License at
+  ~
+  ~     http://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~ Unless required by applicable law or agreed to in writing, software
+  ~ distributed under the License is distributed on an "AS IS" BASIS,
+  ~ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~ See the License for the specific language governing permissions and
+  ~ limitations under the License.
+  -->
+
+<resources>
+  <dimen name="default_padding">8dp</dimen>
+  <dimen name="default_paddingDouble">16dp</dimen>
+  <dimen name="default_margin">8dp</dimen>
+  <dimen name="default_marginDouble">16dp</dimen>
+
+  <dimen name="notification_textCountdownSize">32sp</dimen>
+  <dimen name="notification_buttonWidth">50dp</dimen>
+  <dimen name="notification_buttonHeight">50dp</dimen>
+  <dimen name="notification_iconWidth">64dp</dimen>
+  <dimen name="notification_iconHeight">64dp</dimen>
+  <dimen name="notification_actionMargin">72dp</dimen>
+  <dimen name="notification_separatorHeight">1px</dimen>
+
+  <dimen name="textCountdownSize">42sp</dimen>
+  <dimen name="edit_minWidth">40dp</dimen>
+  <dimen name="buttonWidth">50dp</dimen>
+  <dimen name="buttonHeight">50dp</dimen>
+
+  <dimen name="favorites_deleteButtonHeight">32dp</dimen>
+  <dimen name="favorites_deleteButtonWidth">32dp</dimen>
+
+  <dimen name="fab_changeStateBottom">16dp</dimen>
+  <dimen name="fab_changeStateLeft">16dp</dimen>
+  <dimen name="fab_changeStateRight">0dp</dimen>
+  <dimen name="fab_changeStateTop">8dp</dimen>
+
+  <dimen name="fab_replayBottom">24dp</dimen>
+</resources>

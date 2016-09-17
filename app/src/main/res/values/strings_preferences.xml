@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  ~ Copyright (c) 2016. Héctor de Isidro - hrules6872
+  ~
+  ~ Licensed under the Apache License, Version 2.0 (the "License");
+  ~ you may not use this file except in compliance with the License.
+  ~ You may obtain a copy of the License at
+  ~
+  ~     http://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~ Unless required by applicable law or agreed to in writing, software
+  ~ distributed under the License is distributed on an "AS IS" BASIS,
+  ~ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~ See the License for the specific language governing permissions and
+  ~ limitations under the License.
+  -->
+
+<resources>
+  <string name="prefs_alertStyleCategory">Alert styles</string>
+  <string name="prefs_alertSound">Sound effects</string>
+  <string name="prefs_soundUseMediaStream">Use music stream</string>
+  <string name="prefs_soundMuteMediaStream">Mute music stream</string>
+  <string name="prefs_soundMuteMediaStreamSummary">Mute music stream while playing alerts</string>
+  <string name="prefs_alertVibrate">Vibrate</string>
+  <string name="prefs_alertTypeCategory">Alert types</string>
+  <string name="prefs_alertHalfway">Halfway alert</string>
+  <string name="prefs_alertHalfwaySummary">Minimum countdown 30 seconds</string>
+  <string name="prefs_alertTenSeconds">Ten seconds alert</string>
+  <string name="prefs_alertThreeSeconds">Three seconds countdown</string>
+  <string name="prefs_displayCategory">Display</string>
+  <string name="prefs_displayKeepScreenOn">Keep screen on</string>
+  <string name="prefs_displayOrientation">Orientation</string>
+  <string name="prefs_miscCategory">Miscellaneous</string>
+  <string name="prefs_controlVibrateButtons">Vibrate buttons</string>
+  <string name="prefs_stopwatchAutoStop">Auto-stop stopwatch</string>
+  <string name="prefs_stopwatchAutoStopSummary">Stop stopwatch when notification is closed</string>
+  <string name="prefs_infoCategory">Information</string>
+  <string name="prefs_appRateIt">Rate this app on Google Play</string>
+  <string name="prefs_appSendFeedback">Send feedback to developer</string>
+  <string name="prefs_appAbout">About</string>
+</resources>

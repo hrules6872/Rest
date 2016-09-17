@@ -1,0 +1,188 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  ~ Copyright (c) 2016. Héctor de Isidro - hrules6872
+  ~
+  ~ Licensed under the Apache License, Version 2.0 (the "License");
+  ~ you may not use this file except in compliance with the License.
+  ~ You may obtain a copy of the License at
+  ~
+  ~     http://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~ Unless required by applicable law or agreed to in writing, software
+  ~ distributed under the License is distributed on an "AS IS" BASIS,
+  ~ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~ See the License for the specific language governing permissions and
+  ~ limitations under the License.
+  -->
+
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/layout_root"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:focusable="true"
+    android:focusableInTouchMode="true">
+
+  <com.hrules.rest.presentation.components.ProgressCountdownView
+      android:id="@+id/progress_view"
+      android:layout_width="match_parent"
+      android:layout_height="match_parent"/>
+
+  <com.hrules.rest.presentation.components.RevealBackgroundView
+      android:id="@+id/reveal_background"
+      android:layout_width="match_parent"
+      android:layout_height="match_parent"/>
+
+  <android.support.v7.widget.Toolbar
+      android:id="@+id/toolbar"
+      android:layout_width="match_parent"
+      android:layout_height="?attr/actionBarSize"
+      android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
+      app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
+  />
+
+  <RelativeLayout
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:layout_below="@id/toolbar"
+  >
+    <LinearLayout
+        android:id="@+id/layout_stopwatch"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:orientation="vertical">
+      <TextView
+          android:id="@+id/text_stopwatch"
+          android:layout_width="match_parent"
+          android:layout_height="wrap_content"
+          android:gravity="center"
+          android:textAppearance="?android:attr/textAppearanceMedium"
+          android:textColor="@color/textColorPrimary"
+          tools:text="00:00.00"
+      />
+
+      <TextView
+          android:id="@+id/text_stopwatchLast"
+          android:layout_width="match_parent"
+          android:layout_height="wrap_content"
+          android:gravity="center"
+          android:textAppearance="?android:attr/textAppearanceSmall"
+          android:textColor="@color/textColorSecondary"
+          tools:text="00:00.00"
+      />
+    </LinearLayout>
+
+    <ImageButton
+        android:id="@+id/button_stopwatchChangeState"
+        android:layout_width="@dimen/buttonWidth"
+        android:layout_height="@dimen/buttonHeight"
+        android:layout_toRightOf="@id/layout_stopwatch"
+        android:src="@drawable/ic_play_stopwatch"
+        style="?attr/borderlessButtonStyle"
+    />
+  </RelativeLayout>
+
+  <com.hrules.rest.presentation.components.ScaleAnimatedTextView
+      android:id="@+id/text_countDown"
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:layout_centerInParent="true"
+      android:gravity="center"
+      android:textSize="@dimen/textCountdownSize"
+      tools:text="00:00:00"
+  />
+
+  <!--app:useCompatPadding="true" doesn't work fine here-->
+  <com.hrules.rest.presentation.components.ChangeStateFloatingActionButton
+      android:id="@+id/button_changeState"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:layout_alignParentBottom="true"
+      android:layout_centerHorizontal="true"
+      android:src="@drawable/ic_play_fab"
+      app:fabSize="normal"
+      style="@style/FabChangeState"/>
+
+  <!--app:useCompatPadding="true" doesn't work fine here-->
+  <com.hrules.rest.presentation.components.ReplayFloatingActionButton
+      android:id="@+id/button_replay"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:layout_alignParentBottom="true"
+      android:layout_toRightOf="@id/button_changeState"
+      android:src="@drawable/ic_replay_fab"
+      app:backgroundTint="@color/fab_replay_background"
+      app:fabSize="mini"
+      style="@style/FabReplay"/>
+
+  <RelativeLayout
+      android:id="@+id/layout_time"
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:layout_above="@id/button_changeState"
+  >
+    <LinearLayout
+        android:id="@+id/layout_edit"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:orientation="horizontal">
+
+      <EditText
+          android:id="@+id/edit_minutes"
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:digits="1234567890"
+          android:gravity="center"
+          android:hint="@string/text_minAbbrv"
+          android:imeOptions="actionNext"
+          android:inputType="phone"
+          android:maxLength="3"
+          android:maxLines="1"
+          android:minWidth="@dimen/edit_minWidth"
+          android:selectAllOnFocus="true"
+          android:textAppearance="?android:attr/textAppearanceMedium"
+          android:textColor="@color/textColorPrimary"/>
+
+      <TextView
+          android:id="@+id/text_editSeparator"
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:text="@string/text_editSeparator"
+          android:textAppearance="?android:attr/textAppearanceMedium"
+          android:textColor="@color/textColorSecondary"
+      />
+
+      <EditText
+          android:id="@+id/edit_seconds"
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:digits="1234567890"
+          android:gravity="center"
+          android:hint="@string/text_secAbbrv"
+          android:imeOptions="actionDone"
+          android:inputType="phone"
+          android:maxLength="2"
+          android:maxLines="1"
+          android:minWidth="@dimen/edit_minWidth"
+          android:selectAllOnFocus="true"
+          android:textAppearance="?android:attr/textAppearanceMedium"
+          android:textColor="@color/textColorPrimary"/>
+    </LinearLayout>
+
+    <ImageButton
+        android:id="@+id/button_favorites"
+        android:layout_width="@dimen/buttonWidth"
+        android:layout_height="@dimen/buttonHeight"
+        android:layout_marginLeft="@dimen/default_margin"
+        android:layout_toRightOf="@id/layout_edit"
+        android:src="@drawable/ic_favorite"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        style="?attr/borderlessButtonStyle"
+    />
+  </RelativeLayout>
+
+</RelativeLayout>
