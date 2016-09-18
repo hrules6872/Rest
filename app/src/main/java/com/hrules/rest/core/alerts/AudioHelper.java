@@ -22,6 +22,7 @@ import android.media.AudioManager;
 import android.media.SoundPool;
 import android.os.AsyncTask;
 import android.os.Build;
+import android.support.annotation.NonNull;
 import com.hrules.rest.R;
 import com.hrules.rest.core.AudioUtils;
 
@@ -34,10 +35,11 @@ public class AudioHelper {
   private static final int DEFAULT_SOUNDPOOL_PLAY_NO_LOOP = 0;
   private static final float DEFAULT_SOUNDPOOL_PLAY_RATE = 1f;
 
-  private final Context context;
+  private final AudioManager audioManager;
   private final int streamType;
 
   private SoundPool soundPool;
+  private ToggleMuteTask toggleMuteTask;
 
   private int soundShortId;
   private int soundShort2Id;
@@ -46,9 +48,10 @@ public class AudioHelper {
   private boolean soundShort2Loaded;
   private boolean soundLongLoaded;
 
-  @SuppressWarnings("deprecation") public AudioHelper(Context context, int streamType) {
-    this.context = context;
+  @SuppressWarnings("deprecation") public AudioHelper(@NonNull Context context, int streamType) {
     this.streamType = streamType;
+
+    audioManager = (AudioManager) context.getSystemService(Context.AUDIO_SERVICE);
 
     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
       SoundPool.Builder builder = new SoundPool.Builder();
@@ -74,7 +77,6 @@ public class AudioHelper {
   }
 
   private float getCurrentVolume(int streamType) {
-    AudioManager audioManager = (AudioManager) context.getSystemService(Context.AUDIO_SERVICE);
     int currentVolume = audioManager.getStreamVolume(streamType);
     int maxVolume = audioManager.getStreamMaxVolume(streamType);
     return currentVolume / maxVolume;
@@ -105,7 +107,8 @@ public class AudioHelper {
   }
 
   public void toggleMute(long delay) {
-    new ToggleMuteTask(context, delay).execute();
+    toggleMuteTask = new ToggleMuteTask(audioManager, delay);
+    toggleMuteTask.execute();
   }
 
   public void release() {
@@ -113,11 +116,15 @@ public class AudioHelper {
       soundPool.release();
       soundPool = null;
     }
+    if (toggleMuteTask != null) {
+      toggleMuteTask.cancel(true);
+      toggleMuteTask = null;
+    }
   }
 
-  private class ToggleMuteTask extends AsyncTask<Void, Void, Boolean> {
+  private static class ToggleMuteTask extends AsyncTask<Void, Void, Boolean> {
     private static final int VOLUME_MUTE_PERCENT = 30;
-    private static final int DEFAULT_FLAGS = 0; // avoids getting a visual and audio indicator
+    private static final int DEFAULT_FLAGS = 0; // avoids getting a visual audio indicator
 
     private final AudioManager audioManager;
 
@@ -130,10 +137,10 @@ public class AudioHelper {
 
     private final long delay;
 
-    public ToggleMuteTask(Context context, long delay) {
+    ToggleMuteTask(@NonNull AudioManager audioManager, long delay) {
+      this.audioManager = audioManager;
       this.delay = delay;
 
-      audioManager = (AudioManager) context.getSystemService(Context.AUDIO_SERVICE);
       volumeMediaMax = audioManager.getStreamMaxVolume(AudioManager.STREAM_MUSIC);
       volumeMediaPrevious = audioManager.getStreamVolume(AudioManager.STREAM_MUSIC);
 
@@ -157,6 +164,10 @@ public class AudioHelper {
       } catch (InterruptedException ignored) {
       }
       return true;
+    }
+
+    @Override protected void onCancelled() {
+      super.onCancelled();
     }
 
     @Override protected void onPostExecute(Boolean result) {
