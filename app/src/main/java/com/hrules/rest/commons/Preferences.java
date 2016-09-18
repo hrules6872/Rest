@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.hrules.rest.commons.preferences;
+package com.hrules.rest.commons;
 
 import android.content.Context;
 import android.content.SharedPreferences;
@@ -22,7 +22,7 @@ import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
 import java.util.Set;
 
-public class Preferences implements PreferencesInterface {
+public class Preferences {
   private final SharedPreferences preferences;
 
   public Preferences(Context context) {
@@ -37,27 +37,27 @@ public class Preferences implements PreferencesInterface {
     return preferences.getLong(key, defaultValue);
   }
 
-  @Override public boolean getBoolean(@NonNull String key, boolean defaultValue) {
+  public boolean getBoolean(@NonNull String key, boolean defaultValue) {
     return preferences.getBoolean(key, defaultValue);
   }
 
-  @Override public Set<String> getStringSet(@NonNull String key, Set<String> defValues) {
+  public Set<String> getStringSet(@NonNull String key, Set<String> defValues) {
     return preferences.getStringSet(key, defValues);
   }
 
-  @Override public void save(@NonNull String key, long value) {
+  public void save(@NonNull String key, long value) {
     preferences.edit().putLong(key, value).apply();
   }
 
-  @Override public void save(@NonNull String key, Set<String> values) {
+  public void save(@NonNull String key, Set<String> values) {
     preferences.edit().putStringSet(key, values).apply();
   }
 
-  @Override public void addListener(@NonNull SharedPreferences.OnSharedPreferenceChangeListener listener) {
+  public void addListener(@NonNull SharedPreferences.OnSharedPreferenceChangeListener listener) {
     preferences.registerOnSharedPreferenceChangeListener(listener);
   }
 
-  @Override public void removeListener(@NonNull SharedPreferences.OnSharedPreferenceChangeListener listener) {
+  public void removeListener(@NonNull SharedPreferences.OnSharedPreferenceChangeListener listener) {
     preferences.unregisterOnSharedPreferenceChangeListener(listener);
   }
 }

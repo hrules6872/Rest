@@ -35,7 +35,7 @@ import android.widget.RemoteViews;
 import android.widget.Toast;
 import com.hrules.rest.AppConstants;
 import com.hrules.rest.R;
-import com.hrules.rest.commons.preferences.Preferences;
+import com.hrules.rest.commons.Preferences;
 import com.hrules.rest.core.AudioUtils;
 import com.hrules.rest.core.alerts.AudioHelper;
 import com.hrules.rest.core.alerts.VibratorHelper;

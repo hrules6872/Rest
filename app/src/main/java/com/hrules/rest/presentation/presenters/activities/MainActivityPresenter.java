@@ -40,7 +40,7 @@ import com.hrules.darealmvp.DRView;
 import com.hrules.rest.App;
 import com.hrules.rest.AppConstants;
 import com.hrules.rest.R;
-import com.hrules.rest.commons.preferences.Preferences;
+import com.hrules.rest.commons.Preferences;
 import com.hrules.rest.core.alerts.VibratorHelper;
 import com.hrules.rest.core.time.TimeManager;
 import com.hrules.rest.presentation.commons.TimeUtils;

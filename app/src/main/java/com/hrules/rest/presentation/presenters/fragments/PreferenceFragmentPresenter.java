@@ -24,7 +24,7 @@ import com.hrules.darealmvp.DRPresenter;
 import com.hrules.darealmvp.DRView;
 import com.hrules.rest.App;
 import com.hrules.rest.R;
-import com.hrules.rest.commons.preferences.Preferences;
+import com.hrules.rest.commons.Preferences;
 
 public class PreferenceFragmentPresenter extends DRPresenter<PreferenceFragmentPresenter.PreferenceView> {
   private Context appContext;
