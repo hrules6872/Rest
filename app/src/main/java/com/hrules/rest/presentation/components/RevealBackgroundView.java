@@ -43,12 +43,12 @@ public class RevealBackgroundView extends View {
   public static final int STATE_FILL_STARTED = 1;
   public static final int STATE_FINISHED = 2;
 
-  @Retention(RetentionPolicy.SOURCE) @IntDef({ STATE_NOT_STARTED, STATE_FILL_STARTED, STATE_FINISHED }) public @interface State {
+  @Retention(RetentionPolicy.SOURCE) @IntDef({ STATE_NOT_STARTED, STATE_FILL_STARTED, STATE_FINISHED }) @interface State {
   }
 
   private static final Interpolator DEFAULT_INTERPOLATOR = new AccelerateInterpolator();
 
-  private int state;
+  private int state = STATE_NOT_STARTED;
 
   private Paint paintReveal;
   private int currentRadius;
@@ -67,33 +67,31 @@ public class RevealBackgroundView extends View {
     void onStateChange(int state);
   }
 
-  public RevealBackgroundView(Context context) {
+  public RevealBackgroundView(@NonNull Context context) {
     this(context, null, 0);
   }
 
-  public RevealBackgroundView(Context context, AttributeSet attrs) {
+  public RevealBackgroundView(@NonNull Context context, AttributeSet attrs) {
     this(context, attrs, 0);
   }
 
-  public RevealBackgroundView(Context context, AttributeSet attrs, int defStyleAttr) {
+  public RevealBackgroundView(@NonNull Context context, AttributeSet attrs, int defStyleAttr) {
     super(context, attrs, defStyleAttr);
     init(context, attrs);
   }
 
   @TargetApi(Build.VERSION_CODES.LOLLIPOP)
-  public RevealBackgroundView(Context context, AttributeSet attrs, int defStyleAttr, int defStyleRes) {
+  public RevealBackgroundView(@NonNull Context context, AttributeSet attrs, int defStyleAttr, int defStyleRes) {
     super(context, attrs, defStyleAttr, defStyleRes);
     init(context, attrs);
   }
 
-  private void init(Context context, AttributeSet attrs) {
+  private void init(@NonNull Context context, AttributeSet attrs) {
     final TypedArray typedArray = context.obtainStyledAttributes(attrs, R.styleable.RevealBackgroundView);
     int painRevealColor = typedArray.getColor(R.styleable.RevealBackgroundView_r_revealColor,
         ContextCompat.getColor(context, R.color.default_ProgressCountdownView_progressColor));
     typedArray.recycle();
 
-    revealHeight = 0;
-    state = STATE_NOT_STARTED;
     animDurationMilli = getResources().getInteger(android.R.integer.config_mediumAnimTime);
 
     paintReveal = new Paint();
@@ -120,6 +118,7 @@ public class RevealBackgroundView extends View {
     revealAnimator.addListener(new AnimatorListenerAdapter() {
       @Override public void onAnimationEnd(Animator animation) {
         changeState(STATE_FINISHED);
+        revealAnimator.removeAllListeners();
       }
     });
     revealAnimator.start();
@@ -145,6 +144,7 @@ public class RevealBackgroundView extends View {
     revealAnimator.addListener(new AnimatorListenerAdapter() {
       @Override public void onAnimationEnd(Animator animation) {
         changeState(STATE_FINISHED);
+        revealAnimator.removeAllListeners();
       }
     });
     revealAnimator.start();
@@ -183,7 +183,7 @@ public class RevealBackgroundView extends View {
   }
 
   public void setCurrentRadius(int radius) {
-    // do NOT delete!
+    // do NOT delete! relative to ObjectAnimator
     this.currentRadius = radius;
     invalidate();
   }

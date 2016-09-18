@@ -164,7 +164,7 @@ public class MainActivityView extends DRAppCompatActivity<MainActivityPresenter,
     return false;
   }
 
-  @Override public void updateCountdown(final boolean animate) {
+  @Override public void updateCountdown(boolean animate) {
     textCountdown.setText(TimeUtils.milliToMinutesSecondsMilliString(TimeUtils.getCountdownMilliUnsigned(), getResources()), animate,
         TimeManager.INSTANCE.isRunning() ? ScaleAnimatedTextView.ANIM_TYPE_SCALE_OUT : ScaleAnimatedTextView.ANIM_TYPE_SCALE_IN);
     textCountdown.setTextColor(TimeUtils.getTextColorFromMilli(MainActivityView.this));
@@ -183,8 +183,7 @@ public class MainActivityView extends DRAppCompatActivity<MainActivityPresenter,
     }
   }
 
-  @Override
-  public void setButtonChangeStateAttributes(final boolean animate, @DrawableRes final int drawableResId, @ColorRes final int colorResId) {
+  @Override public void setButtonChangeStateAttributes(boolean animate, @DrawableRes int drawableResId, @ColorRes int colorResId) {
     if (animate) {
       doRevealBackground();
     } else {

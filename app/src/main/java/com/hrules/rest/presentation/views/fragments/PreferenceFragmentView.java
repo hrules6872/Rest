@@ -22,6 +22,7 @@ import android.preference.ListPreference;
 import android.preference.Preference;
 import android.preference.PreferenceFragment;
 import android.preference.PreferenceManager;
+import android.support.annotation.NonNull;
 import android.view.View;
 import com.hrules.rest.R;
 import com.hrules.rest.presentation.commons.AppUtils;
@@ -65,11 +66,11 @@ public class PreferenceFragmentView extends PreferenceFragment
     return R.xml.preferences;
   }
 
-  private void bindPreference(Preference preference) {
+  private void bindPreference(@NonNull Preference preference) {
     preference.setOnPreferenceClickListener(this);
   }
 
-  private void bindPreferenceSummaryToValue(Preference preference) {
+  private void bindPreferenceSummaryToValue(@NonNull Preference preference) {
     preference.setOnPreferenceChangeListener(this);
     onPreferenceChange(preference, PreferenceManager.getDefaultSharedPreferences(getActivity()).getString(preference.getKey(), ""));
   }

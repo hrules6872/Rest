@@ -71,10 +71,10 @@ public class MainActivityPresenter extends DRPresenter<MainActivityPresenter.Mai
   private Preferences preferences;
   private boolean prefsVibrateButtons;
 
-  private Handler countdownHandler;
-  private Handler stopwatchHandler;
+  private final Handler countdownHandler = new Handler(Looper.getMainLooper());
+  private final Handler stopwatchHandler = new Handler(Looper.getMainLooper());
 
-  private ScheduledThreadPoolExecutor scheduledThreadPoolExecutor;
+  private final ScheduledThreadPoolExecutor scheduledThreadPoolExecutor = new ScheduledThreadPoolExecutor(DEFAULT_EXECUTOR_CORE_POOL_SIZE);
   private ScheduledFuture scheduledFutureStopwatch;
   private long stopwatchStartTime;
 
@@ -89,11 +89,6 @@ public class MainActivityPresenter extends DRPresenter<MainActivityPresenter.Mai
     preferences = new Preferences(appContext);
     getPreferences();
     preferences.addListener(sharedPreferenceChangeListener);
-
-    countdownHandler = new Handler(Looper.getMainLooper());
-    stopwatchHandler = new Handler(Looper.getMainLooper());
-
-    scheduledThreadPoolExecutor = new ScheduledThreadPoolExecutor(DEFAULT_EXECUTOR_CORE_POOL_SIZE);
 
     // countdown
     TimeManager.INSTANCE.setCountdownTime(
@@ -171,7 +166,7 @@ public class MainActivityPresenter extends DRPresenter<MainActivityPresenter.Mai
     super.onDestroy();
   }
 
-  public void onMenuItemClick(MenuItem item) {
+  public void onMenuItemClick(@NonNull MenuItem item) {
     switch (item.getItemId()) {
       case R.id.menu_preferences:
         getView().launchPreferencesActivity();
@@ -254,7 +249,7 @@ public class MainActivityPresenter extends DRPresenter<MainActivityPresenter.Mai
     }
   }
 
-  @SuppressWarnings("UnusedParameters") public void onEditorAction(TextView v, int actionId, KeyEvent event) {
+  @SuppressWarnings("UnusedParameters") public void onEditorAction(@NonNull TextView v, int actionId, KeyEvent event) {
     getView().hideSoftKeyboardAndClearEditFocus();
   }
 
@@ -381,8 +376,7 @@ public class MainActivityPresenter extends DRPresenter<MainActivityPresenter.Mai
   private void startStopwatchRunnable() {
     stopStopwatchRunnable();
     scheduledFutureStopwatch = scheduledThreadPoolExecutor.scheduleAtFixedRate(updateStopwatchRunnable, DEFAULT_STOPWATCH_DELAY_MILLI,
-        DEFAULT_STOPWATCH_PERIOD_MILLI,
-            TimeUnit.MILLISECONDS);
+        DEFAULT_STOPWATCH_PERIOD_MILLI, TimeUnit.MILLISECONDS);
   }
 
   private void stopStopwatchRunnable() {
@@ -468,7 +462,7 @@ public class MainActivityPresenter extends DRPresenter<MainActivityPresenter.Mai
   }
 
   private final BroadcastReceiver stopwatchReceiver = new BroadcastReceiver() {
-    @Override public void onReceive(Context context, Intent intent) {
+    @Override public void onReceive(@NonNull Context context, Intent intent) {
       if (intent.getAction().equals(ACTION_STOPWATCHSTOP)) {
         // update UI
         setStopwatchLastTime();

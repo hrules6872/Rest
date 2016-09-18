@@ -24,6 +24,7 @@ import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.os.Build;
 import android.support.annotation.ColorRes;
+import android.support.annotation.NonNull;
 import android.support.v4.content.ContextCompat;
 import android.util.AttributeSet;
 import android.view.View;
@@ -39,26 +40,26 @@ public class ProgressCountdownView extends View {
   private Paint paintProgress;
   private Paint paintBackground;
 
-  public ProgressCountdownView(Context context) {
+  public ProgressCountdownView(@NonNull Context context) {
     this(context, null, 0);
   }
 
-  public ProgressCountdownView(Context context, AttributeSet attrs) {
+  public ProgressCountdownView(@NonNull Context context, AttributeSet attrs) {
     this(context, attrs, 0);
   }
 
-  public ProgressCountdownView(Context context, AttributeSet attrs, int defStyleAttr) {
+  public ProgressCountdownView(@NonNull Context context, AttributeSet attrs, int defStyleAttr) {
     super(context, attrs, defStyleAttr);
     init(context, attrs);
   }
 
   @TargetApi(Build.VERSION_CODES.LOLLIPOP)
-  public ProgressCountdownView(Context context, AttributeSet attrs, int defStyleAttr, int defStyleRes) {
+  public ProgressCountdownView(@NonNull Context context, AttributeSet attrs, int defStyleAttr, int defStyleRes) {
     super(context, attrs, defStyleAttr, defStyleRes);
     init(context, attrs);
   }
 
-  private void init(final Context context, final AttributeSet attrs) {
+  private void init(@NonNull final Context context, final AttributeSet attrs) {
     final TypedArray typedArray = context.obtainStyledAttributes(attrs, R.styleable.ProgressCountdownView);
     Resources res = getResources();
     currentProgress = typedArray.getInt(R.styleable.ProgressCountdownView_p_currentProgress,

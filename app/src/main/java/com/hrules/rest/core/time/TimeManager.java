@@ -35,13 +35,13 @@ public enum TimeManager {
   private static final long DEFAULT_DELAY_MILLI = 0;
   private static final long DEFAULT_PERIOD_MILLI = 33;
 
-  private int currentState;
+  private int currentState = STATE_STOPPED;
   private long startTimeMilli;
-  private long countdownTimeMilli;
+  private long countdownTimeMilli = AppConstants.DEFAULT_COUNTDOWN_MILLI;
 
-  private List<TimeManagerListener> listeners;
+  private final List<TimeManagerListener> listeners = new ArrayList<>();
 
-  private final ScheduledThreadPoolExecutor scheduledThreadPoolExecutor;
+  private final ScheduledThreadPoolExecutor scheduledThreadPoolExecutor = new ScheduledThreadPoolExecutor(DEFAULT_EXECUTOR_CORE_POOL_SIZE);
   private ScheduledFuture scheduledFutureCountdown;
 
   public interface TimeManagerListener {
@@ -52,56 +52,38 @@ public enum TimeManager {
     void onCountdownTick();
   }
 
-  TimeManager() {
-    currentState = STATE_STOPPED;
-    countdownTimeMilli = AppConstants.DEFAULT_COUNTDOWN_MILLI;
-
-    scheduledThreadPoolExecutor = new ScheduledThreadPoolExecutor(DEFAULT_EXECUTOR_CORE_POOL_SIZE);
-  }
-
   public void addListener(@NonNull TimeManagerListener listener) {
     removeListener(listener); // avoid duplicates
-    if (listeners == null) {
-      listeners = new ArrayList<>();
-    }
     listeners.add(listener);
   }
 
   public void removeListener(@NonNull TimeManagerListener listener) {
-    if (listeners != null) {
-      int position = listeners.indexOf(listener);
-      if (position != -1) {
-        listeners.remove(position);
-      }
+    int position = listeners.indexOf(listener);
+    if (position != -1) {
+      listeners.remove(position);
     }
   }
 
   @SuppressWarnings("Convert2streamapi") private void notifyStateChanged() {
-    if (listeners != null) {
-      for (TimeManagerListener listener : listeners) {
-        if (listener != null) {
-          listener.onStateChanged();
-        }
+    for (TimeManagerListener listener : listeners) {
+      if (listener != null) {
+        listener.onStateChanged();
       }
     }
   }
 
   @SuppressWarnings("Convert2streamapi") private void notifyCountdownTimeChanged() {
-    if (listeners != null) {
-      for (TimeManagerListener listener : listeners) {
-        if (listener != null) {
-          listener.onCountdownTimeChanged();
-        }
+    for (TimeManagerListener listener : listeners) {
+      if (listener != null) {
+        listener.onCountdownTimeChanged();
       }
     }
   }
 
   @SuppressWarnings("Convert2streamapi") private void notifyCountdownTick() {
-    if (listeners != null) {
-      for (TimeManagerListener listener : listeners) {
-        if (listener != null) {
-          listener.onCountdownTick();
-        }
+    for (TimeManagerListener listener : listeners) {
+      if (listener != null) {
+        listener.onCountdownTick();
       }
     }
   }
@@ -179,11 +161,9 @@ public enum TimeManager {
     }
   }
 
-  private final Runnable updateCountdownRunnable = new Runnable() {
-    @Override public void run() {
-      if (currentState == STATE_RUNNING) {
-        notifyCountdownTick();
-      }
+  private final Runnable updateCountdownRunnable = () -> {
+    if (currentState == STATE_RUNNING) {
+      notifyCountdownTick();
     }
   };
 }

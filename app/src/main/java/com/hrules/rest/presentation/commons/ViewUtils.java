@@ -18,11 +18,12 @@ package com.hrules.rest.presentation.commons;
 
 import android.app.Activity;
 import android.graphics.Rect;
+import android.support.annotation.NonNull;
 import android.view.View;
 import android.view.Window;
 
 public class ViewUtils {
-  private static int getStatusBarHeight(Activity activity) {
+  private static int getStatusBarHeight(@NonNull Activity activity) {
     Rect rectangle = new Rect();
     Window window = activity.getWindow();
     window.getDecorView().getWindowVisibleDisplayFrame(rectangle);
@@ -31,7 +32,7 @@ public class ViewUtils {
     return contentViewTop - statusBarHeight;
   }
 
-  public static int[] getRevealStartPosition(Activity activity, View view) {
+  public static int[] getRevealStartPosition(@NonNull Activity activity, @NonNull View view) {
     final int[] startingLocation = new int[2];
     view.getLocationOnScreen(startingLocation);
     startingLocation[0] += view.getWidth() / 2;

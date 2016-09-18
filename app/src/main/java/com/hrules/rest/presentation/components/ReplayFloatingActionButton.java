@@ -17,6 +17,7 @@
 package com.hrules.rest.presentation.components;
 
 import android.content.Context;
+import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
 import android.util.AttributeSet;
 import android.view.View;
@@ -29,15 +30,15 @@ public class ReplayFloatingActionButton extends FloatingActionButton {
   private static final float DEFAULT_SCALE = 1.0f;
   private static final float DEFAULT_SCALE_OUT = 0.0f;
 
-  public ReplayFloatingActionButton(Context context) {
+  public ReplayFloatingActionButton(@NonNull Context context) {
     super(context);
   }
 
-  public ReplayFloatingActionButton(Context context, AttributeSet attrs) {
+  public ReplayFloatingActionButton(@NonNull Context context, AttributeSet attrs) {
     super(context, attrs);
   }
 
-  public ReplayFloatingActionButton(Context context, AttributeSet attrs, int defStyleAttr) {
+  public ReplayFloatingActionButton(@NonNull Context context, AttributeSet attrs, int defStyleAttr) {
     super(context, attrs, defStyleAttr);
   }
 

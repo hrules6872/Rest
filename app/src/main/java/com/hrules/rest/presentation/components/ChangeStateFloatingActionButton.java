@@ -20,6 +20,7 @@ import android.content.Context;
 import android.content.res.ColorStateList;
 import android.support.annotation.ColorRes;
 import android.support.annotation.DrawableRes;
+import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.content.ContextCompat;
 import android.util.AttributeSet;
@@ -32,15 +33,15 @@ public class ChangeStateFloatingActionButton extends FloatingActionButton {
   private static final float DEFAULT_SCALE = 1.0f;
   private static final float DEFAULT_SCALE_OUT = 0.2f;
 
-  public ChangeStateFloatingActionButton(Context context) {
+  public ChangeStateFloatingActionButton(@NonNull Context context) {
     super(context);
   }
 
-  public ChangeStateFloatingActionButton(Context context, AttributeSet attrs) {
+  public ChangeStateFloatingActionButton(@NonNull Context context, AttributeSet attrs) {
     super(context, attrs);
   }
 
-  public ChangeStateFloatingActionButton(Context context, AttributeSet attrs, int defStyleAttr) {
+  public ChangeStateFloatingActionButton(@NonNull Context context, AttributeSet attrs, int defStyleAttr) {
     super(context, attrs, defStyleAttr);
   }
 

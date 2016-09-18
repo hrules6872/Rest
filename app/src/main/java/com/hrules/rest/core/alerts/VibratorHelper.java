@@ -18,6 +18,7 @@ package com.hrules.rest.core.alerts;
 
 import android.content.Context;
 import android.os.Vibrator;
+import android.support.annotation.NonNull;
 
 public class VibratorHelper {
   private static final long VIBRATE_NO_DELAY_MILLI = 0;
@@ -34,22 +35,22 @@ public class VibratorHelper {
       VIBRATE_NO_DELAY_MILLI, VIBRATE_SHORT_MILLI, VIBRATE_DELAY_MILLI, VIBRATE_SHORT_MILLI, VIBRATE_DELAY_MILLI, VIBRATE_SHORT_MILLI
   };
 
-  public static void vibrateShort(Context context) {
+  public static void vibrateShort(@NonNull Context context) {
     Vibrator vibrator = (Vibrator) context.getSystemService(Context.VIBRATOR_SERVICE);
     vibrator.vibrate(VIBRATE_SHORT_MILLI);
   }
 
-  public static void vibrateShort2(Context context) {
+  public static void vibrateShort2(@NonNull Context context) {
     Vibrator vibrator = (Vibrator) context.getSystemService(Context.VIBRATOR_SERVICE);
     vibrator.vibrate(VIBRATE_SHORT2_PATTERN, VIBRATE_NO_REPEAT);
   }
 
-  public static void vibrateLong(Context context) {
+  public static void vibrateLong(@NonNull Context context) {
     Vibrator vibrator = (Vibrator) context.getSystemService(Context.VIBRATOR_SERVICE);
     vibrator.vibrate(VIBRATE_LONG_PATTERN, VIBRATE_NO_REPEAT);
   }
 
-  public static void vibrateClick(Context context) {
+  public static void vibrateClick(@NonNull Context context) {
     Vibrator vibrator = (Vibrator) context.getSystemService(Context.VIBRATOR_SERVICE);
     vibrator.vibrate(VIBRATE_CLICK_MILLI);
   }

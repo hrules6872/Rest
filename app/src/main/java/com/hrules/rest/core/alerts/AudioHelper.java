@@ -166,10 +166,6 @@ public class AudioHelper {
       return true;
     }
 
-    @Override protected void onCancelled() {
-      super.onCancelled();
-    }
-
     @Override protected void onPostExecute(Boolean result) {
       audioManager.setStreamVolume(AudioManager.STREAM_MUSIC, volumeMediaPrevious, DEFAULT_FLAGS);
 

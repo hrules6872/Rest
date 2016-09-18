@@ -20,6 +20,7 @@ import android.annotation.TargetApi;
 import android.content.Context;
 import android.os.Build;
 import android.support.annotation.IntDef;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.text.Spannable;
 import android.util.AttributeSet;
@@ -42,20 +43,20 @@ public class ScaleAnimatedTextView extends TextView {
   @Retention(RetentionPolicy.SOURCE) @IntDef({ ANIM_TYPE_SCALE_OUT, ANIM_TYPE_SCALE_IN }) public @interface Type {
   }
 
-  public ScaleAnimatedTextView(Context context) {
+  public ScaleAnimatedTextView(@NonNull Context context) {
     super(context);
   }
 
-  public ScaleAnimatedTextView(Context context, AttributeSet attrs) {
+  public ScaleAnimatedTextView(@NonNull Context context, AttributeSet attrs) {
     super(context, attrs);
   }
 
-  public ScaleAnimatedTextView(Context context, AttributeSet attrs, int defStyleAttr) {
+  public ScaleAnimatedTextView(@NonNull Context context, AttributeSet attrs, int defStyleAttr) {
     super(context, attrs, defStyleAttr);
   }
 
   @TargetApi(Build.VERSION_CODES.LOLLIPOP)
-  public ScaleAnimatedTextView(Context context, AttributeSet attrs, int defStyleAttr, int defStyleRes) {
+  public ScaleAnimatedTextView(@NonNull Context context, AttributeSet attrs, int defStyleAttr, int defStyleRes) {
     super(context, attrs, defStyleAttr, defStyleRes);
   }
 

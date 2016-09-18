@@ -36,7 +36,7 @@ public class ToolTipView {
   public static final int LENGTH_SHORT = Toast.LENGTH_SHORT;
   public static final int LENGTH_LONG = Toast.LENGTH_LONG;
 
-  @Retention(RetentionPolicy.SOURCE) @IntDef({ LENGTH_SHORT, LENGTH_LONG }) public @interface Duration {
+  @Retention(RetentionPolicy.SOURCE) @IntDef({ LENGTH_SHORT, LENGTH_LONG }) @interface Duration {
   }
 
   private static final int DEFAULT_ESTIMATED_TOAST_HEIGHT_DIPS = 48;

@@ -40,7 +40,7 @@ public class TimeServiceReceiver extends BroadcastReceiver {
     this.listener = listener;
   }
 
-  @Override public void onReceive(Context context, Intent intent) {
+  @Override public void onReceive(@NonNull Context context, Intent intent) {
     switch (intent.getAction()) {
       case ACTION_CHANGESTATE:
         if (listener != null) {

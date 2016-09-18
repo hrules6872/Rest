@@ -34,7 +34,7 @@ public class PreferenceFragmentPresenter extends DRPresenter<PreferenceFragmentP
     appContext = App.getAppContext();
   }
 
-  public void onPreferenceClick(Preference preference) {
+  public void onPreferenceClick(@NonNull Preference preference) {
     Resources resources = appContext.getResources();
     String key = preference.getKey();
     if (resources.getString(R.string.prefs_appAboutKey).equals(key)) {
