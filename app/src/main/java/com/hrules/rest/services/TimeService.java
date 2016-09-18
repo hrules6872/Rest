@@ -287,14 +287,14 @@ public class TimeService extends Service {
         }
       }
 
-      if (prefsTenSecondsAlert && countdownTime >= TimeUnit.SECONDS.toMillis(10) && !dispatchedTenSecondsAlert) {
+      if (prefsTenSecondsAlert && countdownTime > TimeUnit.SECONDS.toMillis(10) && !dispatchedTenSecondsAlert) {
         dispatchedTenSecondsAlert = timeLeft <= TimeUnit.SECONDS.toMillis(10);
         if (dispatchedTenSecondsAlert) {
           playAlertShort(VOLUME_MUTE_TEN_SECONDS_DURATION_MILLI);
         }
       }
 
-      if (prefsThreeSecondsBeep && countdownTime >= TimeUnit.SECONDS.toMillis(3)) {
+      if (prefsThreeSecondsBeep && countdownTime > TimeUnit.SECONDS.toMillis(3)) {
         if (!dispatchedThreeSecondsBeep3) {
           dispatchedThreeSecondsBeep3 = timeLeft <= TimeUnit.SECONDS.toMillis(3);
           if (dispatchedThreeSecondsBeep3) {
