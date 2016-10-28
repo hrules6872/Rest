@@ -66,19 +66,18 @@ android {
 }
 
 dependencies {
-  compile fileTree(dir: 'libs', include: ['*.jar'])
-
   // support
-  compile supportDependencies.appCompat
-  compile supportDependencies.recyclerView
-  compile supportDependencies.supportAnnotations
-  compile supportDependencies.design
-  compile supportDependencies.cardView
+  supportDependencies.each {
+    add("compile", it.value)
+  }
 
   // project
-  compile projectDependencies.butterKnife
-  compile projectDependencies.daRealMVP
+  projectDependencies.each {
+    add("compile", it.value)
+  }
 
   // other
-  annotationProcessor otherDependencies.butterKnifeCompiler
+  otherDependencies.each {
+    add("annotationProcessor", it.value)
+  }
 }
