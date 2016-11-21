@@ -17,10 +17,13 @@
 package com.hrules.rest.presentation.views.activities;
 
 import android.app.ActivityManager;
+import android.app.NotificationManager;
 import android.content.Context;
 import android.content.Intent;
+import android.os.Build;
 import android.os.Handler;
 import android.os.Looper;
+import android.service.notification.StatusBarNotification;
 import android.support.annotation.ColorRes;
 import android.support.annotation.DrawableRes;
 import android.support.annotation.IdRes;
@@ -59,6 +62,7 @@ import com.hrules.rest.presentation.components.ToolTipView;
 import com.hrules.rest.presentation.models.base.Favorite;
 import com.hrules.rest.presentation.presenters.activities.MainActivityPresenter;
 import com.hrules.rest.services.TimeService;
+import com.hrules.rest.services.TimeServiceReceiver;
 import java.util.List;
 
 public class MainActivityView extends DRAppCompatActivity<MainActivityPresenter, MainActivityPresenter.MainView>
@@ -113,10 +117,15 @@ public class MainActivityView extends DRAppCompatActivity<MainActivityPresenter,
     return true;
   }
 
+  @Override public boolean onPrepareOptionsMenu(Menu menu) {
+    menu.findItem(R.id.menu_closeNotification).setVisible(isNotificationVisible());
+    return super.onPrepareOptionsMenu(menu);
+  }
+
   @Override public boolean onOptionsItemSelected(MenuItem item) {
     switch (item.getItemId()) {
       case R.id.menu_preferences:
-      case R.id.menu_about:
+      case R.id.menu_closeNotification:
         getPresenter().onMenuItemClick(item);
         return true;
 
@@ -125,12 +134,26 @@ public class MainActivityView extends DRAppCompatActivity<MainActivityPresenter,
     }
   }
 
+  private boolean isNotificationVisible() {
+    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+      NotificationManager notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+      StatusBarNotification[] notifications = notificationManager.getActiveNotifications();
+      for (StatusBarNotification notification : notifications) {
+        if (notification.getId() == TimeService.NOTIFICATION_ID) {
+          return true;
+        }
+      }
+      return false;
+    }
+    return true;
+  }
+
   @Override public void launchPreferencesActivity() {
     startActivity(new Intent(this, PreferenceActivityView.class));
   }
 
-  @Override public void launchAboutActivity() {
-    startActivity(new Intent(this, AboutActivityView.class));
+  @Override public void closeNotification() {
+    sendBroadcast(new Intent(TimeServiceReceiver.ACTION_EXIT));
   }
 
   @Override public void setDisplayOptions(boolean keepScreenOn, final int screenOrientationSensor) {
@@ -165,8 +188,10 @@ public class MainActivityView extends DRAppCompatActivity<MainActivityPresenter,
   }
 
   @Override public void updateCountdown(boolean animate) {
-    textCountdown.setText(TimeUtils.milliToMinutesSecondsMilliString(TimeUtils.getCountdownMilliUnsigned(), getResources()), animate,
-        TimeManager.INSTANCE.isRunning() ? ScaleAnimatedTextView.ANIM_TYPE_SCALE_OUT : ScaleAnimatedTextView.ANIM_TYPE_SCALE_IN);
+    textCountdown.setText(
+        TimeUtils.milliToMinutesSecondsMilliString(TimeUtils.getCountdownMilliUnsigned(), getResources()), animate,
+        TimeManager.INSTANCE.isRunning() ? ScaleAnimatedTextView.ANIM_TYPE_SCALE_OUT
+            : ScaleAnimatedTextView.ANIM_TYPE_SCALE_IN);
     textCountdown.setTextColor(TimeUtils.getTextColorFromMilli(MainActivityView.this));
 
     if (TimeManager.INSTANCE.isRunning() && !TimeManager.INSTANCE.isCountdownOver()
@@ -183,7 +208,8 @@ public class MainActivityView extends DRAppCompatActivity<MainActivityPresenter,
     }
   }
 
-  @Override public void setButtonChangeStateAttributes(boolean animate, @DrawableRes int drawableResId, @ColorRes int colorResId) {
+  @Override public void setButtonChangeStateAttributes(boolean animate, @DrawableRes int drawableResId,
+      @ColorRes int colorResId) {
     if (animate) {
       doRevealBackground();
     } else {
@@ -211,8 +237,9 @@ public class MainActivityView extends DRAppCompatActivity<MainActivityPresenter,
 
   private void doRevealBackground() {
     int height = revealBackgroundView.getHeight();
-    long forecastHeight = ((progressView.getCurrentProgress() + revealBackgroundView.getAnimDuration()) * progressView.getHeight())
-        / progressView.getMaxProgress();
+    long forecastHeight =
+        ((progressView.getCurrentProgress() + revealBackgroundView.getAnimDuration()) * progressView.getHeight())
+            / progressView.getMaxProgress();
     int heightReveal = (int) (height - forecastHeight);
     int[] revealStartPosition = ViewUtils.getRevealStartPosition(this, buttonChangeState);
 

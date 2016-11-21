@@ -17,11 +17,14 @@
 
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
-  <item android:id="@+id/menu_preferences"
-      android:title="@string/menu_preferences"
+
+  <item
+      android:id="@+id/menu_closeNotification"
+      android:title="@string/menu_closeNotification"
       app:showAsAction="never"/>
 
-  <item android:id="@+id/menu_about"
-      android:title="@string/menu_about"
+  <item
+      android:id="@+id/menu_preferences"
+      android:title="@string/menu_preferences"
       app:showAsAction="never"/>
 </menu>

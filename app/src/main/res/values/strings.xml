@@ -37,7 +37,7 @@
 
   <!--menu-->
   <string name="menu_preferences">Preferences</string>
-  <string name="menu_about">About</string>
+  <string name="menu_closeNotification">Close notification</string>
 
   <!--app utils-->
   <string name="text_appVersionFormatted">version %1$s (%2$s)</string>

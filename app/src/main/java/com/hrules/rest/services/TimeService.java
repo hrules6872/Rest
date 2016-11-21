@@ -46,7 +46,7 @@ import com.hrules.rest.presentation.views.activities.MainActivityView;
 import java.util.concurrent.TimeUnit;
 
 public class TimeService extends Service {
-  private static final int NOTIFICATION_ID = 22011982;
+  public static final int NOTIFICATION_ID = 22011982;
 
   private static final long MIN_TIME_TO_DISPATCH_HALFWAYALERT_MILLI = TimeUnit.MINUTES.toMillis(1) / 2;
 
