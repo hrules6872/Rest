@@ -15,8 +15,6 @@
   -->
 
 <resources>
-  <string name="app_name">Rest</string>
-
   <string name="activity_preferencesTitle">Preferences</string>
   <string name="activity_aboutTitle">About</string>
 
