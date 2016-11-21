@@ -41,10 +41,13 @@
       </intent-filter>
     </activity>
 
-    <activity android:name=".presentation.views.activities.PreferenceActivityView"
+    <activity
+        android:name=".presentation.views.activities.PreferenceActivityView"
         android:theme="@style/AppThemePreferences"/>
 
-    <activity android:name=".presentation.views.activities.AboutActivityView"/>
+    <activity
+        android:name=".presentation.views.activities.AboutActivityView"
+        android:theme="@style/AppThemeAbout"/>
 
     <service
         android:enabled="true"

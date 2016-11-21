@@ -43,6 +43,7 @@ public class AboutActivityView extends DRAppCompatActivity<AboutActivityPresente
 
   @Override protected void initializeViews() {
     ButterKnife.bind(this);
+
     setSupportActionBar(toolbar);
     ActionBar actionBar = getSupportActionBar();
     if (actionBar != null) {
@@ -64,7 +65,9 @@ public class AboutActivityView extends DRAppCompatActivity<AboutActivityPresente
     return super.onOptionsItemSelected(item);
   }
 
-  @OnClick({ R.id.about_rateIt, R.id.about_sendFeedback, R.id.about_moreApps, R.id.about_twitter }) void onClickButton(Button button) {
+  @OnClick({
+      R.id.about_rateIt, R.id.about_sendFeedback, R.id.about_moreApps, R.id.about_twitter, R.id.about_sourceCode
+  }) void onClickButton(Button button) {
     getPresenter().onClickButton(button);
   }
 
@@ -72,7 +75,7 @@ public class AboutActivityView extends DRAppCompatActivity<AboutActivityPresente
     try {
       startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(getString(R.string.app_playStoreURL))));
     } catch (Exception ignored) {
-      showUnknownErrorToast();
+      showUnknownError();
     }
   }
 
@@ -84,7 +87,7 @@ public class AboutActivityView extends DRAppCompatActivity<AboutActivityPresente
     try {
       startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(getString(R.string.app_developerPlayStoreURL))));
     } catch (Exception ignored) {
-      showUnknownErrorToast();
+      showUnknownError();
     }
   }
 
@@ -92,11 +95,19 @@ public class AboutActivityView extends DRAppCompatActivity<AboutActivityPresente
     try {
       startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(getString(R.string.app_developerTwitterURL))));
     } catch (Exception ignored) {
-      showUnknownErrorToast();
+      showUnknownError();
     }
   }
 
-  private void showUnknownErrorToast() {
+  @Override public void goToSourceCode() {
+    try {
+      startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(getString(R.string.app_sourceCodeURL))));
+    } catch (Exception e) {
+      showUnknownError();
+    }
+  }
+
+  private void showUnknownError() {
     Toast.makeText(this, getString(R.string.about_unknownError), Toast.LENGTH_SHORT).show();
   }
 }

@@ -16,7 +16,6 @@
 
 <resources>
   <string name="app_name">Rest</string>
-  <string name="app_playStoreURL">https://play.google.com/store/apps/details?id=com.hrules.rest</string>
 
   <string name="activity_preferencesTitle">Preferences</string>
   <string name="activity_aboutTitle">About</string>

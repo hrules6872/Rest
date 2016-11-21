@@ -16,5 +16,6 @@
   -->
 
 <resources>
-  <color name="title_textColor">#388E3C</color>
+  <color name="about_titleTextColor">#388E3C</color>
+  <color name="about_cardViewBackground">#fff</color>
 </resources>
