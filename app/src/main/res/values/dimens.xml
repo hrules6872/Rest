@@ -42,4 +42,9 @@
   <dimen name="fab_changeStateTop">8dp</dimen>
 
   <dimen name="fab_replayBottom">24dp</dimen>
+
+  <dimen name="shape_messageAlertCornersRadius">3dp</dimen>
+  <dimen name="message_alertTextSize">10sp</dimen>
+  <dimen name="message_alertPaddingHorizontally">5dp</dimen>
+  <dimen name="message_alertPaddingVertically">3dp</dimen>
 </resources>

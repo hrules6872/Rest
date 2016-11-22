@@ -41,6 +41,7 @@ import com.hrules.rest.App;
 import com.hrules.rest.AppConstants;
 import com.hrules.rest.R;
 import com.hrules.rest.commons.Preferences;
+import com.hrules.rest.core.AudioUtils;
 import com.hrules.rest.core.alerts.VibratorHelper;
 import com.hrules.rest.core.time.TimeManager;
 import com.hrules.rest.presentation.commons.TimeUtils;
@@ -202,6 +203,7 @@ public class MainActivityPresenter extends DRPresenter<MainActivityPresenter.Mai
   private void internalOnStateChanged(boolean animate) {
     getView().updateCountdown(animate);
     getView().setEditTextsEnabled(!TimeManager.INSTANCE.isRunning());
+    getView().setMessageAlertVisibility(AudioUtils.isDoNotDisturbActive() ? View.VISIBLE : View.GONE);
 
     if (TimeManager.INSTANCE.isRunning()) {
       // start countdown
@@ -213,7 +215,7 @@ public class MainActivityPresenter extends DRPresenter<MainActivityPresenter.Mai
       getView().setButtonReplayVisibility(animate, View.VISIBLE);
     } else {
       // stop countdown
-      getView().setButtonChangeStateAttributes(animate, R.drawable.ic_play_fab, R.color.fab_play_background);
+      getView().setButtonChangeStateAttributes(animate, R.drawable.ic_play_fab, R.color.fab_playBackground);
       getView().setButtonReplayVisibility(animate, View.INVISIBLE);
     }
   }
@@ -238,17 +240,17 @@ public class MainActivityPresenter extends DRPresenter<MainActivityPresenter.Mai
     boolean state = TimeManager.INSTANCE.getCountdownTime() != 0;
     getView().setButtonChangeStateEnabled(state);
     if (state) {
-      getView().setButtonChangeStateAttributes(false, R.drawable.ic_play_fab, R.color.fab_play_background);
+      getView().setButtonChangeStateAttributes(false, R.drawable.ic_play_fab, R.color.fab_playBackground);
     } else {
-      getView().setButtonChangeStateAttributes(false, R.drawable.ic_play_fab, R.color.fab_play_disabled_background);
+      getView().setButtonChangeStateAttributes(false, R.drawable.ic_play_fab, R.color.fab_playDisabledBackground);
     }
   }
 
   private void updateStopButtonColor(boolean animate) {
     if (TimeManager.INSTANCE.isCountdownOver()) {
-      getView().setButtonChangeStateAttributes(false, R.drawable.ic_stop_over_fab, R.color.fab_stop_over_background);
+      getView().setButtonChangeStateAttributes(false, R.drawable.ic_stop_over_fab, R.color.fab_stopOverBackground);
     } else {
-      getView().setButtonChangeStateAttributes(animate, R.drawable.ic_stop_fab, R.color.fab_stop_background);
+      getView().setButtonChangeStateAttributes(animate, R.drawable.ic_stop_fab, R.color.fab_stopBackground);
     }
   }
 
@@ -491,6 +493,8 @@ public class MainActivityPresenter extends DRPresenter<MainActivityPresenter.Mai
     void setDisplayOptions(boolean keepScreenOn, int screenOrientationSensor);
 
     void showTooltip(@IdRes int viewResId, @StringRes int stringResId);
+
+    void setMessageAlertVisibility(int visibility);
 
     // COUNTDOWN
     void startServiceIfNotRunning();

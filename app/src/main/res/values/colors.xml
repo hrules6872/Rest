@@ -33,10 +33,10 @@
   <color name="countDownTextOver">#e53935</color>
   <color name="textColorPrimary">#B0BEC5</color>
   <color name="textColorSecondary">#607D8B</color>
-  <color name="fab_stop_background">#fff</color>
-  <color name="fab_replay_background">#fff</color>
-  <color name="fab_play_background">#388E3C</color>
-  <color name="fab_stop_over_background">@color/countDownTextOver</color>
-  <color name="fab_play_disabled_background">#aaa</color>
-
+  <color name="fab_stopBackground">#fff</color>
+  <color name="fab_replayBackground">#fff</color>
+  <color name="fab_playBackground">#388E3C</color>
+  <color name="fab_stopOverBackground">@color/countDownTextOver</color>
+  <color name="fab_playDisabledBackground">#aaa</color>
+  <color name="messageAlert">@color/countDownTextOver</color>
 </resources>

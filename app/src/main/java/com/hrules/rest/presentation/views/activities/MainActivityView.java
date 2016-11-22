@@ -72,6 +72,7 @@ public class MainActivityView extends DRAppCompatActivity<MainActivityPresenter,
   @BindView(R.id.button_changeState) ChangeStateFloatingActionButton buttonChangeState;
   @BindView(R.id.button_replay) ReplayFloatingActionButton buttonReplay;
   @BindView(R.id.toolbar) Toolbar toolbar;
+  @BindView(R.id.message_alert) TextView messageAlert;
   @BindView(R.id.edit_minutes) EditText editMinutes;
   @BindView(R.id.edit_seconds) EditText editSeconds;
   @BindView(R.id.text_editSeparator) TextView textEditSeparator;
@@ -168,6 +169,10 @@ public class MainActivityView extends DRAppCompatActivity<MainActivityPresenter,
 
   @Override public void showTooltip(@IdRes int viewResId, @StringRes int stringResId) {
     ToolTipView.show(findViewById(viewResId), getString(stringResId), ToolTipView.LENGTH_SHORT);
+  }
+
+  @Override public void setMessageAlertVisibility(int visibility) {
+    messageAlert.setVisibility(visibility);
   }
 
   //region COUNTDOWN

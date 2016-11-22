@@ -15,8 +15,7 @@
   ~ limitations under the License.
   -->
 
-<resources>
-  <!--ProgressCountdownView-->
-  <color name="default_ProgressCountdownView_backgroundColor">@color/windowBackground</color>
-  <color name="default_ProgressCountdownView_progressColor">@color/fab_playBackground</color>
-</resources>
+<shape xmlns:android="http://schemas.android.com/apk/res/android">
+  <solid android:color="@color/messageAlert"/>
+  <corners android:radius="@dimen/shape_messageAlertCornersRadius"/>
+</shape>

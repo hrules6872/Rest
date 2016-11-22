@@ -46,6 +46,27 @@
       app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
       />
 
+  <FrameLayout
+      android:layout_width="match_parent"
+      android:layout_height="?attr/actionBarSize"
+      >
+    <TextView
+        android:id="@+id/message_alert"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:background="@drawable/shape_messagealert"
+        android:paddingBottom="@dimen/message_alertPaddingVertically"
+        android:paddingLeft="@dimen/message_alertPaddingHorizontally"
+        android:paddingRight="@dimen/message_alertPaddingHorizontally"
+        android:paddingTop="@dimen/message_alertPaddingVertically"
+        android:text="@string/text_dndWarningShort"
+        android:textAllCaps="true"
+        android:textColor="@android:color/white"
+        android:textSize="@dimen/message_alertTextSize"
+        />
+  </FrameLayout>
+
   <RelativeLayout
       android:layout_width="match_parent"
       android:layout_height="wrap_content"
@@ -120,7 +141,7 @@
       android:layout_alignParentBottom="true"
       android:layout_toRightOf="@id/button_changeState"
       android:src="@drawable/ic_replay_fab"
-      app:backgroundTint="@color/fab_replay_background"
+      app:backgroundTint="@color/fab_replayBackground"
       app:fabSize="mini"
       style="@style/FabReplay"
       />

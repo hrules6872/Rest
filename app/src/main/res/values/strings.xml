@@ -33,6 +33,7 @@
   <string name="text_addFavorite">Add current time</string>
   <string name="text_longClickStopwatch">Press and hold to stop</string>
   <string name="text_dndWarning">DND mode is ACTIVE\nAlert sounds are muted</string>
+  <string name="text_dndWarningShort">DND mode is ACTIVE</string>
   <string name="text_stopwatchStillRunning">STOPWATCH keeps RUNNING\nYou can enable Auto-stop in Preferences</string>
 
   <!--menu-->
