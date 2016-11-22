@@ -37,6 +37,9 @@ public class ScaleAnimatedTextView extends TextView {
   private static final float SCALE_FACTOR_OUT = 1.2f;
   private static final float SCALE_FACTOR_IN = 0.8f;
 
+  private static final float DEFAULT_PIVOT_X = 0.5f;
+  private static final float DEFAULT_PIVOT_Y = 0.5f;
+
   public static final int ANIM_TYPE_SCALE_OUT = 1;
   public static final int ANIM_TYPE_SCALE_IN = 0;
 
@@ -64,7 +67,8 @@ public class ScaleAnimatedTextView extends TextView {
     if (animate) {
       float scaleFactor = type == ANIM_TYPE_SCALE_OUT ? SCALE_FACTOR_OUT : SCALE_FACTOR_IN;
       Animation animation =
-          new ScaleAnimation(1.0f, scaleFactor, 1.0f, scaleFactor, Animation.RELATIVE_TO_SELF, 0.5f, Animation.RELATIVE_TO_SELF, 0.5f);
+          new ScaleAnimation(1.0f, scaleFactor, 1.0f, scaleFactor, Animation.RELATIVE_TO_SELF, DEFAULT_PIVOT_X,
+              Animation.RELATIVE_TO_SELF, DEFAULT_PIVOT_Y);
       animation.setDuration(getResources().getInteger(android.R.integer.config_shortAnimTime));
       animation.setRepeatMode(Animation.REVERSE);
       animation.setRepeatCount(1);

@@ -29,28 +29,33 @@ import com.hrules.rest.core.time.TimeManager;
 import java.util.Locale;
 import java.util.concurrent.TimeUnit;
 
-public class TimeUtils {
+public final class TimeUtils {
   private static final float RELATIVESIZESPAN_MILLI = 0.8f;
   private static final String FORMAT_SECONDS_TWO_LEADING_ZEROS = "%02d";
 
   public static String milliToFavoriteMinutesSecondsString(long milli, @NonNull Resources resources) {
     long minutes = TimeUnit.MILLISECONDS.toMinutes(milli);
-    long seconds = TimeUnit.MILLISECONDS.toSeconds(milli) - TimeUnit.MINUTES.toSeconds(TimeUnit.MILLISECONDS.toMinutes(milli));
+    long seconds =
+        TimeUnit.MILLISECONDS.toSeconds(milli) - TimeUnit.MINUTES.toSeconds(TimeUnit.MILLISECONDS.toMinutes(milli));
     return String.format(resources.getString(R.string.text_favoriteMinutesSecondsFormatted), minutes, seconds);
   }
 
   public static String milliToMinutesSecondsString(long milli, @NonNull Resources resources) {
     long minutes = TimeUnit.MILLISECONDS.toMinutes(milli);
-    long seconds = TimeUnit.MILLISECONDS.toSeconds(milli) - TimeUnit.MINUTES.toSeconds(TimeUnit.MILLISECONDS.toMinutes(milli));
+    long seconds =
+        TimeUnit.MILLISECONDS.toSeconds(milli) - TimeUnit.MINUTES.toSeconds(TimeUnit.MILLISECONDS.toMinutes(milli));
     return String.format(resources.getString(R.string.text_timeMinutesSecondsFormatted), minutes, seconds);
   }
 
   public static Spannable milliToMinutesSecondsMilliString(long milli, @NonNull Resources resources) {
     long minutes = TimeUnit.MILLISECONDS.toMinutes(milli);
-    long seconds = TimeUnit.MILLISECONDS.toSeconds(milli) - TimeUnit.MINUTES.toSeconds(TimeUnit.MILLISECONDS.toMinutes(milli));
+    long seconds =
+        TimeUnit.MILLISECONDS.toSeconds(milli) - TimeUnit.MINUTES.toSeconds(TimeUnit.MILLISECONDS.toMinutes(milli));
     long milliseconds = (milli % TimeUnit.SECONDS.toMillis(1)) / 10;
 
-    String formatted = String.format(resources.getString(R.string.text_timeMinutesSecondsMilliFormatted), minutes, seconds, milliseconds);
+    String formatted =
+        String.format(resources.getString(R.string.text_timeMinutesSecondsMilliFormatted), minutes, seconds,
+            milliseconds);
     Spannable spannable = new SpannableString(formatted);
     spannable.setSpan(new RelativeSizeSpan(RELATIVESIZESPAN_MILLI), formatted.length() - 2, formatted.length(),
         Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
@@ -59,12 +64,15 @@ public class TimeUtils {
 
   public static Spannable milliToStopwatchHoursMinutesSecondsMilliString(long milli, @NonNull Resources resources) {
     long hours = TimeUnit.MILLISECONDS.toHours(milli);
-    long minutes = TimeUnit.MILLISECONDS.toMinutes(milli) - TimeUnit.HOURS.toMinutes(TimeUnit.MILLISECONDS.toHours(milli));
-    long seconds = TimeUnit.MILLISECONDS.toSeconds(milli) - TimeUnit.MINUTES.toSeconds(TimeUnit.MILLISECONDS.toMinutes(milli));
+    long minutes =
+        TimeUnit.MILLISECONDS.toMinutes(milli) - TimeUnit.HOURS.toMinutes(TimeUnit.MILLISECONDS.toHours(milli));
+    long seconds =
+        TimeUnit.MILLISECONDS.toSeconds(milli) - TimeUnit.MINUTES.toSeconds(TimeUnit.MILLISECONDS.toMinutes(milli));
     long milliseconds = (milli % TimeUnit.SECONDS.toMillis(1)) / 10;
 
     String formatted =
-        String.format(resources.getString(R.string.text_stopwatchHoursMinutesSecondsMilliFormatted), hours, minutes, seconds, milliseconds);
+        String.format(resources.getString(R.string.text_stopwatchHoursMinutesSecondsMilliFormatted), hours, minutes,
+            seconds, milliseconds);
     Spannable spannable = new SpannableString(formatted);
     spannable.setSpan(new RelativeSizeSpan(RELATIVESIZESPAN_MILLI), formatted.length() - 2, formatted.length(),
         Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);

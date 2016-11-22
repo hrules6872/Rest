@@ -20,7 +20,7 @@ import android.content.Context;
 import android.os.Vibrator;
 import android.support.annotation.NonNull;
 
-public class VibratorHelper {
+public final class VibratorHelper {
   private static final long VIBRATE_NO_DELAY_MILLI = 0;
   private static final long VIBRATE_DELAY_MILLI = 150;
   private static final int VIBRATE_NO_REPEAT = -1;
@@ -32,7 +32,8 @@ public class VibratorHelper {
       VIBRATE_NO_DELAY_MILLI, VIBRATE_SHORT_MILLI, VIBRATE_DELAY_MILLI, VIBRATE_SHORT_MILLI
   };
   private static final long[] VIBRATE_LONG_PATTERN = {
-      VIBRATE_NO_DELAY_MILLI, VIBRATE_SHORT_MILLI, VIBRATE_DELAY_MILLI, VIBRATE_SHORT_MILLI, VIBRATE_DELAY_MILLI, VIBRATE_SHORT_MILLI
+      VIBRATE_NO_DELAY_MILLI, VIBRATE_SHORT_MILLI, VIBRATE_DELAY_MILLI, VIBRATE_SHORT_MILLI, VIBRATE_DELAY_MILLI,
+      VIBRATE_SHORT_MILLI
   };
 
   public static void vibrateShort(@NonNull Context context) {

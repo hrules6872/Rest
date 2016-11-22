@@ -21,16 +21,16 @@ import java.util.HashSet;
 import java.util.Set;
 import java.util.concurrent.TimeUnit;
 
-public class AppConstants {
+public final class AppConstants {
   public static final long DEFAULT_COUNTDOWN_MILLI = TimeUnit.SECONDS.toMillis(90);
 
-  public static class PREFS {
+  public static final class PREFS {
     public static final String COUNTDOWN_MILLI = "COUNTDOWN_MILLI";
     public static final String STOPWATCH_MILLI = "STOPWATCH_MILLI";
     public static final String STOPWATCH_MILLI_LAST = "STOPWATCH_MILLI_LAST";
     public static final String FAVORITES = "FAVORITES";
 
-    public static class DEFAULTS {
+    public static final class DEFAULTS {
       public static final long COUNTDOWN_MILLI = DEFAULT_COUNTDOWN_MILLI;
       public static final long STOPWATCH_MILLI = 0;
       public static final long STOPWATCH_MILLI_LAST = 0;

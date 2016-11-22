@@ -20,7 +20,7 @@ import android.os.Build;
 import android.provider.Settings;
 import com.hrules.rest.App;
 
-public class AudioUtils {
+public final class AudioUtils {
   private static final int ZEN_MODE_OFF = 0;
 
   public static boolean isDoNotDisturbActive() {

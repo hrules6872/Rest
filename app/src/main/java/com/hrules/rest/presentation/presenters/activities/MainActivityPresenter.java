@@ -263,7 +263,7 @@ public class MainActivityPresenter extends DRPresenter<MainActivityPresenter.Mai
     if (!hasFocus) {
       String text = editText.getText().toString();
 
-      if (text.length() == 0) {
+      if (text.isEmpty()) {
         if (editText.getId() == R.id.edit_seconds) {
           getView().setEditText(R.id.edit_seconds,
               TimeUtils.getSecondsFormattedWithLeadingZeros(DEFAULT_EDIT_STATE_EMPTY));
@@ -282,13 +282,13 @@ public class MainActivityPresenter extends DRPresenter<MainActivityPresenter.Mai
     long minutes;
     long seconds;
 
-    if (editMinutes.getText().toString().length() == 0) {
+    if (editMinutes.getText().toString().isEmpty()) {
       minutes = DEFAULT_EDIT_STATE_EMPTY;
     } else {
       minutes = Long.parseLong(editMinutes.getText().toString());
     }
 
-    if (editSeconds.getText().toString().length() == 0) {
+    if (editSeconds.getText().toString().isEmpty()) {
       seconds = DEFAULT_EDIT_STATE_EMPTY;
     } else {
       seconds = Long.parseLong(editSeconds.getText().toString());
@@ -315,11 +315,11 @@ public class MainActivityPresenter extends DRPresenter<MainActivityPresenter.Mai
     }
     Collections.sort(favorites, new FavoriteSecondsAscendingComparator());
 
-    if (editMinutes.getText().toString().length() != 0 && editSeconds.getText().toString().length() != 0) {
+    if (!editMinutes.getText().toString().isEmpty() && !editSeconds.getText().toString().isEmpty()) {
       long minutes = Long.parseLong(editMinutes.getText().toString());
       long seconds = Long.parseLong(editSeconds.getText().toString());
       String totalSeconds = String.valueOf(TimeUnit.MINUTES.toSeconds(minutes) + seconds);
-      if (!favoritesSet.contains(totalSeconds) && !totalSeconds.equals("0")) {
+      if (!favoritesSet.contains(totalSeconds) && !"0".equals(totalSeconds)) {
         favorites.add(0, new FavoriteAdd(resources.getString(R.string.text_addFavorite)));
       }
     }

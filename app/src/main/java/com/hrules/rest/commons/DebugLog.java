@@ -23,7 +23,7 @@ import com.hrules.rest.BuildConfig;
  * +info: https://gist.github.com/hrules6872/3e047ef1a7ed2a525104
  */
 
-public class DebugLog {
+public final class DebugLog {
   private static final int LOG_TAG_MAX_LENGTH = 23;
 
   private static boolean isDebuggable() {
@@ -33,8 +33,8 @@ public class DebugLog {
   private static String formatMessage(String message) {
     StackTraceElement[] stackTrace = new Throwable().getStackTrace();
     if (stackTrace.length >= 2) {
-      return String.format("[%s:%s] -> %s(): %s", stackTrace[2].getFileName(), stackTrace[2].getLineNumber(), stackTrace[2].getMethodName(),
-          message);
+      return String.format("[%s:%s] -> %s(): %s", stackTrace[2].getFileName(), stackTrace[2].getLineNumber(),
+          stackTrace[2].getMethodName(), message);
     } else {
       return message;
     }

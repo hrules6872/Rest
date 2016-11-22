@@ -177,7 +177,7 @@ public class MainActivityView extends DRAppCompatActivity<MainActivityPresenter,
   }
 
   //region COUNTDOWN
-  public void startServiceIfNotRunning() {
+  @Override public void startServiceIfNotRunning() {
     if (!isServiceRunning()) {
       startService(new Intent(this, TimeService.class));
     }
@@ -298,7 +298,7 @@ public class MainActivityView extends DRAppCompatActivity<MainActivityPresenter,
     editText.addTextChangedListener(editTextChangedListener);
   }
 
-  public void hideSoftKeyboardAndClearEditFocus() {
+  @Override public void hideSoftKeyboardAndClearEditFocus() {
     InputMethodManager inputMethodManager = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
     inputMethodManager.hideSoftInputFromWindow(layoutRoot.getWindowToken(), 0);
     layoutRoot.requestFocus();

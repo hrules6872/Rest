@@ -22,7 +22,7 @@ import android.support.annotation.NonNull;
 import android.view.View;
 import android.view.Window;
 
-public class ViewUtils {
+public final class ViewUtils {
   private static int getStatusBarHeight(@NonNull Activity activity) {
     Rect rectangle = new Rect();
     Window window = activity.getWindow();

@@ -41,7 +41,8 @@ public enum TimeManager {
 
   private final List<TimeManagerListener> listeners = new ArrayList<>();
 
-  private final ScheduledThreadPoolExecutor scheduledThreadPoolExecutor = new ScheduledThreadPoolExecutor(DEFAULT_EXECUTOR_CORE_POOL_SIZE);
+  private final ScheduledThreadPoolExecutor scheduledThreadPoolExecutor =
+      new ScheduledThreadPoolExecutor(DEFAULT_EXECUTOR_CORE_POOL_SIZE);
   private ScheduledFuture scheduledFutureCountdown;
 
   public interface TimeManagerListener {
@@ -93,7 +94,7 @@ public enum TimeManager {
   }
 
   public boolean isCountdownOver() {
-    return getElapsedTime() >= getCountdownTime();
+    return getElapsedTime() >= countdownTimeMilli;
   }
 
   public long getElapsedTime() {
@@ -151,8 +152,8 @@ public enum TimeManager {
   private void startCountdownRunnable() {
     stopCountdownRunnable();
     scheduledFutureCountdown =
-        scheduledThreadPoolExecutor.scheduleAtFixedRate(updateCountdownRunnable, DEFAULT_DELAY_MILLI, DEFAULT_PERIOD_MILLI,
-            TimeUnit.MILLISECONDS);
+        scheduledThreadPoolExecutor.scheduleAtFixedRate(updateCountdownRunnable, DEFAULT_DELAY_MILLI,
+            DEFAULT_PERIOD_MILLI, TimeUnit.MILLISECONDS);
   }
 
   private void stopCountdownRunnable() {

@@ -24,7 +24,7 @@ import android.net.Uri;
 import android.support.annotation.NonNull;
 import com.hrules.rest.R;
 
-public class AppUtils {
+public final class AppUtils {
   private static final String DEFAULT_VERSION_CODE = "1";
   private static final String DEFAULT_VERSION_NAME = "1";
 
@@ -44,9 +44,10 @@ public class AppUtils {
   }
 
   public static void sendFeedbackByEmail(@NonNull Context context) {
-    Intent intent =
-        new Intent(Intent.ACTION_SENDTO, Uri.fromParts(SCHEME_MAILTO, context.getString(R.string.feedback_developerEmail), null));
-    intent.putExtra(Intent.EXTRA_SUBJECT, String.format(context.getString(R.string.feedback_emailSubject), getAppVersionText(context)));
+    Intent intent = new Intent(Intent.ACTION_SENDTO,
+        Uri.fromParts(SCHEME_MAILTO, context.getString(R.string.feedback_developerEmail), null));
+    intent.putExtra(Intent.EXTRA_SUBJECT,
+        String.format(context.getString(R.string.feedback_emailSubject), getAppVersionText(context)));
     context.startActivity(Intent.createChooser(intent, context.getString(R.string.feedback_emailChooserTitle)));
   }
 }
