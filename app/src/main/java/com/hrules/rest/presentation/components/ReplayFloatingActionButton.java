@@ -23,6 +23,7 @@ import android.util.AttributeSet;
 import android.view.View;
 import android.view.animation.AnticipateInterpolator;
 import android.view.animation.Interpolator;
+import com.hrules.rest.presentation.commons.Visibility;
 
 public class ReplayFloatingActionButton extends FloatingActionButton {
   private static final Interpolator DEFAULT_INTERPOLATOR = new AnticipateInterpolator();
@@ -42,7 +43,7 @@ public class ReplayFloatingActionButton extends FloatingActionButton {
     super(context, attrs, defStyleAttr);
   }
 
-  public void setVisibility(boolean animate, final int visibility, final long animDurationMilli) {
+  public void setVisibility(boolean animate, @Visibility final int visibility, final long animDurationMilli) {
     if (animate) {
       if (visibility == View.VISIBLE) {
         setScaleX(DEFAULT_SCALE_OUT);

@@ -45,6 +45,7 @@ import com.hrules.rest.core.AudioUtils;
 import com.hrules.rest.core.alerts.VibratorHelper;
 import com.hrules.rest.core.time.TimeManager;
 import com.hrules.rest.presentation.commons.TimeUtils;
+import com.hrules.rest.presentation.commons.Visibility;
 import com.hrules.rest.presentation.models.FavoriteAdd;
 import com.hrules.rest.presentation.models.FavoriteSeconds;
 import com.hrules.rest.presentation.models.base.Favorite;
@@ -494,7 +495,7 @@ public class MainActivityPresenter extends DRPresenter<MainActivityPresenter.Mai
 
     void showTooltip(@IdRes int viewResId, @StringRes int stringResId);
 
-    void setMessageAlertVisibility(int visibility);
+    void setMessageAlertVisibility(@Visibility int visibility);
 
     // COUNTDOWN
     void startServiceIfNotRunning();
@@ -505,9 +506,9 @@ public class MainActivityPresenter extends DRPresenter<MainActivityPresenter.Mai
 
     void setButtonChangeStateEnabled(boolean enabled);
 
-    void setProgressViewAttributes(int visibility, long maxProgress, long currentProgress);
+    void setProgressViewAttributes(@Visibility int visibility, long maxProgress, long currentProgress);
 
-    void setButtonReplayVisibility(boolean animate, int visibility);
+    void setButtonReplayVisibility(boolean animate, @Visibility int visibility);
 
     void hideSoftKeyboardAndClearEditFocus();
 
