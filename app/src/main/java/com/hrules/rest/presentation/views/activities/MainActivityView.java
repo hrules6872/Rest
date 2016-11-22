@@ -310,6 +310,12 @@ public class MainActivityView extends DRAppCompatActivity<MainActivityPresenter,
     getPresenter().onButtonFavoritesClick(editMinutes, editSeconds);
   }
 
+  @OnClick(R.id.text_countDown) void onTextCountDownClick() {
+    if (buttonFavorites.isEnabled()) {
+      getPresenter().onButtonFavoritesClick(editMinutes, editSeconds);
+    }
+  }
+
   private final TextView.OnEditorActionListener editActionListener = (v, actionId, event) -> {
     if (actionId == EditorInfo.IME_ACTION_DONE) {
       getPresenter().onEditorAction(v, actionId, event);
