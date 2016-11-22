@@ -20,9 +20,8 @@ import android.support.annotation.NonNull;
 import com.hrules.rest.presentation.models.base.Favorite;
 
 public class FavoriteSeconds extends Favorite {
-  public FavoriteSeconds(@NonNull String title, int seconds, Type type) {
-    this.title = title;
+  public FavoriteSeconds(@NonNull String title, int seconds) {
+    super(title, Type.SECONDS);
     this.seconds = seconds;
-    this.type = type;
   }
 }

@@ -44,7 +44,7 @@ import com.hrules.rest.commons.Preferences;
 import com.hrules.rest.core.alerts.VibratorHelper;
 import com.hrules.rest.core.time.TimeManager;
 import com.hrules.rest.presentation.commons.TimeUtils;
-import com.hrules.rest.presentation.models.FavoriteAction;
+import com.hrules.rest.presentation.models.FavoriteAdd;
 import com.hrules.rest.presentation.models.FavoriteSeconds;
 import com.hrules.rest.presentation.models.base.Favorite;
 import com.hrules.rest.presentation.models.comparators.FavoriteSecondsAscendingComparator;
@@ -308,8 +308,7 @@ public class MainActivityPresenter extends DRPresenter<MainActivityPresenter.Mai
     for (String secondsFromStringSet : favoritesSet) {
       long milli = Integer.valueOf(secondsFromStringSet) * TimeUnit.SECONDS.toMillis(1);
       int seconds = Integer.valueOf(secondsFromStringSet);
-      favorites.add(new FavoriteSeconds(TimeUtils.milliToFavoriteMinutesSecondsString(milli, resources), seconds,
-          Favorite.Type.FAVORITE));
+      favorites.add(new FavoriteSeconds(TimeUtils.milliToFavoriteMinutesSecondsString(milli, resources), seconds));
     }
     Collections.sort(favorites, new FavoriteSecondsAscendingComparator());
 
@@ -318,7 +317,7 @@ public class MainActivityPresenter extends DRPresenter<MainActivityPresenter.Mai
       long seconds = Long.parseLong(editSeconds.getText().toString());
       String totalSeconds = String.valueOf(TimeUnit.MINUTES.toSeconds(minutes) + seconds);
       if (!favoritesSet.contains(totalSeconds) && !totalSeconds.equals("0")) {
-        favorites.add(0, new FavoriteAction(resources.getString(R.string.text_addFavorite), Favorite.Type.ADD));
+        favorites.add(0, new FavoriteAdd(resources.getString(R.string.text_addFavorite)));
       }
     }
 

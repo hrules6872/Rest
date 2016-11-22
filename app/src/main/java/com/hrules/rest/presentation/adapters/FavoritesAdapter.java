@@ -49,7 +49,8 @@ public class FavoritesAdapter extends ArrayAdapter<Favorite> {
     }
   }
 
-  public FavoritesAdapter(@NonNull Context context, @NonNull List<Favorite> favorites, @NonNull FavoritesAdapterListener listener) {
+  public FavoritesAdapter(@NonNull Context context, @NonNull List<Favorite> favorites,
+      @NonNull FavoritesAdapterListener listener) {
     super(context, 0, favorites);
     this.listener = listener;
   }
@@ -86,17 +87,17 @@ public class FavoritesAdapter extends ArrayAdapter<Favorite> {
   }
 
   @Override public int getItemViewType(int position) {
-    return getItem(position).getType().ordinal();
+    return getItem(position).getType();
   }
 
   @Override public int getViewTypeCount() {
-    return Favorite.Type.values().length;
+    return Favorite.Type.class.getMethods().length - 1;
   }
 
   private View getInflatedLayoutForType(int type, ViewGroup parent) {
-    if (type == Favorite.Type.ADD.ordinal()) {
+    if (type == Favorite.Type.ADD) {
       return LayoutInflater.from(getContext()).inflate(R.layout.main_item_favorite_action, parent, false);
-    } else if (type == Favorite.Type.FAVORITE.ordinal()) {
+    } else if (type == Favorite.Type.SECONDS) {
       return LayoutInflater.from(getContext()).inflate(R.layout.main_item_favorite_seconds, parent, false);
     } else {
       throw new UnsupportedOperationException();

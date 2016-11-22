@@ -16,13 +16,26 @@
 
 package com.hrules.rest.presentation.models.base;
 
-public class Favorite {
-  protected String title;
-  protected int seconds;
-  protected Type type;
+import android.support.annotation.IntDef;
+import android.support.annotation.NonNull;
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
 
-  public enum Type {
-    ADD, FAVORITE
+public class Favorite {
+  private final String title;
+  protected int seconds = 0;
+  private final @Type int type;
+
+  @IntDef({
+      Type.ADD, Type.SECONDS
+  }) @Retention(RetentionPolicy.RUNTIME) public @interface Type {
+    int ADD = 0;
+    int SECONDS = 1;
+  }
+
+  protected Favorite(@NonNull String title, @Type int type) {
+    this.title = title;
+    this.type = type;
   }
 
   public String getTitle() {
@@ -33,7 +46,7 @@ public class Favorite {
     return seconds;
   }
 
-  public Type getType() {
+  public @Type int getType() {
     return type;
   }
 }

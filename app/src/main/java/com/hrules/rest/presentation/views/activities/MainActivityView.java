@@ -260,7 +260,7 @@ public class MainActivityView extends DRAppCompatActivity<MainActivityPresenter,
     listPopupWindow.setAnchorView(findViewById(R.id.layout_time));
     listPopupWindow.setAdapter(new FavoritesAdapter(this, favorites, new FavoritesAdapter.FavoritesAdapterListener() {
       @Override public void onTitleClick(@NonNull Favorite favorite) {
-        if (favorite.getType() == Favorite.Type.FAVORITE) {
+        if (favorite.getType() == Favorite.Type.SECONDS) {
           getPresenter().onFavoriteTitleClick(favorite);
         } else if (favorite.getType() == Favorite.Type.ADD) {
           getPresenter().onFavoriteActionAddClick(editMinutes, editSeconds);
