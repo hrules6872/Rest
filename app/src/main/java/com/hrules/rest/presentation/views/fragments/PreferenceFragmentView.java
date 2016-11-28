@@ -59,10 +59,6 @@ public class PreferenceFragmentView extends PreferenceFragment
     presenter.checkSoundAndVibrateState();
   }
 
-  private PreferenceFragmentPresenter getPresenter() {
-    return presenter;
-  }
-
   private int getPreferenceResource() {
     return R.xml.preferences;
   }
