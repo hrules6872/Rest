@@ -136,6 +136,16 @@ public class MainActivityView extends DRAppCompatActivity<MainActivityPresenter,
     }
   }
 
+  @Override protected void onResume() {
+    super.onResume();
+    getPresenter().onViewResume();
+  }
+
+  @Override protected void onStop() {
+    super.onStop();
+    getPresenter().onViewStop();
+  }
+
   private boolean isNotificationVisible() {
     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
       NotificationManager notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);

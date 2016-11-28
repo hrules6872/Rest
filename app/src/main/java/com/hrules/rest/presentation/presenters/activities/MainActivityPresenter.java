@@ -23,12 +23,14 @@ import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.content.pm.ActivityInfo;
 import android.content.res.Resources;
+import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
 import android.support.annotation.ColorRes;
 import android.support.annotation.DrawableRes;
 import android.support.annotation.IdRes;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.annotation.StringRes;
 import android.view.KeyEvent;
 import android.view.MenuItem;
@@ -88,7 +90,7 @@ public class MainActivityPresenter extends DRPresenter<MainActivityPresenter.Mai
     appContext = App.getAppContext();
   }
 
-  @Override protected void onViewReady() {
+  @Override public void onViewReady(@Nullable Bundle savedInstanceState) {
     preferences = new Preferences(appContext);
     getPreferences();
     preferences.addListener(sharedPreferenceChangeListener);
@@ -106,7 +108,7 @@ public class MainActivityPresenter extends DRPresenter<MainActivityPresenter.Mai
     getView().setEditText(R.id.edit_seconds, TimeUtils.getSecondsFormattedWithLeadingZeros(seconds));
   }
 
-  @Override protected void onResume() {
+  public void onViewResume() {
     Resources resources = appContext.getResources();
 
     boolean keepScreenOn = preferences.getBoolean(resources.getString(R.string.prefs_displayKeepScreenOnKey),
@@ -141,12 +143,9 @@ public class MainActivityPresenter extends DRPresenter<MainActivityPresenter.Mai
     registerStopwatchReceiver();
   }
 
-  @Override protected void onPause() {
-    // we will stop UI updates in onStop() instead of onResume()
+  public void onViewStop() {
+    // we will stop UI updates in onViewStop() instead of onViewResume()
     // in order to support Multi Window (API >= 24)
-  }
-
-  @Override protected void onStop() {
     getView().setDisplayOptions(DEFAULT_KEEP_SCREEN_ON_STATE, ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED);
 
     // countdown
@@ -158,7 +157,8 @@ public class MainActivityPresenter extends DRPresenter<MainActivityPresenter.Mai
     unregisterStopwatchReceiver();
   }
 
-  @Override protected void onDestroy() {
+  @Override public void unbind() {
+    super.unbind();
     TimeManager.INSTANCE.removeListener(timeManagerListener);
     preferences.removeListener(sharedPreferenceChangeListener);
 
@@ -166,8 +166,6 @@ public class MainActivityPresenter extends DRPresenter<MainActivityPresenter.Mai
 
     countdownHandler.removeCallbacksAndMessages(null);
     stopwatchHandler.removeCallbacksAndMessages(null);
-
-    super.onDestroy();
   }
 
   public void onMenuItemClick(@NonNull MenuItem item) {
