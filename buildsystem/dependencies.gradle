@@ -15,7 +15,7 @@
  */
 
 ext {
-  androidBuildToolsVersion = '25'
+  androidBuildToolsVersion = '25.0.1'
   androidBuildMinSDKVersion = '16'
   androidBuildTargetSDKVersion = '24'
   androidBuildCompileSDKVersion = 'android-24'
