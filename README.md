@@ -5,7 +5,7 @@ REST
 This repository contains the source code for the Rest Android app.
 
 ### Download on Google Play Store
-<a href="https://play.google.com/store/apps/details?id=com.hrules.rest"><img alt="Get it on Google Play" height="60" src="https://play.google.com/intl/en_us/badges/images/apps/en-play-badge.png" /></a>
+<a href="https://play.google.com/store/apps/details?id=com.hrules.rest"><img alt="Get it on Google Play" height="60" src="https://play.google.com/intl/en_us/badges/images/generic/en_badge_web_generic.png" /></a>
 
 ### Screenshots
 ![image](art/screenshot1.png) ![image](art/screenshot2.png) ![image](art/screenshot3.png)
