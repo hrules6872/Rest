@@ -33,6 +33,9 @@ public final class TimeUtils {
   private static final float RELATIVESIZESPAN_MILLI = 0.8f;
   private static final String FORMAT_SECONDS_TWO_LEADING_ZEROS = "%02d";
 
+  private TimeUtils() {
+  }
+
   public static String milliToFavoriteMinutesSecondsString(long milli, @NonNull Resources resources) {
     long minutes = TimeUnit.MILLISECONDS.toMinutes(milli);
     long seconds =

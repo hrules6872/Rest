@@ -23,6 +23,9 @@ import android.view.View;
 import android.view.Window;
 
 public final class ViewUtils {
+  private ViewUtils() {
+  }
+
   private static int getStatusBarHeight(@NonNull Activity activity) {
     Rect rectangle = new Rect();
     Window window = activity.getWindow();

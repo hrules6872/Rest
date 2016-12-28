@@ -36,6 +36,9 @@ public final class VibratorHelper {
       VIBRATE_SHORT_MILLI
   };
 
+  private VibratorHelper() {
+  }
+
   public static void vibrateShort(@NonNull Context context) {
     Vibrator vibrator = (Vibrator) context.getSystemService(Context.VIBRATOR_SERVICE);
     vibrator.vibrate(VIBRATE_SHORT_MILLI);

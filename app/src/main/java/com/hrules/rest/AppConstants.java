@@ -24,6 +24,9 @@ import java.util.concurrent.TimeUnit;
 public final class AppConstants {
   public static final long DEFAULT_COUNTDOWN_MILLI = TimeUnit.SECONDS.toMillis(90);
 
+  private AppConstants() {
+  }
+
   public static final class PREFS {
     public static final String COUNTDOWN_MILLI = "COUNTDOWN_MILLI";
     public static final String STOPWATCH_MILLI = "STOPWATCH_MILLI";

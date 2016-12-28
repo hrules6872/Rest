@@ -41,6 +41,9 @@ public final class ToolTipView {
 
   private static final int DEFAULT_ESTIMATED_TOAST_HEIGHT_DIPS = 48;
 
+  private ToolTipView() {
+  }
+
   public static void show(@NonNull View view, @NonNull CharSequence text, @Duration int duration) {
     if (TextUtils.isEmpty(text)) {
       return;

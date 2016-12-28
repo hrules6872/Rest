@@ -23,6 +23,9 @@ import com.hrules.rest.App;
 public final class AudioUtils {
   private static final int ZEN_MODE_OFF = 0;
 
+  private AudioUtils() {
+  }
+
   public static boolean isDoNotDisturbActive() {
     boolean result = true;
     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {

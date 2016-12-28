@@ -26,6 +26,9 @@ import com.hrules.rest.BuildConfig;
 public final class DebugLog {
   private static final int LOG_TAG_MAX_LENGTH = 23;
 
+  private DebugLog() {
+  }
+
   private static boolean isDebuggable() {
     return BuildConfig.DEBUG;
   }
