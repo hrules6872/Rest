@@ -16,23 +16,21 @@
 
 package com.hrules.rest.presentation.components;
 
-import android.annotation.TargetApi;
 import android.content.Context;
-import android.os.Build;
 import android.support.annotation.IntDef;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.v7.widget.AppCompatTextView;
 import android.text.Spannable;
 import android.util.AttributeSet;
 import android.view.animation.AccelerateInterpolator;
 import android.view.animation.Animation;
 import android.view.animation.Interpolator;
 import android.view.animation.ScaleAnimation;
-import android.widget.TextView;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 
-public class ScaleAnimatedTextView extends TextView {
+public class ScaleAnimatedTextView extends AppCompatTextView {
   private static final Interpolator DEFAULT_INTERPOLATOR = new AccelerateInterpolator();
   private static final float SCALE_FACTOR_OUT = 1.2f;
   private static final float SCALE_FACTOR_IN = 0.8f;
@@ -56,11 +54,6 @@ public class ScaleAnimatedTextView extends TextView {
 
   public ScaleAnimatedTextView(@NonNull Context context, AttributeSet attrs, int defStyleAttr) {
     super(context, attrs, defStyleAttr);
-  }
-
-  @TargetApi(Build.VERSION_CODES.LOLLIPOP)
-  public ScaleAnimatedTextView(@NonNull Context context, AttributeSet attrs, int defStyleAttr, int defStyleRes) {
-    super(context, attrs, defStyleAttr, defStyleRes);
   }
 
   public void setText(@Nullable Spannable spannable, boolean animate, @Type int type) {

@@ -16,13 +16,11 @@
 
 package com.hrules.rest.presentation.components;
 
-import android.annotation.TargetApi;
 import android.content.Context;
 import android.content.res.Resources;
 import android.content.res.TypedArray;
 import android.graphics.Canvas;
 import android.graphics.Paint;
-import android.os.Build;
 import android.support.annotation.ColorRes;
 import android.support.annotation.NonNull;
 import android.support.v4.content.ContextCompat;
@@ -50,12 +48,6 @@ public class ProgressCountdownView extends View {
 
   public ProgressCountdownView(@NonNull Context context, AttributeSet attrs, int defStyleAttr) {
     super(context, attrs, defStyleAttr);
-    init(context, attrs);
-  }
-
-  @TargetApi(Build.VERSION_CODES.LOLLIPOP)
-  public ProgressCountdownView(@NonNull Context context, AttributeSet attrs, int defStyleAttr, int defStyleRes) {
-    super(context, attrs, defStyleAttr, defStyleRes);
     init(context, attrs);
   }
 

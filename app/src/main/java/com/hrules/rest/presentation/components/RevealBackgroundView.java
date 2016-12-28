@@ -19,12 +19,10 @@ package com.hrules.rest.presentation.components;
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.animation.ObjectAnimator;
-import android.annotation.TargetApi;
 import android.content.Context;
 import android.content.res.TypedArray;
 import android.graphics.Canvas;
 import android.graphics.Paint;
-import android.os.Build;
 import android.support.annotation.ColorRes;
 import android.support.annotation.IntDef;
 import android.support.annotation.NonNull;
@@ -43,7 +41,8 @@ public class RevealBackgroundView extends View {
   public static final int STATE_FILL_STARTED = 1;
   public static final int STATE_FINISHED = 2;
 
-  @Retention(RetentionPolicy.SOURCE) @IntDef({ STATE_NOT_STARTED, STATE_FILL_STARTED, STATE_FINISHED }) @interface State {
+  @Retention(RetentionPolicy.SOURCE) @IntDef({ STATE_NOT_STARTED, STATE_FILL_STARTED, STATE_FINISHED })
+  @interface State {
   }
 
   private static final Interpolator DEFAULT_INTERPOLATOR = new AccelerateInterpolator();
@@ -80,12 +79,6 @@ public class RevealBackgroundView extends View {
     init(context, attrs);
   }
 
-  @TargetApi(Build.VERSION_CODES.LOLLIPOP)
-  public RevealBackgroundView(@NonNull Context context, AttributeSet attrs, int defStyleAttr, int defStyleRes) {
-    super(context, attrs, defStyleAttr, defStyleRes);
-    init(context, attrs);
-  }
-
   private void init(@NonNull Context context, AttributeSet attrs) {
     final TypedArray typedArray = context.obtainStyledAttributes(attrs, R.styleable.RevealBackgroundView);
     int painRevealColor = typedArray.getColor(R.styleable.RevealBackgroundView_r_revealColor,
@@ -113,7 +106,8 @@ public class RevealBackgroundView extends View {
     this.revealHeight = revealHeight;
     startLocationX = location[0];
     startLocationY = location[1];
-    revealAnimator = ObjectAnimator.ofInt(this, "currentRadius", startRadius, revealHeight).setDuration(animDurationMilli);
+    revealAnimator =
+        ObjectAnimator.ofInt(this, "currentRadius", startRadius, revealHeight).setDuration(animDurationMilli);
     revealAnimator.setInterpolator(interpolator);
     revealAnimator.addListener(new AnimatorListenerAdapter() {
       @Override public void onAnimationEnd(Animator animation) {
@@ -139,7 +133,8 @@ public class RevealBackgroundView extends View {
     this.revealHeight = 0;
     startLocationX = location[0];
     startLocationY = location[1];
-    revealAnimator = ObjectAnimator.ofInt(this, "currentRadius", revealHeight, startRadius).setDuration(animDurationMilli);
+    revealAnimator =
+        ObjectAnimator.ofInt(this, "currentRadius", revealHeight, startRadius).setDuration(animDurationMilli);
     revealAnimator.setInterpolator(interpolator);
     revealAnimator.addListener(new AnimatorListenerAdapter() {
       @Override public void onAnimationEnd(Animator animation) {
@@ -182,33 +177,33 @@ public class RevealBackgroundView extends View {
     this.state = state;
   }
 
+  public int getCurrentRadius() {
+    return currentRadius;
+  }
+
   public void setCurrentRadius(int radius) {
     // do NOT delete! relative to ObjectAnimator
     this.currentRadius = radius;
     invalidate();
   }
 
-  public int getCurrentRadius() {
-    return currentRadius;
-  }
-
   public void setRevealColor(@ColorRes int color) {
     paintReveal.setColor(ContextCompat.getColor(getContext(), color));
-  }
-
-  public void setAnimDuration(int milli) {
-    this.animDurationMilli = milli;
   }
 
   public int getAnimDuration() {
     return animDurationMilli;
   }
 
-  public void setInterpolator(@NonNull Interpolator interpolator) {
-    this.interpolator = interpolator;
+  public void setAnimDuration(int milli) {
+    this.animDurationMilli = milli;
   }
 
   public Interpolator getInterpolator() {
     return interpolator;
+  }
+
+  public void setInterpolator(@NonNull Interpolator interpolator) {
+    this.interpolator = interpolator;
   }
 }
