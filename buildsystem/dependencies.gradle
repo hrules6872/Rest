@@ -21,8 +21,8 @@ ext {
   androidBuildCompileSDKVersion = 'android-25'
 
   // internal
-  appVersionCode = 1100
-  appVersionName = '1.1.0'
+  appVersionCode = 1110
+  appVersionName = '1.1.1'
 
   // support libraries
   supportLibraryVersion = '25.1.+'
