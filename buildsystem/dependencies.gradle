@@ -17,8 +17,8 @@
 ext {
   androidBuildToolsVersion = '25.0.2'
   androidBuildMinSDKVersion = '16'
-  androidBuildTargetSDKVersion = '24'
-  androidBuildCompileSDKVersion = 'android-24'
+  androidBuildTargetSDKVersion = '25'
+  androidBuildCompileSDKVersion = 'android-25'
 
   // internal
   appVersionCode = 1100
