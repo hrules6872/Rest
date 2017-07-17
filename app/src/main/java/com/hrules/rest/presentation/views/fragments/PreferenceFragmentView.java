@@ -24,24 +24,21 @@ import android.preference.PreferenceFragment;
 import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
 import android.view.View;
+import com.hrules.rest.App;
 import com.hrules.rest.R;
+import com.hrules.rest.commons.Preferences;
 import com.hrules.rest.presentation.commons.AppUtils;
-import com.hrules.rest.presentation.presenters.fragments.PreferenceFragmentPresenter;
 import com.hrules.rest.presentation.views.activities.AboutActivityView;
 
 public class PreferenceFragmentView extends PreferenceFragment
-    implements PreferenceFragmentPresenter.Contract, Preference.OnPreferenceClickListener, Preference.OnPreferenceChangeListener {
-  private PreferenceFragmentPresenter presenter;
-
+    implements Preference.OnPreferenceClickListener, Preference.OnPreferenceChangeListener {
   @Override public void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
-    addPreferencesFromResource(getPreferenceResource());
+    addPreferencesFromResource(R.xml.preferences);
   }
 
   @Override public void onViewCreated(View view, Bundle savedInstanceState) {
     super.onViewCreated(view, savedInstanceState);
-    presenter = new PreferenceFragmentPresenter();
-    presenter.bind(this);
     initializeViews();
   }
 
@@ -55,11 +52,7 @@ public class PreferenceFragmentView extends PreferenceFragment
     bindPreferenceSummaryToValue(findPreference(getString(R.string.prefs_displayOrientationKey)));
 
     // check states
-    presenter.checkSoundAndVibrateState();
-  }
-
-  private int getPreferenceResource() {
-    return R.xml.preferences;
+    checkSoundAndVibrateState();
   }
 
   private void bindPreference(@NonNull Preference preference) {
@@ -72,7 +65,16 @@ public class PreferenceFragmentView extends PreferenceFragment
   }
 
   @Override public boolean onPreferenceClick(Preference preference) {
-    presenter.onPreferenceClick(preference);
+    String key = preference.getKey();
+    if (getString(R.string.prefs_appAboutKey).equals(key)) {
+      launchAboutActivity();
+    } else if (getString(R.string.prefs_appSendFeedbackKey).equals(key)) {
+      sendFeedbackByEmail();
+    } else if (getString(R.string.prefs_alertSoundKey).equals(key) || getString(R.string.prefs_alertVibrateKey).equals(key)) {
+      checkSoundAndVibrateState();
+    } else {
+      return false;
+    }
     return true;
   }
 
@@ -88,21 +90,35 @@ public class PreferenceFragmentView extends PreferenceFragment
     return true;
   }
 
-  @Override public void launchAboutActivity() {
+  private void checkSoundAndVibrateState() {
+    Preferences preferences = new Preferences(App.getAppContext());
+    boolean prefsSound =
+        preferences.getBoolean(getString(R.string.prefs_alertSoundKey), getResources().getBoolean(R.bool.prefs_alertSoundDefault));
+    boolean prefsVibrate =
+        preferences.getBoolean(getString(R.string.prefs_alertVibrateKey), getResources().getBoolean(R.bool.prefs_alertVibrateDefault));
+
+    if (!prefsSound && !prefsVibrate) {
+      disableAllAlerts();
+    } else {
+      enableAllAlerts();
+    }
+  }
+
+  private void launchAboutActivity() {
     startActivity(new Intent(getActivity(), AboutActivityView.class));
   }
 
-  @Override public void sendFeedbackByEmail() {
+  private void sendFeedbackByEmail() {
     AppUtils.sendFeedbackByEmail(getActivity());
   }
 
-  @Override public void disableAllAlerts() {
+  private void disableAllAlerts() {
     findPreference(getString(R.string.prefs_alertHalfwayKey)).setEnabled(false);
     findPreference(getString(R.string.prefs_alertTenSecondsKey)).setEnabled(false);
     findPreference(getString(R.string.prefs_alertThreeSecondsKey)).setEnabled(false);
   }
 
-  @Override public void enableAllAlerts() {
+  private void enableAllAlerts() {
     findPreference(getString(R.string.prefs_alertHalfwayKey)).setEnabled(true);
     findPreference(getString(R.string.prefs_alertTenSecondsKey)).setEnabled(true);
     findPreference(getString(R.string.prefs_alertThreeSecondsKey)).setEnabled(true);

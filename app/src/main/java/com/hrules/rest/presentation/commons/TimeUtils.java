@@ -16,11 +16,9 @@
 
 package com.hrules.rest.presentation.commons;
 
-import android.content.Context;
 import android.content.res.Resources;
 import android.support.annotation.ColorInt;
 import android.support.annotation.NonNull;
-import android.support.v4.content.ContextCompat;
 import android.text.Spannable;
 import android.text.SpannableString;
 import android.text.style.RelativeSizeSpan;
@@ -38,27 +36,22 @@ public final class TimeUtils {
 
   public static String milliToFavoriteMinutesSecondsString(long milli, @NonNull Resources resources) {
     long minutes = TimeUnit.MILLISECONDS.toMinutes(milli);
-    long seconds =
-        TimeUnit.MILLISECONDS.toSeconds(milli) - TimeUnit.MINUTES.toSeconds(TimeUnit.MILLISECONDS.toMinutes(milli));
+    long seconds = TimeUnit.MILLISECONDS.toSeconds(milli) - TimeUnit.MINUTES.toSeconds(TimeUnit.MILLISECONDS.toMinutes(milli));
     return String.format(resources.getString(R.string.text_favoriteMinutesSecondsFormatted), minutes, seconds);
   }
 
   public static String milliToMinutesSecondsString(long milli, @NonNull Resources resources) {
     long minutes = TimeUnit.MILLISECONDS.toMinutes(milli);
-    long seconds =
-        TimeUnit.MILLISECONDS.toSeconds(milli) - TimeUnit.MINUTES.toSeconds(TimeUnit.MILLISECONDS.toMinutes(milli));
+    long seconds = TimeUnit.MILLISECONDS.toSeconds(milli) - TimeUnit.MINUTES.toSeconds(TimeUnit.MILLISECONDS.toMinutes(milli));
     return String.format(resources.getString(R.string.text_timeMinutesSecondsFormatted), minutes, seconds);
   }
 
   public static Spannable milliToMinutesSecondsMilliString(long milli, @NonNull Resources resources) {
     long minutes = TimeUnit.MILLISECONDS.toMinutes(milli);
-    long seconds =
-        TimeUnit.MILLISECONDS.toSeconds(milli) - TimeUnit.MINUTES.toSeconds(TimeUnit.MILLISECONDS.toMinutes(milli));
+    long seconds = TimeUnit.MILLISECONDS.toSeconds(milli) - TimeUnit.MINUTES.toSeconds(TimeUnit.MILLISECONDS.toMinutes(milli));
     long milliseconds = (milli % TimeUnit.SECONDS.toMillis(1)) / 10;
 
-    String formatted =
-        String.format(resources.getString(R.string.text_timeMinutesSecondsMilliFormatted), minutes, seconds,
-            milliseconds);
+    String formatted = String.format(resources.getString(R.string.text_timeMinutesSecondsMilliFormatted), minutes, seconds, milliseconds);
     Spannable spannable = new SpannableString(formatted);
     spannable.setSpan(new RelativeSizeSpan(RELATIVESIZESPAN_MILLI), formatted.length() - 2, formatted.length(),
         Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
@@ -67,15 +60,12 @@ public final class TimeUtils {
 
   public static Spannable milliToStopwatchHoursMinutesSecondsMilliString(long milli, @NonNull Resources resources) {
     long hours = TimeUnit.MILLISECONDS.toHours(milli);
-    long minutes =
-        TimeUnit.MILLISECONDS.toMinutes(milli) - TimeUnit.HOURS.toMinutes(TimeUnit.MILLISECONDS.toHours(milli));
-    long seconds =
-        TimeUnit.MILLISECONDS.toSeconds(milli) - TimeUnit.MINUTES.toSeconds(TimeUnit.MILLISECONDS.toMinutes(milli));
+    long minutes = TimeUnit.MILLISECONDS.toMinutes(milli) - TimeUnit.HOURS.toMinutes(TimeUnit.MILLISECONDS.toHours(milli));
+    long seconds = TimeUnit.MILLISECONDS.toSeconds(milli) - TimeUnit.MINUTES.toSeconds(TimeUnit.MILLISECONDS.toMinutes(milli));
     long milliseconds = (milli % TimeUnit.SECONDS.toMillis(1)) / 10;
 
     String formatted =
-        String.format(resources.getString(R.string.text_stopwatchHoursMinutesSecondsMilliFormatted), hours, minutes,
-            seconds, milliseconds);
+        String.format(resources.getString(R.string.text_stopwatchHoursMinutesSecondsMilliFormatted), hours, minutes, seconds, milliseconds);
     Spannable spannable = new SpannableString(formatted);
     spannable.setSpan(new RelativeSizeSpan(RELATIVESIZESPAN_MILLI), formatted.length() - 2, formatted.length(),
         Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
@@ -102,19 +92,19 @@ public final class TimeUtils {
     return String.format(Locale.getDefault(), FORMAT_SECONDS_TWO_LEADING_ZEROS, seconds);
   }
 
-  public static @ColorInt int getNotificationTextColorFromMilli(@NonNull Context context) {
+  public static @ColorInt int getNotificationTextColorFromMilli(@NonNull ResUtils resources) {
     if (TimeManager.INSTANCE.isCountdownOver()) {
-      return ContextCompat.getColor(context, R.color.notification_countDownTextOver);
+      return resources.getColor(R.color.notification_countDownTextOver);
     } else {
-      return ContextCompat.getColor(context, R.color.notification_countDownText);
+      return resources.getColor(R.color.notification_countDownText);
     }
   }
 
-  public static @ColorInt int getTextColorFromMilli(@NonNull Context context) {
+  public static @ColorInt int getTextColorFromMilli(@NonNull ResUtils resources) {
     if (TimeManager.INSTANCE.isCountdownOver()) {
-      return ContextCompat.getColor(context, R.color.countDownTextOver);
+      return resources.getColor(R.color.countDownTextOver);
     } else {
-      return ContextCompat.getColor(context, R.color.countDownText);
+      return resources.getColor(R.color.countDownText);
     }
   }
 }

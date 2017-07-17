@@ -50,9 +50,11 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import butterknife.OnLongClick;
+import com.hrules.rest.App;
 import com.hrules.rest.R;
 import com.hrules.rest.core.time.TimeManager;
 import com.hrules.rest.presentation.adapters.FavoritesAdapter;
+import com.hrules.rest.presentation.commons.ResUtils;
 import com.hrules.rest.presentation.commons.TimeUtils;
 import com.hrules.rest.presentation.commons.ViewUtils;
 import com.hrules.rest.presentation.commons.annotations.Visibility;
@@ -137,8 +139,11 @@ public class MainActivityView extends DRMVPAppCompatActivity<MainActivityPresent
   @Override public boolean onOptionsItemSelected(MenuItem item) {
     switch (item.getItemId()) {
       case R.id.menu_preferences:
+        launchPreferencesActivity();
+        return true;
+
       case R.id.menu_closeNotification:
-        getPresenter().onMenuItemClick(item);
+        closeNotification();
         return true;
 
       default:
@@ -170,11 +175,11 @@ public class MainActivityView extends DRMVPAppCompatActivity<MainActivityPresent
     return true;
   }
 
-  @Override public void launchPreferencesActivity() {
+  private void launchPreferencesActivity() {
     startActivity(new Intent(this, PreferenceActivityView.class));
   }
 
-  @Override public void closeNotification() {
+  private void closeNotification() {
     sendBroadcast(new Intent(TimeServiceReceiver.ACTION_EXIT));
   }
 
@@ -216,7 +221,7 @@ public class MainActivityView extends DRMVPAppCompatActivity<MainActivityPresent
   @Override public void updateCountdown(boolean animate) {
     textCountdown.setText(TimeUtils.milliToMinutesSecondsMilliString(TimeUtils.getCountdownMilliUnsigned(), getResources()), animate,
         TimeManager.INSTANCE.isRunning() ? ScaleAnimatedTextView.ANIM_TYPE_SCALE_OUT : ScaleAnimatedTextView.ANIM_TYPE_SCALE_IN);
-    textCountdown.setTextColor(TimeUtils.getTextColorFromMilli(MainActivityView.this));
+    textCountdown.setTextColor(TimeUtils.getTextColorFromMilli(new ResUtils(App.getAppContext())));
 
     if (TimeManager.INSTANCE.isRunning() && !TimeManager.INSTANCE.isCountdownOver()
         && revealBackgroundView.getState() == RevealBackgroundView.STATE_FINISHED) {
@@ -285,7 +290,7 @@ public class MainActivityView extends DRMVPAppCompatActivity<MainActivityPresent
         if (favorite.getType() == Favorite.Type.SECONDS) {
           getPresenter().onFavoriteTitleClick(favorite);
         } else if (favorite.getType() == Favorite.Type.ADD) {
-          getPresenter().onFavoriteActionAddClick(editMinutes, editSeconds);
+          getPresenter().onFavoriteActionAddClick(editMinutes.getText().toString(), editSeconds.getText().toString());
         }
         listPopupWindow.dismiss();
       }
@@ -329,12 +334,12 @@ public class MainActivityView extends DRMVPAppCompatActivity<MainActivityPresent
   }
 
   @OnClick(R.id.button_favorites) void onButtonFavoritesClick() {
-    getPresenter().onButtonFavoritesClick(editMinutes, editSeconds);
+    getPresenter().onButtonFavoritesClick(editMinutes.getText().toString(), editSeconds.getText().toString());
   }
 
   @OnClick(R.id.text_countDown) void onTextCountDownClick() {
     if (buttonFavorites.isEnabled()) {
-      getPresenter().onButtonFavoritesClick(editMinutes, editSeconds);
+      getPresenter().onButtonFavoritesClick(editMinutes.getText().toString(), editSeconds.getText().toString());
     }
   }
 
@@ -360,7 +365,7 @@ public class MainActivityView extends DRMVPAppCompatActivity<MainActivityPresent
     }
 
     @Override public void afterTextChanged(Editable s) {
-      getPresenter().editAfterTextChanged(editMinutes, editSeconds);
+      getPresenter().editAfterTextChanged(editMinutes.getText().toString(), editSeconds.getText().toString());
     }
   };
   //endregion

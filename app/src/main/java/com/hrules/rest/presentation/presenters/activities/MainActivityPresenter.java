@@ -22,7 +22,6 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.content.pm.ActivityInfo;
-import android.content.res.Resources;
 import android.os.Handler;
 import android.os.Looper;
 import android.support.annotation.ColorRes;
@@ -30,8 +29,8 @@ import android.support.annotation.DrawableRes;
 import android.support.annotation.IdRes;
 import android.support.annotation.NonNull;
 import android.support.annotation.StringRes;
+import android.text.TextUtils;
 import android.view.KeyEvent;
-import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.TextView;
@@ -44,6 +43,7 @@ import com.hrules.rest.commons.Preferences;
 import com.hrules.rest.core.AudioUtils;
 import com.hrules.rest.core.alerts.VibratorHelper;
 import com.hrules.rest.core.time.TimeManager;
+import com.hrules.rest.presentation.commons.ResUtils;
 import com.hrules.rest.presentation.commons.TimeUtils;
 import com.hrules.rest.presentation.commons.annotations.Visibility;
 import com.hrules.rest.presentation.models.FavoriteAdd;
@@ -70,25 +70,25 @@ public class MainActivityPresenter extends DRMVPPresenter<MainActivityPresenter.
   private static final long DEFAULT_STOPWATCH_DELAY_MILLI = 0;
   private static final long DEFAULT_STOPWATCH_PERIOD_MILLI = 33;
 
+  private ResUtils resources;
   private Preferences preferences;
   private boolean prefsVibrateButtons;
 
   private final Handler countdownHandler = new Handler(Looper.getMainLooper());
-  private final Handler stopwatchHandler = new Handler(Looper.getMainLooper());
 
+  private final Handler stopwatchHandler = new Handler(Looper.getMainLooper());
   private final ScheduledThreadPoolExecutor scheduledThreadPoolExecutor = new ScheduledThreadPoolExecutor(DEFAULT_EXECUTOR_CORE_POOL_SIZE);
   private ScheduledFuture scheduledFutureStopwatch;
-  private long stopwatchStartTime;
 
-  private Context appContext;
+  private long stopwatchStartTime;
 
   @Override public void bind(@NonNull Contract view) {
     super.bind(view);
-    appContext = App.getAppContext();
+    resources = new ResUtils(App.getAppContext());
+    preferences = new Preferences(App.getAppContext());
   }
 
   public void onViewReady() {
-    preferences = new Preferences(appContext);
     getPreferences();
     preferences.addListener(sharedPreferenceChangeListener);
 
@@ -106,8 +106,6 @@ public class MainActivityPresenter extends DRMVPPresenter<MainActivityPresenter.
   }
 
   public void onViewResume() {
-    Resources resources = appContext.getResources();
-
     boolean keepScreenOn = preferences.getBoolean(resources.getString(R.string.prefs_displayKeepScreenOnKey),
         resources.getBoolean(R.bool.prefs_displayKeepScreenOnDefault));
 
@@ -164,23 +162,7 @@ public class MainActivityPresenter extends DRMVPPresenter<MainActivityPresenter.
     stopwatchHandler.removeCallbacksAndMessages(null);
   }
 
-  public void onMenuItemClick(@NonNull MenuItem item) {
-    switch (item.getItemId()) {
-      case R.id.menu_preferences:
-        getView().launchPreferencesActivity();
-        break;
-
-      case R.id.menu_closeNotification:
-        getView().closeNotification();
-        break;
-
-      default:
-        throw new UnsupportedOperationException();
-    }
-  }
-
   private void getPreferences() {
-    Resources resources = appContext.getResources();
     prefsVibrateButtons = preferences.getBoolean(resources.getString(R.string.prefs_controlVibrateButtonsKey),
         resources.getBoolean(R.bool.prefs_controlVibrateButtonsDefault));
   }
@@ -191,7 +173,7 @@ public class MainActivityPresenter extends DRMVPPresenter<MainActivityPresenter.
   // region COUNTDOWN
   private void checkVibrateOnClickState() {
     if (prefsVibrateButtons) {
-      VibratorHelper.vibrateClick(appContext);
+      VibratorHelper.vibrateClick(App.getAppContext());
     }
   }
 
@@ -271,52 +253,57 @@ public class MainActivityPresenter extends DRMVPPresenter<MainActivityPresenter.
     }
   }
 
-  public void editAfterTextChanged(@NonNull EditText editMinutes, @NonNull EditText editSeconds) {
+  public void editAfterTextChanged(@NonNull String editMinutes, @NonNull String editSeconds) {
     long minutes;
     long seconds;
 
-    if (editMinutes.getText().toString().isEmpty()) {
-      minutes = DEFAULT_EDIT_STATE_EMPTY;
-    } else {
-      minutes = Long.parseLong(editMinutes.getText().toString());
-    }
-
-    if (editSeconds.getText().toString().isEmpty()) {
-      seconds = DEFAULT_EDIT_STATE_EMPTY;
-    } else {
-      seconds = Long.parseLong(editSeconds.getText().toString());
-      if (seconds > TimeUnit.MINUTES.toSeconds(1) - 1) {
-        seconds = TimeUnit.MINUTES.toSeconds(1) - 1;
-        getView().setEditText(R.id.edit_seconds, String.valueOf(seconds));
+    try {
+      if (TextUtils.isEmpty(editMinutes)) {
+        minutes = DEFAULT_EDIT_STATE_EMPTY;
+      } else {
+        minutes = Long.parseLong(editMinutes);
       }
-    }
 
-    preferences.save(AppConstants.PREFS.COUNTDOWN_MILLI, TimeUtils.getMilliFromMinutesSecond(minutes, seconds));
-    TimeManager.INSTANCE.setCountdownTimeMilli(TimeUtils.getMilliFromMinutesSecond(minutes, seconds));
+      if (TextUtils.isEmpty(editSeconds)) {
+        seconds = DEFAULT_EDIT_STATE_EMPTY;
+      } else {
+        seconds = Long.parseLong(editSeconds);
+        if (seconds > TimeUnit.MINUTES.toSeconds(1) - 1) {
+          seconds = TimeUnit.MINUTES.toSeconds(1) - 1;
+          getView().setEditText(R.id.edit_seconds, String.valueOf(seconds));
+        }
+      }
+
+      preferences.save(AppConstants.PREFS.COUNTDOWN_MILLI, TimeUtils.getMilliFromMinutesSecond(minutes, seconds));
+      TimeManager.INSTANCE.setCountdownTimeMilli(TimeUtils.getMilliFromMinutesSecond(minutes, seconds));
+    } catch (NumberFormatException ignored) {
+    }
   }
 
-  public void onButtonFavoritesClick(@NonNull EditText editMinutes, @NonNull EditText editSeconds) {
-    Resources resources = appContext.getResources();
+  public void onButtonFavoritesClick(@NonNull String editMinutes, @NonNull String editSeconds) {
     List<Favorite> favorites = new ArrayList<>();
 
     Set<String> favoritesSet = new HashSet<>(preferences.getStringSet(AppConstants.PREFS.FAVORITES, AppConstants.PREFS.DEFAULTS.FAVORITES));
     for (String secondsFromStringSet : favoritesSet) {
       long milli = Integer.valueOf(secondsFromStringSet) * TimeUnit.SECONDS.toMillis(1);
       int seconds = Integer.valueOf(secondsFromStringSet);
-      favorites.add(new FavoriteSeconds(TimeUtils.milliToFavoriteMinutesSecondsString(milli, resources), seconds));
+      favorites.add(new FavoriteSeconds(TimeUtils.milliToFavoriteMinutesSecondsString(milli, resources.getResources()), seconds));
     }
     Collections.sort(favorites, new FavoriteSecondsAscendingComparator());
 
-    if (!editMinutes.getText().toString().isEmpty() && !editSeconds.getText().toString().isEmpty()) {
-      long minutes = Long.parseLong(editMinutes.getText().toString());
-      long seconds = Long.parseLong(editSeconds.getText().toString());
-      String totalSeconds = String.valueOf(TimeUnit.MINUTES.toSeconds(minutes) + seconds);
-      if (!favoritesSet.contains(totalSeconds) && !"0".equals(totalSeconds)) {
-        favorites.add(0, new FavoriteAdd(resources.getString(R.string.text_addFavorite)));
+    try {
+      if (!TextUtils.isEmpty(editMinutes) && !TextUtils.isEmpty(editMinutes)) {
+        long minutes = Long.parseLong(editMinutes);
+        long seconds = Long.parseLong(editSeconds);
+        String totalSeconds = String.valueOf(TimeUnit.MINUTES.toSeconds(minutes) + seconds);
+        if (!favoritesSet.contains(totalSeconds) && !"0".equals(totalSeconds)) {
+          favorites.add(0, new FavoriteAdd(resources.getString(R.string.text_addFavorite)));
+        }
       }
-    }
 
-    getView().showPopupFavorites(favorites);
+      getView().showPopupFavorites(favorites);
+    } catch (NumberFormatException ignored) {
+    }
   }
 
   public void onFavoriteTitleClick(@NonNull Favorite favorite) {
@@ -339,16 +326,19 @@ public class MainActivityPresenter extends DRMVPPresenter<MainActivityPresenter.
     preferences.save(AppConstants.PREFS.FAVORITES, favoritesSet);
   }
 
-  public void onFavoriteActionAddClick(@NonNull EditText editMinutes, @NonNull EditText editSeconds) {
+  public void onFavoriteActionAddClick(@NonNull String editMinutes, @NonNull String editSeconds) {
     Set<String> favoritesSet = new HashSet<>(preferences.getStringSet(AppConstants.PREFS.FAVORITES, AppConstants.PREFS.DEFAULTS.FAVORITES));
 
-    long minutes = Long.parseLong(editMinutes.getText().toString());
-    long seconds = Long.parseLong(editSeconds.getText().toString());
-    String secondsStringToSave =
-        String.valueOf(Math.round(TimeUtils.getMilliFromMinutesSecond(minutes, seconds) / TimeUnit.SECONDS.toMillis(1)));
-    favoritesSet.add(secondsStringToSave);
+    try {
+      long minutes = Long.parseLong(editMinutes);
+      long seconds = Long.parseLong(editSeconds);
+      String secondsStringToSave =
+          String.valueOf(Math.round(TimeUtils.getMilliFromMinutesSecond(minutes, seconds) / TimeUnit.SECONDS.toMillis(1)));
+      favoritesSet.add(secondsStringToSave);
 
-    preferences.save(AppConstants.PREFS.FAVORITES, favoritesSet);
+      preferences.save(AppConstants.PREFS.FAVORITES, favoritesSet);
+    } catch (Exception ignored) {
+    }
   }
 
   private final TimeManager.TimeManagerListener timeManagerListener = new TimeManager.TimeManagerListener() {
@@ -451,12 +441,12 @@ public class MainActivityPresenter extends DRMVPPresenter<MainActivityPresenter.
   private void registerStopwatchReceiver() {
     IntentFilter intentFilter = new IntentFilter();
     intentFilter.addAction(ACTION_STOPWATCHSTOP);
-    appContext.registerReceiver(stopwatchReceiver, intentFilter);
+    App.getAppContext().registerReceiver(stopwatchReceiver, intentFilter);
   }
 
   private void unregisterStopwatchReceiver() {
     try {
-      appContext.unregisterReceiver(stopwatchReceiver);
+      App.getAppContext().unregisterReceiver(stopwatchReceiver);
     } catch (IllegalArgumentException ignored) {
     }
   }
@@ -473,10 +463,6 @@ public class MainActivityPresenter extends DRMVPPresenter<MainActivityPresenter.
   //endregion
 
   public interface Contract extends DRMVPView {
-    void launchPreferencesActivity();
-
-    void closeNotification();
-
     void setDisplayOptions(boolean keepScreenOn, int screenOrientationSensor);
 
     void showTooltip(@IdRes int viewResId, @StringRes int stringResId);

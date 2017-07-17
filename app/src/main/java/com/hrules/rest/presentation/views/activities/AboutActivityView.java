@@ -21,6 +21,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.ActionBar;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 import android.widget.Button;
@@ -31,20 +32,14 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 import com.hrules.rest.R;
 import com.hrules.rest.presentation.commons.AppUtils;
-import com.hrules.rest.presentation.presenters.activities.AboutActivityPresenter;
-import com.hrules.rest.presentation.views.activities.base.DRMVPAppCompatActivity;
 
-public class AboutActivityView extends DRMVPAppCompatActivity<AboutActivityPresenter, AboutActivityPresenter.Contract>
-    implements AboutActivityPresenter.Contract {
+public class AboutActivityView extends AppCompatActivity {
   @BindView(R.id.toolbar) Toolbar toolbar;
   @BindView(R.id.about_version) TextView aboutVersion;
 
-  @Override protected int getLayoutResId() {
-    return R.layout.activity_about;
-  }
-
   @Override protected void onCreate(@Nullable Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
+    setContentView(R.layout.activity_about);
     initializeViews();
   }
 
@@ -75,10 +70,30 @@ public class AboutActivityView extends DRMVPAppCompatActivity<AboutActivityPrese
   @OnClick({
       R.id.about_rateIt, R.id.about_sendFeedback, R.id.about_moreApps, R.id.about_twitter, R.id.about_sourceCode
   }) void onClickButton(Button button) {
-    getPresenter().onClickButton(button);
+    switch (button.getId()) {
+      case R.id.about_rateIt:
+        goToPlayStore();
+        break;
+
+      case R.id.about_sendFeedback:
+        sendFeedbackByEmail();
+        break;
+
+      case R.id.about_moreApps:
+        goToPlayStoreDeveloper();
+        break;
+
+      case R.id.about_twitter:
+        goToTwitterDeveloper();
+        break;
+
+      case R.id.about_sourceCode:
+        goToSourceCode();
+        break;
+    }
   }
 
-  @Override public void goToPlayStore() {
+  private void goToPlayStore() {
     try {
       startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(getString(R.string.app_playStoreURL))));
     } catch (Exception ignored) {
@@ -86,11 +101,11 @@ public class AboutActivityView extends DRMVPAppCompatActivity<AboutActivityPrese
     }
   }
 
-  @Override public void sendFeedbackByEmail() {
+  private void sendFeedbackByEmail() {
     AppUtils.sendFeedbackByEmail(this);
   }
 
-  @Override public void goToPlayStoreDeveloper() {
+  private void goToPlayStoreDeveloper() {
     try {
       startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(getString(R.string.app_developerPlayStoreURL))));
     } catch (Exception ignored) {
@@ -98,7 +113,7 @@ public class AboutActivityView extends DRMVPAppCompatActivity<AboutActivityPrese
     }
   }
 
-  @Override public void goToTwitterDeveloper() {
+  private void goToTwitterDeveloper() {
     try {
       startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(getString(R.string.app_developerTwitterURL))));
     } catch (Exception ignored) {
@@ -106,7 +121,7 @@ public class AboutActivityView extends DRMVPAppCompatActivity<AboutActivityPrese
     }
   }
 
-  @Override public void goToSourceCode() {
+  private void goToSourceCode() {
     try {
       startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(getString(R.string.app_sourceCodeURL))));
     } catch (Exception e) {
