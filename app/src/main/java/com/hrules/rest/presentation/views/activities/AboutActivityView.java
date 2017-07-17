@@ -40,7 +40,7 @@ public class AboutActivityView extends DRMVPAppCompatActivity<AboutActivityPrese
   @BindView(R.id.about_version) TextView aboutVersion;
 
   @Override protected int getLayoutResId() {
-    return R.layout.about_activity;
+    return R.layout.activity_about;
   }
 
   @Override protected void onCreate(@Nullable Bundle savedInstanceState) {

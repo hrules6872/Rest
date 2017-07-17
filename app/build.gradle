@@ -62,16 +62,6 @@ android {
       signingConfig signingConfigs.release
     }
   }
-
-  sourceSets {
-    main {
-      res.srcDirs = ['src/main/res/layout/main',
-                     'src/main/res/layout/notification',
-                     'src/main/res/layout/about',
-                     'src/main/res/layout',
-                     'src/main/res']
-    }
-  }
 }
 
 dependencies {

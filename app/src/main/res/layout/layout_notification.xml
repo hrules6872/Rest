@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!--
-  ~ Copyright (c) 2016. Héctor de Isidro - hrules6872
+  ~ Copyright (c) 2017. Héctor de Isidro - hrules6872
   ~
   ~ Licensed under the Apache License, Version 2.0 (the "License");
   ~ you may not use this file except in compliance with the License.
@@ -15,7 +15,11 @@
   ~ limitations under the License.
   -->
 
-<merge xmlns:android="http://schemas.android.com/apk/res/android">
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/layout_buttons"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="horizontal">
 
   <ImageView
       android:layout_width="@dimen/notification_iconWidth"
@@ -30,9 +34,9 @@
       android:layout_height="match_parent"
       android:layout_weight="1"
       android:gravity="center"
+      android:maxLines="1"
       android:textColor="@color/notification_countDownText"
-      android:textSize="@dimen/notification_textCountdownSize"
-      android:maxLines="1"/>
+      android:textSize="@dimen/notification_textCountdownSize"/>
 
   <ImageView
       android:id="@+id/button_replay"
@@ -52,4 +56,4 @@
       android:background="@drawable/selector_notificationbutton"
       android:scaleType="centerInside"
       android:src="@drawable/ic_play"/>
-</merge>
+</LinearLayout>

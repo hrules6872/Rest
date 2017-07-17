@@ -38,7 +38,7 @@ public class Favorite {
     this.type = type;
   }
 
-  public String getTitle() {
+  public @NonNull String getTitle() {
     return title;
   }
 

@@ -96,9 +96,9 @@ public class FavoritesAdapter extends ArrayAdapter<Favorite> {
 
   private View getInflatedLayoutForType(int type, ViewGroup parent) {
     if (type == Favorite.Type.ADD) {
-      return LayoutInflater.from(getContext()).inflate(R.layout.main_item_favorite_action, parent, false);
+      return LayoutInflater.from(getContext()).inflate(R.layout.item_favorite_action, parent, false);
     } else if (type == Favorite.Type.SECONDS) {
-      return LayoutInflater.from(getContext()).inflate(R.layout.main_item_favorite_seconds, parent, false);
+      return LayoutInflater.from(getContext()).inflate(R.layout.item_favorite_seconds, parent, false);
     } else {
       throw new UnsupportedOperationException();
     }

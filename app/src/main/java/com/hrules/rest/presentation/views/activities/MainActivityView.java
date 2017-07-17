@@ -92,7 +92,7 @@ public class MainActivityView extends DRMVPAppCompatActivity<MainActivityPresent
   private ListPopupWindow listPopupWindow;
 
   @Override protected int getLayoutResId() {
-    return R.layout.main_activity;
+    return R.layout.activity_main;
   }
 
   @Override protected void onCreate(@Nullable Bundle savedInstanceState) {

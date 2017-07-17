@@ -224,7 +224,7 @@ public class TimeService extends Service {
   }
 
   private RemoteViews getRemoteViewExpanded() {
-    RemoteViews remoteView = new RemoteViews(getPackageName(), R.layout.notification_expanded);
+    RemoteViews remoteView = new RemoteViews(getPackageName(), R.layout.layout_notification_expanded);
 
     updateRemoteView(remoteView);
     setOnClickPendingIntentOnRemoteView(remoteView);
@@ -236,7 +236,7 @@ public class TimeService extends Service {
   }
 
   private RemoteViews getRemoteViewCollapsed() {
-    RemoteViews remoteView = new RemoteViews(getPackageName(), R.layout.notification);
+    RemoteViews remoteView = new RemoteViews(getPackageName(), R.layout.layout_notification);
 
     updateRemoteView(remoteView);
     setOnClickPendingIntentOnRemoteView(remoteView);
