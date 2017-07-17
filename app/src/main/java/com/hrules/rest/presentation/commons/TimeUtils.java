@@ -95,7 +95,7 @@ public final class TimeUtils {
   }
 
   public static long getCountdownMilliUnsigned() {
-    return Math.abs(TimeManager.INSTANCE.getCountdownTime() - TimeManager.INSTANCE.getElapsedTime());
+    return Math.abs(TimeManager.INSTANCE.getCountdownTimeMilli() - TimeManager.INSTANCE.getElapsedTime());
   }
 
   public static String getSecondsFormattedWithLeadingZeros(long seconds) {

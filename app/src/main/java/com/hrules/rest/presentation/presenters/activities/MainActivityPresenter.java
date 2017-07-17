@@ -47,7 +47,7 @@ import com.hrules.rest.core.AudioUtils;
 import com.hrules.rest.core.alerts.VibratorHelper;
 import com.hrules.rest.core.time.TimeManager;
 import com.hrules.rest.presentation.commons.TimeUtils;
-import com.hrules.rest.presentation.commons.Visibility;
+import com.hrules.rest.presentation.commons.annotations.Visibility;
 import com.hrules.rest.presentation.models.FavoriteAdd;
 import com.hrules.rest.presentation.models.FavoriteSeconds;
 import com.hrules.rest.presentation.models.base.Favorite;
@@ -96,7 +96,7 @@ public class MainActivityPresenter extends DRPresenter<MainActivityPresenter.Mai
     preferences.addListener(sharedPreferenceChangeListener);
 
     // countdown
-    TimeManager.INSTANCE.setCountdownTime(
+    TimeManager.INSTANCE.setCountdownTimeMilli(
         preferences.getLong(AppConstants.PREFS.COUNTDOWN_MILLI, AppConstants.PREFS.DEFAULTS.COUNTDOWN_MILLI));
 
     long minutes = TimeUtils.getExactMinutesFromMilli(
@@ -208,7 +208,7 @@ public class MainActivityPresenter extends DRPresenter<MainActivityPresenter.Mai
       // start countdown
       getView().startServiceIfNotRunning();
 
-      getView().setProgressViewAttributes(View.INVISIBLE, TimeManager.INSTANCE.getCountdownTime(),
+      getView().setProgressViewAttributes(View.INVISIBLE, TimeManager.INSTANCE.getCountdownTimeMilli(),
           TimeManager.INSTANCE.getElapsedTime());
       updateStopButtonColor(animate);
       getView().setButtonReplayVisibility(animate, View.VISIBLE);
@@ -236,7 +236,7 @@ public class MainActivityPresenter extends DRPresenter<MainActivityPresenter.Mai
   }
 
   private void updateButtonChangeStateEnabled() {
-    boolean state = TimeManager.INSTANCE.getCountdownTime() != 0;
+    boolean state = TimeManager.INSTANCE.getCountdownTimeMilli() != 0;
     getView().setButtonChangeStateEnabled(state);
     if (state) {
       getView().setButtonChangeStateAttributes(false, R.drawable.ic_play_fab, R.color.fab_playBackground);
@@ -297,7 +297,7 @@ public class MainActivityPresenter extends DRPresenter<MainActivityPresenter.Mai
     }
 
     preferences.save(AppConstants.PREFS.COUNTDOWN_MILLI, TimeUtils.getMilliFromMinutesSecond(minutes, seconds));
-    TimeManager.INSTANCE.setCountdownTime(TimeUtils.getMilliFromMinutesSecond(minutes, seconds));
+    TimeManager.INSTANCE.setCountdownTimeMilli(TimeUtils.getMilliFromMinutesSecond(minutes, seconds));
   }
 
   public void onButtonFavoritesClick(@NonNull EditText editMinutes, @NonNull EditText editSeconds) {
@@ -335,7 +335,7 @@ public class MainActivityPresenter extends DRPresenter<MainActivityPresenter.Mai
     getView().setEditText(R.id.edit_seconds, TimeUtils.getSecondsFormattedWithLeadingZeros(seconds));
 
     preferences.save(AppConstants.PREFS.COUNTDOWN_MILLI, TimeUtils.getMilliFromMinutesSecond(minutes, seconds));
-    TimeManager.INSTANCE.setCountdownTime(TimeUtils.getMilliFromMinutesSecond(minutes, seconds));
+    TimeManager.INSTANCE.setCountdownTimeMilli(TimeUtils.getMilliFromMinutesSecond(minutes, seconds));
   }
 
   public void onFavoriteDeleteClick(@NonNull Favorite favorite) {

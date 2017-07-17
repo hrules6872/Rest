@@ -41,8 +41,7 @@ public enum TimeManager {
 
   private final List<TimeManagerListener> listeners = new ArrayList<>();
 
-  private final ScheduledThreadPoolExecutor scheduledThreadPoolExecutor =
-      new ScheduledThreadPoolExecutor(DEFAULT_EXECUTOR_CORE_POOL_SIZE);
+  private final ScheduledThreadPoolExecutor scheduledThreadPoolExecutor = new ScheduledThreadPoolExecutor(DEFAULT_EXECUTOR_CORE_POOL_SIZE);
   private ScheduledFuture scheduledFutureCountdown;
 
   public interface TimeManagerListener {
@@ -101,39 +100,35 @@ public enum TimeManager {
     return startTimeMilli == 0 ? 0 : System.currentTimeMillis() - startTimeMilli;
   }
 
-  public long getCountdownTime() {
+  public long getCountdownTimeMilli() {
     return countdownTimeMilli;
   }
 
-  public void setCountdownTime(long countDownMilli) {
+  public void setCountdownTimeMilli(long countDownMilli) {
     this.countdownTimeMilli = countDownMilli;
     notifyCountdownTimeChanged();
   }
 
   public synchronized void start() {
-    if (currentState == STATE_RUNNING) {
-      return;
+    if (currentState == STATE_STOPPED) {
+      startTimeMilli = System.currentTimeMillis();
+      currentState = STATE_RUNNING;
+
+      startCountdownRunnable();
+
+      notifyStateChanged();
     }
-
-    startTimeMilli = System.currentTimeMillis();
-    currentState = STATE_RUNNING;
-
-    startCountdownRunnable();
-
-    notifyStateChanged();
   }
 
   public synchronized void stop() {
-    if (currentState == STATE_STOPPED) {
-      return;
+    if (currentState == STATE_RUNNING) {
+      startTimeMilli = 0;
+      currentState = STATE_STOPPED;
+
+      stopCountdownRunnable();
+
+      notifyStateChanged();
     }
-
-    startTimeMilli = 0;
-    currentState = STATE_STOPPED;
-
-    stopCountdownRunnable();
-
-    notifyStateChanged();
   }
 
   public synchronized void reStart() {
@@ -152,8 +147,8 @@ public enum TimeManager {
   private void startCountdownRunnable() {
     stopCountdownRunnable();
     scheduledFutureCountdown =
-        scheduledThreadPoolExecutor.scheduleAtFixedRate(updateCountdownRunnable, DEFAULT_DELAY_MILLI,
-            DEFAULT_PERIOD_MILLI, TimeUnit.MILLISECONDS);
+        scheduledThreadPoolExecutor.scheduleAtFixedRate(updateCountdownRunnable, DEFAULT_DELAY_MILLI, DEFAULT_PERIOD_MILLI,
+            TimeUnit.MILLISECONDS);
   }
 
   private void stopCountdownRunnable() {

@@ -110,12 +110,12 @@ public class ProgressCountdownView extends View {
     invalidate();
   }
 
-  public void setPaintBackground(@ColorRes int color) {
+  public void setPaintBackgroundColor(@ColorRes int color) {
     paintBackground.setColor(ContextCompat.getColor(getContext(), color));
     invalidate();
   }
 
-  public void setPaintProgress(@ColorRes int color) {
+  public void setPaintProgressColor(@ColorRes int color) {
     paintProgress.setColor(ContextCompat.getColor(getContext(), color));
     invalidate();
   }

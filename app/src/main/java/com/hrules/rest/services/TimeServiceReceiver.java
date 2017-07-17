@@ -28,7 +28,7 @@ public class TimeServiceReceiver extends BroadcastReceiver {
 
   private final TimeServiceReceiverListener listener;
 
-  public interface TimeServiceReceiverListener {
+  interface TimeServiceReceiverListener {
     void onActionStateChanged();
 
     void onActionReplay();

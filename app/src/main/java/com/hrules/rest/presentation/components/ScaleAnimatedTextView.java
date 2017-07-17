@@ -41,7 +41,7 @@ public class ScaleAnimatedTextView extends AppCompatTextView {
   public static final int ANIM_TYPE_SCALE_OUT = 1;
   public static final int ANIM_TYPE_SCALE_IN = 0;
 
-  @Retention(RetentionPolicy.SOURCE) @IntDef({ ANIM_TYPE_SCALE_OUT, ANIM_TYPE_SCALE_IN }) public @interface Type {
+  @Retention(RetentionPolicy.SOURCE) @IntDef({ ANIM_TYPE_SCALE_OUT, ANIM_TYPE_SCALE_IN }) @interface Type {
   }
 
   public ScaleAnimatedTextView(@NonNull Context context) {

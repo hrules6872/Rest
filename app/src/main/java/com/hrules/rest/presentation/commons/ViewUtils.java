@@ -39,7 +39,7 @@ public final class ViewUtils {
     final int[] startingLocation = new int[2];
     view.getLocationOnScreen(startingLocation);
     startingLocation[0] += view.getWidth() / 2;
-    startingLocation[1] += (view.getHeight() / 2) + ViewUtils.getStatusBarHeight(activity);
+    startingLocation[1] += (view.getHeight() / 2) + getStatusBarHeight(activity);
     return startingLocation;
   }
 }

@@ -191,11 +191,11 @@ public class RevealBackgroundView extends View {
     paintReveal.setColor(ContextCompat.getColor(getContext(), color));
   }
 
-  public int getAnimDuration() {
+  public int getAnimDurationMilli() {
     return animDurationMilli;
   }
 
-  public void setAnimDuration(int milli) {
+  public void setAnimDurationMilli(int milli) {
     this.animDurationMilli = milli;
   }
 

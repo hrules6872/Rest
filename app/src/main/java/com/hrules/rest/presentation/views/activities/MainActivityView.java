@@ -53,7 +53,7 @@ import com.hrules.rest.core.time.TimeManager;
 import com.hrules.rest.presentation.adapters.FavoritesAdapter;
 import com.hrules.rest.presentation.commons.TimeUtils;
 import com.hrules.rest.presentation.commons.ViewUtils;
-import com.hrules.rest.presentation.commons.Visibility;
+import com.hrules.rest.presentation.commons.annotations.Visibility;
 import com.hrules.rest.presentation.components.ChangeStateFloatingActionButton;
 import com.hrules.rest.presentation.components.ProgressCountdownView;
 import com.hrules.rest.presentation.components.ReplayFloatingActionButton;
@@ -253,8 +253,7 @@ public class MainActivityView extends DRAppCompatActivity<MainActivityPresenter,
 
   private void doRevealBackground() {
     int height = revealBackgroundView.getHeight();
-    long forecastHeight =
-        ((progressView.getCurrentProgress() + revealBackgroundView.getAnimDuration()) * progressView.getHeight())
+    long forecastHeight = ((progressView.getCurrentProgress() + revealBackgroundView.getAnimDurationMilli()) * progressView.getHeight())
             / progressView.getMaxProgress();
     int heightReveal = (int) (height - forecastHeight);
     int[] revealStartPosition = ViewUtils.getRevealStartPosition(this, buttonChangeState);

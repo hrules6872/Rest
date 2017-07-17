@@ -99,7 +99,7 @@ public class TimeService extends Service {
     preferences.addListener(sharedPreferenceChangeListener);
 
     resetAlertCounters();
-    TimeManager.INSTANCE.setCountdownTime(
+    TimeManager.INSTANCE.setCountdownTimeMilli(
         preferences.getLong(AppConstants.PREFS.COUNTDOWN_MILLI, AppConstants.PREFS.DEFAULTS.COUNTDOWN_MILLI));
 
     createAudioHelper();
@@ -263,7 +263,7 @@ public class TimeService extends Service {
     }
 
     remoteView.setViewVisibility(R.id.button_changeState,
-        TimeManager.INSTANCE.getCountdownTime() == 0 ? View.INVISIBLE : View.VISIBLE);
+        TimeManager.INSTANCE.getCountdownTimeMilli() == 0 ? View.INVISIBLE : View.VISIBLE);
 
     remoteView.setTextViewText(R.id.text_countDown,
         TimeUtils.milliToMinutesSecondsString(TimeUtils.getCountdownMilliUnsigned(), getResources()));
@@ -296,7 +296,7 @@ public class TimeService extends Service {
   }
 
   private void checkAlerts() {
-    long countdownTime = TimeManager.INSTANCE.getCountdownTime();
+    long countdownTime = TimeManager.INSTANCE.getCountdownTimeMilli();
     long timeLeft = countdownTime - TimeManager.INSTANCE.getElapsedTime();
 
     if (!TimeManager.INSTANCE.isCountdownOver()) {

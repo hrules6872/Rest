@@ -124,7 +124,7 @@ public class AudioHelper {
 
   private static class ToggleMuteTask extends AsyncTask<Void, Void, Boolean> {
     private static final int VOLUME_MUTE_PERCENT = 30;
-    private static final int DEFAULT_FLAGS = 0; // avoids getting a visual audio indicator
+    private static final int NO_VISUAL_AUDIO_INDICATOR_FLAG = 0;
 
     private final AudioManager audioManager;
 
@@ -151,10 +151,10 @@ public class AudioHelper {
 
     @Override protected void onPreExecute() {
       int volumeMediaAttenuate = (VOLUME_MUTE_PERCENT * volumeMediaMax) / 100;
-      audioManager.setStreamVolume(AudioManager.STREAM_MUSIC, volumeMediaAttenuate, DEFAULT_FLAGS);
+      audioManager.setStreamVolume(AudioManager.STREAM_MUSIC, volumeMediaAttenuate, NO_VISUAL_AUDIO_INDICATOR_FLAG);
 
       if (shouldChangeNotificationVolume) {
-        audioManager.setStreamVolume(AudioManager.STREAM_NOTIFICATION, volumeNotificationMax, DEFAULT_FLAGS);
+        audioManager.setStreamVolume(AudioManager.STREAM_NOTIFICATION, volumeNotificationMax, NO_VISUAL_AUDIO_INDICATOR_FLAG);
       }
     }
 
@@ -167,10 +167,10 @@ public class AudioHelper {
     }
 
     @Override protected void onPostExecute(Boolean result) {
-      audioManager.setStreamVolume(AudioManager.STREAM_MUSIC, volumeMediaPrevious, DEFAULT_FLAGS);
+      audioManager.setStreamVolume(AudioManager.STREAM_MUSIC, volumeMediaPrevious, NO_VISUAL_AUDIO_INDICATOR_FLAG);
 
       if (shouldChangeNotificationVolume) {
-        audioManager.setStreamVolume(AudioManager.STREAM_NOTIFICATION, volumeNotificationPrevious, DEFAULT_FLAGS);
+        audioManager.setStreamVolume(AudioManager.STREAM_NOTIFICATION, volumeNotificationPrevious, NO_VISUAL_AUDIO_INDICATOR_FLAG);
       }
     }
   }

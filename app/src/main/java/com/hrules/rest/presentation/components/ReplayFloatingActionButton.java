@@ -23,7 +23,7 @@ import android.util.AttributeSet;
 import android.view.View;
 import android.view.animation.AnticipateInterpolator;
 import android.view.animation.Interpolator;
-import com.hrules.rest.presentation.commons.Visibility;
+import com.hrules.rest.presentation.commons.annotations.Visibility;
 
 public class ReplayFloatingActionButton extends FloatingActionButton {
   private static final Interpolator DEFAULT_INTERPOLATOR = new AnticipateInterpolator();
