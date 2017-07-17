@@ -20,16 +20,16 @@ import android.content.Context;
 import android.content.res.Resources;
 import android.preference.Preference;
 import android.support.annotation.NonNull;
-import com.hrules.darealmvp.DRPresenter;
-import com.hrules.darealmvp.DRView;
+import com.hrules.darealmvp.DRMVPPresenter;
+import com.hrules.darealmvp.DRMVPView;
 import com.hrules.rest.App;
 import com.hrules.rest.R;
 import com.hrules.rest.commons.Preferences;
 
-public class PreferenceFragmentPresenter extends DRPresenter<PreferenceFragmentPresenter.PreferenceView> {
+public class PreferenceFragmentPresenter extends DRMVPPresenter<PreferenceFragmentPresenter.Contract> {
   private Context appContext;
 
-  @Override public void bind(@NonNull PreferenceView view) {
+  @Override public void bind(@NonNull Contract view) {
     super.bind(view);
     appContext = App.getAppContext();
   }
@@ -64,7 +64,7 @@ public class PreferenceFragmentPresenter extends DRPresenter<PreferenceFragmentP
     }
   }
 
-  public interface PreferenceView extends DRView {
+  public interface Contract extends DRMVPView {
     void launchAboutActivity();
 
     void sendFeedbackByEmail();

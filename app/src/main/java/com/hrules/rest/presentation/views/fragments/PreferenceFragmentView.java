@@ -30,8 +30,7 @@ import com.hrules.rest.presentation.presenters.fragments.PreferenceFragmentPrese
 import com.hrules.rest.presentation.views.activities.AboutActivityView;
 
 public class PreferenceFragmentView extends PreferenceFragment
-    implements PreferenceFragmentPresenter.PreferenceView, Preference.OnPreferenceClickListener,
-    Preference.OnPreferenceChangeListener {
+    implements PreferenceFragmentPresenter.Contract, Preference.OnPreferenceClickListener, Preference.OnPreferenceChangeListener {
   private PreferenceFragmentPresenter presenter;
 
   @Override public void onCreate(Bundle savedInstanceState) {
@@ -69,8 +68,7 @@ public class PreferenceFragmentView extends PreferenceFragment
 
   private void bindPreferenceSummaryToValue(@NonNull Preference preference) {
     preference.setOnPreferenceChangeListener(this);
-    onPreferenceChange(preference,
-        PreferenceManager.getDefaultSharedPreferences(getActivity()).getString(preference.getKey(), ""));
+    onPreferenceChange(preference, PreferenceManager.getDefaultSharedPreferences(getActivity()).getString(preference.getKey(), ""));
   }
 
   @Override public boolean onPreferenceClick(Preference preference) {

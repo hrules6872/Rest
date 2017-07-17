@@ -18,6 +18,8 @@ package com.hrules.rest.presentation.views.activities;
 
 import android.content.Intent;
 import android.net.Uri;
+import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.support.v7.app.ActionBar;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
@@ -27,21 +29,26 @@ import android.widget.Toast;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
-import com.hrules.darealmvp.DRAppCompatActivity;
 import com.hrules.rest.R;
 import com.hrules.rest.presentation.commons.AppUtils;
 import com.hrules.rest.presentation.presenters.activities.AboutActivityPresenter;
+import com.hrules.rest.presentation.views.activities.base.DRMVPAppCompatActivity;
 
-public class AboutActivityView extends DRAppCompatActivity<AboutActivityPresenter, AboutActivityPresenter.AboutView>
-    implements AboutActivityPresenter.AboutView {
+public class AboutActivityView extends DRMVPAppCompatActivity<AboutActivityPresenter, AboutActivityPresenter.Contract>
+    implements AboutActivityPresenter.Contract {
   @BindView(R.id.toolbar) Toolbar toolbar;
   @BindView(R.id.about_version) TextView aboutVersion;
 
-  @Override protected int getLayoutResource() {
+  @Override protected int getLayoutResId() {
     return R.layout.about_activity;
   }
 
-  @Override protected void initializeViews() {
+  @Override protected void onCreate(@Nullable Bundle savedInstanceState) {
+    super.onCreate(savedInstanceState);
+    initializeViews();
+  }
+
+  private void initializeViews() {
     ButterKnife.bind(this);
 
     setSupportActionBar(toolbar);

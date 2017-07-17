@@ -18,11 +18,11 @@ package com.hrules.rest.presentation.presenters.activities;
 
 import android.support.annotation.NonNull;
 import android.widget.Button;
-import com.hrules.darealmvp.DRPresenter;
-import com.hrules.darealmvp.DRView;
+import com.hrules.darealmvp.DRMVPPresenter;
+import com.hrules.darealmvp.DRMVPView;
 import com.hrules.rest.R;
 
-public class AboutActivityPresenter extends DRPresenter<AboutActivityPresenter.AboutView> {
+public class AboutActivityPresenter extends DRMVPPresenter<AboutActivityPresenter.Contract> {
   public void onClickButton(@NonNull Button button) {
     switch (button.getId()) {
       case R.id.about_rateIt:
@@ -50,7 +50,7 @@ public class AboutActivityPresenter extends DRPresenter<AboutActivityPresenter.A
     }
   }
 
-  public interface AboutView extends DRView {
+  public interface Contract extends DRMVPView {
     void goToPlayStore();
 
     void sendFeedbackByEmail();

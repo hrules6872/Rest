@@ -23,22 +23,20 @@ import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.content.pm.ActivityInfo;
 import android.content.res.Resources;
-import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
 import android.support.annotation.ColorRes;
 import android.support.annotation.DrawableRes;
 import android.support.annotation.IdRes;
 import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
 import android.support.annotation.StringRes;
 import android.view.KeyEvent;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.TextView;
-import com.hrules.darealmvp.DRPresenter;
-import com.hrules.darealmvp.DRView;
+import com.hrules.darealmvp.DRMVPPresenter;
+import com.hrules.darealmvp.DRMVPView;
 import com.hrules.rest.App;
 import com.hrules.rest.AppConstants;
 import com.hrules.rest.R;
@@ -61,7 +59,7 @@ import java.util.concurrent.ScheduledFuture;
 import java.util.concurrent.ScheduledThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 
-public class MainActivityPresenter extends DRPresenter<MainActivityPresenter.MainView> {
+public class MainActivityPresenter extends DRMVPPresenter<MainActivityPresenter.Contract> {
   public static final String ACTION_STOPWATCHSTOP = "com.hrules.rest.ACTION_STOPWATCHSTOP";
 
   private static final long DEFAULT_EDIT_STATE_EMPTY = 0;
@@ -78,19 +76,18 @@ public class MainActivityPresenter extends DRPresenter<MainActivityPresenter.Mai
   private final Handler countdownHandler = new Handler(Looper.getMainLooper());
   private final Handler stopwatchHandler = new Handler(Looper.getMainLooper());
 
-  private final ScheduledThreadPoolExecutor scheduledThreadPoolExecutor =
-      new ScheduledThreadPoolExecutor(DEFAULT_EXECUTOR_CORE_POOL_SIZE);
+  private final ScheduledThreadPoolExecutor scheduledThreadPoolExecutor = new ScheduledThreadPoolExecutor(DEFAULT_EXECUTOR_CORE_POOL_SIZE);
   private ScheduledFuture scheduledFutureStopwatch;
   private long stopwatchStartTime;
 
   private Context appContext;
 
-  @Override public void bind(@NonNull MainView view) {
+  @Override public void bind(@NonNull Contract view) {
     super.bind(view);
     appContext = App.getAppContext();
   }
 
-  @Override public void onViewReady(@Nullable Bundle savedInstanceState) {
+  public void onViewReady() {
     preferences = new Preferences(appContext);
     getPreferences();
     preferences.addListener(sharedPreferenceChangeListener);
@@ -137,8 +134,7 @@ public class MainActivityPresenter extends DRPresenter<MainActivityPresenter.Mai
 
     // stopwatch
     setStopwatchLastTime();
-    manageStopwatchState(
-        preferences.getLong(AppConstants.PREFS.STOPWATCH_MILLI, AppConstants.PREFS.DEFAULTS.STOPWATCH_MILLI));
+    manageStopwatchState(preferences.getLong(AppConstants.PREFS.STOPWATCH_MILLI, AppConstants.PREFS.DEFAULTS.STOPWATCH_MILLI));
 
     registerStopwatchReceiver();
   }
@@ -263,8 +259,7 @@ public class MainActivityPresenter extends DRPresenter<MainActivityPresenter.Mai
 
       if (text.isEmpty()) {
         if (editText.getId() == R.id.edit_seconds) {
-          getView().setEditText(R.id.edit_seconds,
-              TimeUtils.getSecondsFormattedWithLeadingZeros(DEFAULT_EDIT_STATE_EMPTY));
+          getView().setEditText(R.id.edit_seconds, TimeUtils.getSecondsFormattedWithLeadingZeros(DEFAULT_EDIT_STATE_EMPTY));
         } else {
           getView().setEditText(R.id.edit_minutes, String.valueOf(DEFAULT_EDIT_STATE_EMPTY));
         }
@@ -304,8 +299,7 @@ public class MainActivityPresenter extends DRPresenter<MainActivityPresenter.Mai
     Resources resources = appContext.getResources();
     List<Favorite> favorites = new ArrayList<>();
 
-    Set<String> favoritesSet =
-        new HashSet<>(preferences.getStringSet(AppConstants.PREFS.FAVORITES, AppConstants.PREFS.DEFAULTS.FAVORITES));
+    Set<String> favoritesSet = new HashSet<>(preferences.getStringSet(AppConstants.PREFS.FAVORITES, AppConstants.PREFS.DEFAULTS.FAVORITES));
     for (String secondsFromStringSet : favoritesSet) {
       long milli = Integer.valueOf(secondsFromStringSet) * TimeUnit.SECONDS.toMillis(1);
       int seconds = Integer.valueOf(secondsFromStringSet);
@@ -339,21 +333,19 @@ public class MainActivityPresenter extends DRPresenter<MainActivityPresenter.Mai
   }
 
   public void onFavoriteDeleteClick(@NonNull Favorite favorite) {
-    Set<String> favoritesSet =
-        new HashSet<>(preferences.getStringSet(AppConstants.PREFS.FAVORITES, AppConstants.PREFS.DEFAULTS.FAVORITES));
+    Set<String> favoritesSet = new HashSet<>(preferences.getStringSet(AppConstants.PREFS.FAVORITES, AppConstants.PREFS.DEFAULTS.FAVORITES));
     favoritesSet.remove(String.valueOf(favorite.getSeconds()));
 
     preferences.save(AppConstants.PREFS.FAVORITES, favoritesSet);
   }
 
   public void onFavoriteActionAddClick(@NonNull EditText editMinutes, @NonNull EditText editSeconds) {
-    Set<String> favoritesSet =
-        new HashSet<>(preferences.getStringSet(AppConstants.PREFS.FAVORITES, AppConstants.PREFS.DEFAULTS.FAVORITES));
+    Set<String> favoritesSet = new HashSet<>(preferences.getStringSet(AppConstants.PREFS.FAVORITES, AppConstants.PREFS.DEFAULTS.FAVORITES));
 
     long minutes = Long.parseLong(editMinutes.getText().toString());
     long seconds = Long.parseLong(editSeconds.getText().toString());
-    String secondsStringToSave = String.valueOf(
-        Math.round(TimeUtils.getMilliFromMinutesSecond(minutes, seconds) / TimeUnit.SECONDS.toMillis(1)));
+    String secondsStringToSave =
+        String.valueOf(Math.round(TimeUtils.getMilliFromMinutesSecond(minutes, seconds) / TimeUnit.SECONDS.toMillis(1)));
     favoritesSet.add(secondsStringToSave);
 
     preferences.save(AppConstants.PREFS.FAVORITES, favoritesSet);
@@ -383,9 +375,8 @@ public class MainActivityPresenter extends DRPresenter<MainActivityPresenter.Mai
   // region STOPWATCH
   private void startStopwatchRunnable() {
     stopStopwatchRunnable();
-    scheduledFutureStopwatch =
-        scheduledThreadPoolExecutor.scheduleAtFixedRate(updateStopwatchRunnable, DEFAULT_STOPWATCH_DELAY_MILLI,
-            DEFAULT_STOPWATCH_PERIOD_MILLI, TimeUnit.MILLISECONDS);
+    scheduledFutureStopwatch = scheduledThreadPoolExecutor.scheduleAtFixedRate(updateStopwatchRunnable, DEFAULT_STOPWATCH_DELAY_MILLI,
+        DEFAULT_STOPWATCH_PERIOD_MILLI, TimeUnit.MILLISECONDS);
   }
 
   private void stopStopwatchRunnable() {
@@ -399,8 +390,7 @@ public class MainActivityPresenter extends DRPresenter<MainActivityPresenter.Mai
       final long stopwatch = System.currentTimeMillis() - stopwatchStartTime;
 
       stopwatchHandler.post(() -> getView().updateStopwatch(
-          stopwatchStartTime != AppConstants.PREFS.DEFAULTS.STOPWATCH_MILLI ? stopwatch
-              : AppConstants.PREFS.DEFAULTS.STOPWATCH_MILLI));
+          stopwatchStartTime != AppConstants.PREFS.DEFAULTS.STOPWATCH_MILLI ? stopwatch : AppConstants.PREFS.DEFAULTS.STOPWATCH_MILLI));
     }
   };
 
@@ -427,8 +417,7 @@ public class MainActivityPresenter extends DRPresenter<MainActivityPresenter.Mai
   }
 
   public void onButtonStopwatchChangeStateClick() {
-    long stopwatch =
-        preferences.getLong(AppConstants.PREFS.STOPWATCH_MILLI, AppConstants.PREFS.DEFAULTS.STOPWATCH_MILLI);
+    long stopwatch = preferences.getLong(AppConstants.PREFS.STOPWATCH_MILLI, AppConstants.PREFS.DEFAULTS.STOPWATCH_MILLI);
     if (stopwatch == AppConstants.PREFS.DEFAULTS.STOPWATCH_MILLI) {
       // stopwatch will be started
       checkVibrateOnClickState();
@@ -444,8 +433,7 @@ public class MainActivityPresenter extends DRPresenter<MainActivityPresenter.Mai
   }
 
   public void onButtonStopwatchChangeStateLongClick() {
-    long stopwatch =
-        preferences.getLong(AppConstants.PREFS.STOPWATCH_MILLI, AppConstants.PREFS.DEFAULTS.STOPWATCH_MILLI);
+    long stopwatch = preferences.getLong(AppConstants.PREFS.STOPWATCH_MILLI, AppConstants.PREFS.DEFAULTS.STOPWATCH_MILLI);
     if (stopwatch != AppConstants.PREFS.DEFAULTS.STOPWATCH_MILLI) {
       //stopwatch will be stopped
       checkVibrateOnClickState();
@@ -484,7 +472,7 @@ public class MainActivityPresenter extends DRPresenter<MainActivityPresenter.Mai
   };
   //endregion
 
-  public interface MainView extends DRView {
+  public interface Contract extends DRMVPView {
     void launchPreferencesActivity();
 
     void closeNotification();
@@ -495,7 +483,7 @@ public class MainActivityPresenter extends DRPresenter<MainActivityPresenter.Mai
 
     void setMessageAlertVisibility(@Visibility int visibility);
 
-    // COUNTDOWN
+    // region COUNTDOWN
     void startServiceIfNotRunning();
 
     void updateCountdown(boolean animate);
@@ -515,12 +503,14 @@ public class MainActivityPresenter extends DRPresenter<MainActivityPresenter.Mai
     void setEditText(@IdRes int editTextResId, @NonNull String text);
 
     void showPopupFavorites(@NonNull List<Favorite> favorites);
+    //endregion
 
-    // STOPWATCH
+    // region STOPWATCH
     void updateStopwatch(long milli);
 
     void setStopwatchTextLastTime(long milli);
 
     void setStopwatchButtonChangeStateResource(@DrawableRes int resId);
+    //endregion
   }
 }

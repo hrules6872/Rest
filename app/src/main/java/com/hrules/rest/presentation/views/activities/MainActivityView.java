@@ -21,6 +21,7 @@ import android.app.NotificationManager;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Build;
+import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
 import android.service.notification.StatusBarNotification;
@@ -28,7 +29,9 @@ import android.support.annotation.ColorRes;
 import android.support.annotation.DrawableRes;
 import android.support.annotation.IdRes;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.annotation.StringRes;
+import android.support.v7.app.ActionBar;
 import android.support.v7.widget.ListPopupWindow;
 import android.support.v7.widget.Toolbar;
 import android.text.Editable;
@@ -47,7 +50,6 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import butterknife.OnLongClick;
-import com.hrules.darealmvp.DRAppCompatActivity;
 import com.hrules.rest.R;
 import com.hrules.rest.core.time.TimeManager;
 import com.hrules.rest.presentation.adapters.FavoritesAdapter;
@@ -62,12 +64,13 @@ import com.hrules.rest.presentation.components.ScaleAnimatedTextView;
 import com.hrules.rest.presentation.components.ToolTipView;
 import com.hrules.rest.presentation.models.base.Favorite;
 import com.hrules.rest.presentation.presenters.activities.MainActivityPresenter;
+import com.hrules.rest.presentation.views.activities.base.DRMVPAppCompatActivity;
 import com.hrules.rest.services.TimeService;
 import com.hrules.rest.services.TimeServiceReceiver;
 import java.util.List;
 
-public class MainActivityView extends DRAppCompatActivity<MainActivityPresenter, MainActivityPresenter.MainView>
-    implements MainActivityPresenter.MainView {
+public class MainActivityView extends DRMVPAppCompatActivity<MainActivityPresenter, MainActivityPresenter.Contract>
+    implements MainActivityPresenter.Contract {
   @BindView(R.id.layout_root) RelativeLayout layoutRoot;
   @BindView(R.id.progress_view) ProgressCountdownView progressView;
   @BindView(R.id.button_changeState) ChangeStateFloatingActionButton buttonChangeState;
@@ -88,16 +91,23 @@ public class MainActivityView extends DRAppCompatActivity<MainActivityPresenter,
 
   private ListPopupWindow listPopupWindow;
 
-  @Override protected int getLayoutResource() {
+  @Override protected int getLayoutResId() {
     return R.layout.main_activity;
   }
 
-  @Override protected void initializeViews() {
+  @Override protected void onCreate(@Nullable Bundle savedInstanceState) {
+    super.onCreate(savedInstanceState);
+    initializeViews();
+    getPresenter().onViewReady();
+  }
+
+  private void initializeViews() {
     ButterKnife.bind(this);
+
     setSupportActionBar(toolbar);
-    try {
+    ActionBar actionBar = getSupportActionBar();
+    if (actionBar != null) {
       getSupportActionBar().setDisplayShowTitleEnabled(false);
-    } catch (Exception ignored) {
     }
 
     defaultAnimDurationMilli = getResources().getInteger(android.R.integer.config_shortAnimTime);
@@ -204,10 +214,8 @@ public class MainActivityView extends DRAppCompatActivity<MainActivityPresenter,
   }
 
   @Override public void updateCountdown(boolean animate) {
-    textCountdown.setText(
-        TimeUtils.milliToMinutesSecondsMilliString(TimeUtils.getCountdownMilliUnsigned(), getResources()), animate,
-        TimeManager.INSTANCE.isRunning() ? ScaleAnimatedTextView.ANIM_TYPE_SCALE_OUT
-            : ScaleAnimatedTextView.ANIM_TYPE_SCALE_IN);
+    textCountdown.setText(TimeUtils.milliToMinutesSecondsMilliString(TimeUtils.getCountdownMilliUnsigned(), getResources()), animate,
+        TimeManager.INSTANCE.isRunning() ? ScaleAnimatedTextView.ANIM_TYPE_SCALE_OUT : ScaleAnimatedTextView.ANIM_TYPE_SCALE_IN);
     textCountdown.setTextColor(TimeUtils.getTextColorFromMilli(MainActivityView.this));
 
     if (TimeManager.INSTANCE.isRunning() && !TimeManager.INSTANCE.isCountdownOver()
@@ -224,8 +232,7 @@ public class MainActivityView extends DRAppCompatActivity<MainActivityPresenter,
     }
   }
 
-  @Override public void setButtonChangeStateAttributes(boolean animate, @DrawableRes int drawableResId,
-      @ColorRes int colorResId) {
+  @Override public void setButtonChangeStateAttributes(boolean animate, @DrawableRes int drawableResId, @ColorRes int colorResId) {
     if (animate) {
       doRevealBackground();
     } else {
@@ -254,7 +261,7 @@ public class MainActivityView extends DRAppCompatActivity<MainActivityPresenter,
   private void doRevealBackground() {
     int height = revealBackgroundView.getHeight();
     long forecastHeight = ((progressView.getCurrentProgress() + revealBackgroundView.getAnimDurationMilli()) * progressView.getHeight())
-            / progressView.getMaxProgress();
+        / progressView.getMaxProgress();
     int heightReveal = (int) (height - forecastHeight);
     int[] revealStartPosition = ViewUtils.getRevealStartPosition(this, buttonChangeState);
 
