@@ -19,7 +19,7 @@ package com.hrules.rest.presentation.models.comparators;
 import com.hrules.rest.presentation.models.base.Favorite;
 import java.util.Comparator;
 
-public class FavoriteSecondsAscendingComparator implements Comparator<Favorite> {
+public final class FavoriteSecondsAscendingComparator implements Comparator<Favorite> {
   @Override public int compare(Favorite lhs, Favorite rhs) {
     return lhs.getSeconds() - rhs.getSeconds();
   }

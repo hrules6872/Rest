@@ -40,8 +40,8 @@ import com.hrules.rest.App;
 import com.hrules.rest.AppConstants;
 import com.hrules.rest.R;
 import com.hrules.rest.commons.Preferences;
-import com.hrules.rest.core.AudioUtils;
 import com.hrules.rest.core.alerts.VibratorHelper;
+import com.hrules.rest.core.commons.ZenModeHelper;
 import com.hrules.rest.core.time.TimeManager;
 import com.hrules.rest.presentation.commons.ResUtils;
 import com.hrules.rest.presentation.commons.TimeUtils;
@@ -59,7 +59,7 @@ import java.util.concurrent.ScheduledFuture;
 import java.util.concurrent.ScheduledThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 
-public class MainActivityPresenter extends DRMVPPresenter<MainActivityPresenter.Contract> {
+public final class MainActivityPresenter extends DRMVPPresenter<MainActivityPresenter.Contract> {
   public static final String ACTION_STOPWATCHSTOP = "com.hrules.rest.ACTION_STOPWATCHSTOP";
 
   private static final long DEFAULT_EDIT_STATE_EMPTY = 0;
@@ -82,15 +82,21 @@ public class MainActivityPresenter extends DRMVPPresenter<MainActivityPresenter.
 
   private long stopwatchStartTime;
 
+  private ZenModeHelper zenModeHelper;
+
   @Override public void bind(@NonNull Contract view) {
     super.bind(view);
     resources = new ResUtils(App.getAppContext());
     preferences = new Preferences(App.getAppContext());
+    zenModeHelper = new ZenModeHelper(App.getAppContext());
   }
 
   public void onViewReady() {
     getPreferences();
     preferences.addListener(sharedPreferenceChangeListener);
+
+    getView().setZenModeAlertVisibility(zenModeHelper.isZenModeActive() ? View.VISIBLE : View.GONE);
+    zenModeHelper.setListener(zenModeManagerListener);
 
     // countdown
     TimeManager.INSTANCE.setCountdownTimeMilli(
@@ -156,6 +162,9 @@ public class MainActivityPresenter extends DRMVPPresenter<MainActivityPresenter.
     TimeManager.INSTANCE.removeListener(timeManagerListener);
     preferences.removeListener(sharedPreferenceChangeListener);
 
+    zenModeHelper.release();
+    zenModeHelper = null;
+
     scheduledThreadPoolExecutor.shutdown();
 
     countdownHandler.removeCallbacksAndMessages(null);
@@ -170,6 +179,9 @@ public class MainActivityPresenter extends DRMVPPresenter<MainActivityPresenter.
   private final SharedPreferences.OnSharedPreferenceChangeListener sharedPreferenceChangeListener =
       (sharedPreferences, key) -> getPreferences();
 
+  private final ZenModeHelper.ZenModeManagerListener zenModeManagerListener =
+      newState -> getView().setZenModeAlertVisibility(newState ? View.VISIBLE : View.GONE);
+
   // region COUNTDOWN
   private void checkVibrateOnClickState() {
     if (prefsVibrateButtons) {
@@ -180,7 +192,6 @@ public class MainActivityPresenter extends DRMVPPresenter<MainActivityPresenter.
   private void internalOnStateChanged(boolean animate) {
     getView().updateCountdown(animate);
     getView().setEditTextsEnabled(!TimeManager.INSTANCE.isRunning());
-    getView().setMessageAlertVisibility(AudioUtils.isDoNotDisturbActive() ? View.VISIBLE : View.GONE);
 
     if (TimeManager.INSTANCE.isRunning()) {
       // start countdown
@@ -467,7 +478,7 @@ public class MainActivityPresenter extends DRMVPPresenter<MainActivityPresenter.
 
     void showTooltip(@IdRes int viewResId, @StringRes int stringResId);
 
-    void setMessageAlertVisibility(@Visibility int visibility);
+    void setZenModeAlertVisibility(@Visibility int visibility);
 
     // region COUNTDOWN
     void startServiceIfNotRunning();

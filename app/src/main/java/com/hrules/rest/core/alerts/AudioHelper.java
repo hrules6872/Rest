@@ -24,9 +24,9 @@ import android.os.AsyncTask;
 import android.os.Build;
 import android.support.annotation.NonNull;
 import com.hrules.rest.R;
-import com.hrules.rest.core.AudioUtils;
+import com.hrules.rest.core.commons.ZenModeHelper;
 
-public class AudioHelper {
+public final class AudioHelper {
   private static final int MAX_STREAM_TYPES = 2;
   private static final int SOUND_PRIORITY = 1;
   private static final int SOUND_QUALITY = 0;
@@ -47,6 +47,8 @@ public class AudioHelper {
   private boolean soundShortLoaded;
   private boolean soundShort2Loaded;
   private boolean soundLongLoaded;
+
+  private ZenModeHelper zenModeHelper;
 
   @SuppressWarnings("deprecation") public AudioHelper(@NonNull Context context, int streamType) {
     this.streamType = streamType;
@@ -74,6 +76,8 @@ public class AudioHelper {
     soundShortId = soundPool.load(context, R.raw.beep_short, SOUND_PRIORITY);
     soundShort2Id = soundPool.load(context, R.raw.beep_short2, SOUND_PRIORITY);
     soundLongId = soundPool.load(context, R.raw.beep_long, SOUND_PRIORITY);
+
+    zenModeHelper = new ZenModeHelper(context);
   }
 
   private float getCurrentVolume(int streamType) {
@@ -107,22 +111,26 @@ public class AudioHelper {
   }
 
   public void toggleMute(long delay) {
-    toggleMuteTask = new ToggleMuteTask(audioManager, delay);
+    toggleMuteTask = new ToggleMuteTask(audioManager, delay, zenModeHelper);
     toggleMuteTask.execute();
   }
 
   public void release() {
-    if (soundPool != null) {
-      soundPool.release();
-      soundPool = null;
-    }
     if (toggleMuteTask != null) {
       toggleMuteTask.cancel(true);
       toggleMuteTask = null;
     }
+
+    if (soundPool != null) {
+      soundPool.release();
+      soundPool = null;
+    }
+
+    zenModeHelper.release();
+    zenModeHelper = null;
   }
 
-  private static class ToggleMuteTask extends AsyncTask<Void, Void, Boolean> {
+  private final static class ToggleMuteTask extends AsyncTask<Void, Void, Boolean> {
     private static final int VOLUME_MUTE_PERCENT = 30;
     private static final int NO_VISUAL_AUDIO_INDICATOR_FLAG = 0;
 
@@ -137,14 +145,14 @@ public class AudioHelper {
 
     private final long delay;
 
-    ToggleMuteTask(@NonNull AudioManager audioManager, long delay) {
+    ToggleMuteTask(@NonNull AudioManager audioManager, long delay, @NonNull ZenModeHelper zenModeHelper) {
       this.audioManager = audioManager;
       this.delay = delay;
 
       volumeMediaMax = audioManager.getStreamMaxVolume(AudioManager.STREAM_MUSIC);
       volumeMediaPrevious = audioManager.getStreamVolume(AudioManager.STREAM_MUSIC);
 
-      shouldChangeNotificationVolume = !AudioUtils.isDoNotDisturbActive();
+      shouldChangeNotificationVolume = !zenModeHelper.isZenModeActive();
       volumeNotificationMax = audioManager.getStreamMaxVolume(AudioManager.STREAM_NOTIFICATION);
       volumeNotificationPrevious = audioManager.getStreamVolume(AudioManager.STREAM_NOTIFICATION);
     }

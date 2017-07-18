@@ -36,13 +36,12 @@ import com.hrules.rest.R;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 
-public class RevealBackgroundView extends View {
+public final class RevealBackgroundView extends View {
   public static final int STATE_NOT_STARTED = 0;
   public static final int STATE_FILL_STARTED = 1;
   public static final int STATE_FINISHED = 2;
 
-  @Retention(RetentionPolicy.SOURCE) @IntDef({ STATE_NOT_STARTED, STATE_FILL_STARTED, STATE_FINISHED })
-  @interface State {
+  @Retention(RetentionPolicy.SOURCE) @IntDef({ STATE_NOT_STARTED, STATE_FILL_STARTED, STATE_FINISHED }) @interface State {
   }
 
   private static final Interpolator DEFAULT_INTERPOLATOR = new AccelerateInterpolator();
@@ -106,8 +105,7 @@ public class RevealBackgroundView extends View {
     this.revealHeight = revealHeight;
     startLocationX = location[0];
     startLocationY = location[1];
-    revealAnimator =
-        ObjectAnimator.ofInt(this, "currentRadius", startRadius, revealHeight).setDuration(animDurationMilli);
+    revealAnimator = ObjectAnimator.ofInt(this, "currentRadius", startRadius, revealHeight).setDuration(animDurationMilli);
     revealAnimator.setInterpolator(interpolator);
     revealAnimator.addListener(new AnimatorListenerAdapter() {
       @Override public void onAnimationEnd(Animator animation) {
@@ -133,8 +131,7 @@ public class RevealBackgroundView extends View {
     this.revealHeight = 0;
     startLocationX = location[0];
     startLocationY = location[1];
-    revealAnimator =
-        ObjectAnimator.ofInt(this, "currentRadius", revealHeight, startRadius).setDuration(animDurationMilli);
+    revealAnimator = ObjectAnimator.ofInt(this, "currentRadius", revealHeight, startRadius).setDuration(animDurationMilli);
     revealAnimator.setInterpolator(interpolator);
     revealAnimator.addListener(new AnimatorListenerAdapter() {
       @Override public void onAnimationEnd(Animator animation) {
@@ -165,7 +162,7 @@ public class RevealBackgroundView extends View {
     }
   }
 
-  public void setOnStateChangeListener(@Nullable OnStateChangeListener listener) {
+  @SuppressWarnings("SuspiciousGetterSetter") public void setOnStateChangeListener(@Nullable OnStateChangeListener listener) {
     this.listener = listener;
   }
 

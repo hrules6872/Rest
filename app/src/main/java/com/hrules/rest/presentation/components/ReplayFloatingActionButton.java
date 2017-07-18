@@ -25,7 +25,7 @@ import android.view.animation.AnticipateInterpolator;
 import android.view.animation.Interpolator;
 import com.hrules.rest.presentation.commons.annotations.Visibility;
 
-public class ReplayFloatingActionButton extends FloatingActionButton {
+public final class ReplayFloatingActionButton extends FloatingActionButton {
   private static final Interpolator DEFAULT_INTERPOLATOR = new AnticipateInterpolator();
 
   private static final float DEFAULT_SCALE = 1.0f;

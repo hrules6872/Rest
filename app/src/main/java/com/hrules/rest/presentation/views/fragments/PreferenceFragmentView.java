@@ -30,7 +30,7 @@ import com.hrules.rest.commons.Preferences;
 import com.hrules.rest.presentation.commons.AppUtils;
 import com.hrules.rest.presentation.views.activities.AboutActivityView;
 
-public class PreferenceFragmentView extends PreferenceFragment
+public final class PreferenceFragmentView extends PreferenceFragment
     implements Preference.OnPreferenceClickListener, Preference.OnPreferenceChangeListener {
   @Override public void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);

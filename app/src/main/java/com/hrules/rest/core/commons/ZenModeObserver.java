@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2016. Héctor de Isidro - hrules6872
+ * Copyright (c) 2017. Héctor de Isidro - hrules6872
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,14 +14,23 @@
  * limitations under the License.
  */
 
-package com.hrules.rest.presentation.models;
+package com.hrules.rest.core.commons;
 
+import android.database.ContentObserver;
+import android.os.Handler;
 import android.support.annotation.NonNull;
-import com.hrules.rest.presentation.models.base.Favorite;
 
-public final class FavoriteSeconds extends Favorite {
-  public FavoriteSeconds(@NonNull String title, int seconds) {
-    super(title, Type.SECONDS);
-    this.seconds = seconds;
+final class ZenModeObserver extends ContentObserver {
+  private final ZenModeHelper.ZenModeManagerListener listener;
+
+  ZenModeObserver(@NonNull ZenModeHelper.ZenModeManagerListener listener) {
+    super(new Handler());
+    this.listener = listener;
+  }
+
+  @SuppressWarnings("ConstantConditions") @Override public void onChange(boolean selfChange) {
+    if (listener != null) {
+      listener.onStateChanged(selfChange);
+    }
   }
 }

@@ -37,9 +37,9 @@ import com.hrules.rest.App;
 import com.hrules.rest.AppConstants;
 import com.hrules.rest.R;
 import com.hrules.rest.commons.Preferences;
-import com.hrules.rest.core.AudioUtils;
 import com.hrules.rest.core.alerts.AudioHelper;
 import com.hrules.rest.core.alerts.VibratorHelper;
+import com.hrules.rest.core.commons.ZenModeHelper;
 import com.hrules.rest.core.time.TimeManager;
 import com.hrules.rest.presentation.commons.ResUtils;
 import com.hrules.rest.presentation.commons.TimeUtils;
@@ -47,7 +47,7 @@ import com.hrules.rest.presentation.presenters.activities.MainActivityPresenter;
 import com.hrules.rest.presentation.views.activities.MainActivityView;
 import java.util.concurrent.TimeUnit;
 
-public class TimeService extends Service {
+public final class TimeService extends Service {
   public static final int NOTIFICATION_ID = 22011982;
 
   private static final long MIN_TIME_TO_DISPATCH_HALFWAYALERT_MILLI = TimeUnit.MINUTES.toMillis(1) / 2;
@@ -89,12 +89,12 @@ public class TimeService extends Service {
   private long lastSecondNotificationUpdate;
   private long remoteViewsWorkaroundSecondsCounter;
 
-  @Override public void onCreate() {
-    super.onCreate();
-    checkIsDNDModeActive();
-  }
+  private ZenModeHelper zenModeHelper;
 
   @Override public int onStartCommand(Intent intent, int flags, int startId) {
+    zenModeHelper = new ZenModeHelper(this);
+    checkIsDNDModeActive();
+
     preferences = new Preferences(this);
     getPreferences();
     preferences.addListener(sharedPreferenceChangeListener);
@@ -121,6 +121,9 @@ public class TimeService extends Service {
     preferences.removeListener(sharedPreferenceChangeListener);
     releaseAudioHelper();
 
+    zenModeHelper.release();
+    zenModeHelper = null;
+
     super.onDestroy();
   }
 
@@ -129,7 +132,7 @@ public class TimeService extends Service {
   }
 
   private void checkIsDNDModeActive() {
-    if (AudioUtils.isDoNotDisturbActive()) {
+    if (zenModeHelper.isZenModeActive()) {
       Toast.makeText(this, R.string.text_dndWarning, Toast.LENGTH_LONG).show();
     }
   }

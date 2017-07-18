@@ -53,7 +53,7 @@ public enum TimeManager {
   }
 
   public void addListener(@NonNull TimeManagerListener listener) {
-    removeListener(listener); // avoid duplicates
+    removeListener(listener);
     listeners.add(listener);
   }
 

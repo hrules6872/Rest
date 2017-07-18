@@ -31,7 +31,7 @@ import com.hrules.rest.R;
 import com.hrules.rest.presentation.models.base.Favorite;
 import java.util.List;
 
-public class FavoritesAdapter extends ArrayAdapter<Favorite> {
+public final class FavoritesAdapter extends ArrayAdapter<Favorite> {
   private final FavoritesAdapterListener listener;
 
   public interface FavoritesAdapterListener {
@@ -49,13 +49,13 @@ public class FavoritesAdapter extends ArrayAdapter<Favorite> {
     }
   }
 
-  public FavoritesAdapter(@NonNull Context context, @NonNull List<Favorite> favorites,
-      @NonNull FavoritesAdapterListener listener) {
+  public FavoritesAdapter(@NonNull Context context, @NonNull List<Favorite> favorites, @NonNull FavoritesAdapterListener listener) {
     super(context, 0, favorites);
     this.listener = listener;
   }
 
-  @NonNull @Override public View getView(int position, View convertView, @NonNull ViewGroup parent) {
+  @SuppressWarnings("ConstantConditions") @NonNull @Override
+  public View getView(int position, View convertView, @NonNull ViewGroup parent) {
     final Favorite favorite = getItem(position);
 
     ViewHolder viewHolder;

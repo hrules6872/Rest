@@ -23,7 +23,7 @@ import com.hrules.rest.R;
 import com.hrules.rest.presentation.views.activities.support.AppCompatPreferenceActivity;
 import com.hrules.rest.presentation.views.fragments.PreferenceFragmentView;
 
-public class PreferenceActivityView extends AppCompatPreferenceActivity {
+public final class PreferenceActivityView extends AppCompatPreferenceActivity {
   @Override protected void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
     initializeViews();

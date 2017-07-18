@@ -26,7 +26,7 @@ public class App extends Application {
     application = this;
   }
 
-  public static App getAppContext() {
+  @SuppressWarnings("SuspiciousGetterSetter") public static App getAppContext() {
     return application;
   }
 }

@@ -27,7 +27,7 @@ import android.util.AttributeSet;
 import android.view.animation.AnticipateInterpolator;
 import android.view.animation.Interpolator;
 
-public class ChangeStateFloatingActionButton extends FloatingActionButton {
+public final class ChangeStateFloatingActionButton extends FloatingActionButton {
   private static final Interpolator DEFAULT_INTERPOLATOR = new AnticipateInterpolator();
 
   private static final float DEFAULT_SCALE = 1.0f;
@@ -48,13 +48,16 @@ public class ChangeStateFloatingActionButton extends FloatingActionButton {
   public void setState(boolean animate, @DrawableRes final int drawableResId, @ColorRes final int colorResId,
       final long animDurationMilli) {
     if (animate) {
-      animate().scaleX(DEFAULT_SCALE_OUT).scaleY(DEFAULT_SCALE_OUT)
-          .setDuration(animDurationMilli).setInterpolator(DEFAULT_INTERPOLATOR).withEndAction(() -> {
-        internalSetState(drawableResId, colorResId);
-        animate().scaleX(DEFAULT_SCALE).scaleY(DEFAULT_SCALE).setDuration(animDurationMilli).withEndAction(() -> {
-          setScaleX(DEFAULT_SCALE);
-          setScaleY(DEFAULT_SCALE);
-        }).start();
+      animate().scaleX(DEFAULT_SCALE_OUT)
+          .scaleY(DEFAULT_SCALE_OUT)
+          .setDuration(animDurationMilli)
+          .setInterpolator(DEFAULT_INTERPOLATOR)
+          .withEndAction(() -> {
+            internalSetState(drawableResId, colorResId);
+            animate().scaleX(DEFAULT_SCALE).scaleY(DEFAULT_SCALE).setDuration(animDurationMilli).withEndAction(() -> {
+              setScaleX(DEFAULT_SCALE);
+              setScaleY(DEFAULT_SCALE);
+            }).start();
           })
           .start();
     } else {

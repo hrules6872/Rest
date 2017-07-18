@@ -71,14 +71,14 @@ import com.hrules.rest.services.TimeService;
 import com.hrules.rest.services.TimeServiceReceiver;
 import java.util.List;
 
-public class MainActivityView extends DRMVPAppCompatActivity<MainActivityPresenter, MainActivityPresenter.Contract>
+public final class MainActivityView extends DRMVPAppCompatActivity<MainActivityPresenter, MainActivityPresenter.Contract>
     implements MainActivityPresenter.Contract {
   @BindView(R.id.layout_root) RelativeLayout layoutRoot;
   @BindView(R.id.progress_view) ProgressCountdownView progressView;
   @BindView(R.id.button_changeState) ChangeStateFloatingActionButton buttonChangeState;
   @BindView(R.id.button_replay) ReplayFloatingActionButton buttonReplay;
   @BindView(R.id.toolbar) Toolbar toolbar;
-  @BindView(R.id.message_alert) TextView messageAlert;
+  @BindView(R.id.zenmode_alert) TextView messageAlert;
   @BindView(R.id.edit_minutes) EditText editMinutes;
   @BindView(R.id.edit_seconds) EditText editSeconds;
   @BindView(R.id.text_editSeparator) TextView textEditSeparator;
@@ -197,7 +197,7 @@ public class MainActivityView extends DRMVPAppCompatActivity<MainActivityPresent
     ToolTipView.show(findViewById(viewResId), getString(stringResId), ToolTipView.LENGTH_SHORT);
   }
 
-  @Override public void setMessageAlertVisibility(@Visibility int visibility) {
+  @Override public void setZenModeAlertVisibility(@Visibility int visibility) {
     messageAlert.setVisibility(visibility);
   }
 
@@ -223,7 +223,8 @@ public class MainActivityView extends DRMVPAppCompatActivity<MainActivityPresent
         TimeManager.INSTANCE.isRunning() ? ScaleAnimatedTextView.ANIM_TYPE_SCALE_OUT : ScaleAnimatedTextView.ANIM_TYPE_SCALE_IN);
     textCountdown.setTextColor(TimeUtils.getTextColorFromMilli(new ResUtils(App.getAppContext())));
 
-    if (TimeManager.INSTANCE.isRunning() && !TimeManager.INSTANCE.isCountdownOver()
+    if (TimeManager.INSTANCE.isRunning()
+        && !TimeManager.INSTANCE.isCountdownOver()
         && revealBackgroundView.getState() == RevealBackgroundView.STATE_FINISHED) {
       progressView.setVisibility(View.VISIBLE);
       progressView.setCurrentProgress(TimeManager.INSTANCE.getElapsedTime());

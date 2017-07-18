@@ -33,7 +33,7 @@ import butterknife.OnClick;
 import com.hrules.rest.R;
 import com.hrules.rest.presentation.commons.AppUtils;
 
-public class AboutActivityView extends AppCompatActivity {
+public final class AboutActivityView extends AppCompatActivity {
   @BindView(R.id.toolbar) Toolbar toolbar;
   @BindView(R.id.about_version) TextView aboutVersion;
 

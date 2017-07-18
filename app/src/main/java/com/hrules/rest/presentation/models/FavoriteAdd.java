@@ -19,7 +19,7 @@ package com.hrules.rest.presentation.models;
 import android.support.annotation.NonNull;
 import com.hrules.rest.presentation.models.base.Favorite;
 
-public class FavoriteAdd extends Favorite {
+public final class FavoriteAdd extends Favorite {
   public FavoriteAdd(@NonNull String title) {
     super(title, Type.ADD);
   }

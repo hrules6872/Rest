@@ -28,7 +28,7 @@ import android.util.AttributeSet;
 import android.view.View;
 import com.hrules.rest.R;
 
-public class ProgressCountdownView extends View {
+public final class ProgressCountdownView extends View {
   private int height;
   private int width;
 

@@ -30,7 +30,7 @@ import android.view.animation.ScaleAnimation;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 
-public class ScaleAnimatedTextView extends AppCompatTextView {
+public final class ScaleAnimatedTextView extends AppCompatTextView {
   private static final Interpolator DEFAULT_INTERPOLATOR = new AccelerateInterpolator();
   private static final float SCALE_FACTOR_OUT = 1.2f;
   private static final float SCALE_FACTOR_IN = 0.8f;
@@ -60,8 +60,8 @@ public class ScaleAnimatedTextView extends AppCompatTextView {
     if (animate) {
       float scaleFactor = type == ANIM_TYPE_SCALE_OUT ? SCALE_FACTOR_OUT : SCALE_FACTOR_IN;
       Animation animation =
-          new ScaleAnimation(1.0f, scaleFactor, 1.0f, scaleFactor, Animation.RELATIVE_TO_SELF, DEFAULT_PIVOT_X,
-              Animation.RELATIVE_TO_SELF, DEFAULT_PIVOT_Y);
+          new ScaleAnimation(1.0f, scaleFactor, 1.0f, scaleFactor, Animation.RELATIVE_TO_SELF, DEFAULT_PIVOT_X, Animation.RELATIVE_TO_SELF,
+              DEFAULT_PIVOT_Y);
       animation.setDuration(getResources().getInteger(android.R.integer.config_shortAnimTime));
       animation.setRepeatMode(Animation.REVERSE);
       animation.setRepeatCount(1);

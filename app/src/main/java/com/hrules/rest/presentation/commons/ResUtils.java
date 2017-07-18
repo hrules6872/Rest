@@ -25,7 +25,7 @@ import android.support.annotation.NonNull;
 import android.support.annotation.StringRes;
 import android.support.v4.content.ContextCompat;
 
-public class ResUtils {
+public final class ResUtils {
   private final Context context;
 
   public ResUtils(@NonNull Context context) {
