@@ -82,12 +82,14 @@ public final class MainActivityPresenter extends DRMVPPresenter<MainActivityPres
 
   private long stopwatchStartTime;
 
+  private VibratorHelper vibratorHelper;
   private ZenModeHelper zenModeHelper;
 
   @Override public void bind(@NonNull Contract view) {
     super.bind(view);
     resources = new ResUtils(App.getAppContext());
     preferences = new Preferences(App.getAppContext());
+    vibratorHelper = new VibratorHelper(App.getAppContext());
     zenModeHelper = new ZenModeHelper(App.getAppContext());
   }
 
@@ -185,7 +187,7 @@ public final class MainActivityPresenter extends DRMVPPresenter<MainActivityPres
   // region COUNTDOWN
   private void checkVibrateOnClickState() {
     if (prefsVibrateButtons) {
-      VibratorHelper.vibrateClick(App.getAppContext());
+      vibratorHelper.vibrateClick();
     }
   }
 

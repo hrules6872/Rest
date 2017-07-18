@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2016. Héctor de Isidro - hrules6872
+ * Copyright (c) 2017. Héctor de Isidro - hrules6872
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,15 +18,19 @@ package com.hrules.rest.presentation.views.fragments;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.preference.CheckBoxPreference;
 import android.preference.ListPreference;
 import android.preference.Preference;
 import android.preference.PreferenceFragment;
 import android.preference.PreferenceManager;
+import android.preference.SwitchPreference;
+import android.preference.TwoStatePreference;
 import android.support.annotation.NonNull;
 import android.view.View;
 import com.hrules.rest.App;
 import com.hrules.rest.R;
 import com.hrules.rest.commons.Preferences;
+import com.hrules.rest.core.alerts.VibratorHelper;
 import com.hrules.rest.presentation.commons.AppUtils;
 import com.hrules.rest.presentation.views.activities.AboutActivityView;
 
@@ -52,7 +56,25 @@ public final class PreferenceFragmentView extends PreferenceFragment
     bindPreferenceSummaryToValue(findPreference(getString(R.string.prefs_displayOrientationKey)));
 
     // check states
+    VibratorHelper vibratorHelper = new VibratorHelper(getActivity());
+    if (!vibratorHelper.hasVibrator()) {
+      disableCheckPreference(findPreference(getString(R.string.prefs_alertVibrateKey)));
+      disableCheckPreference(findPreference(getString(R.string.prefs_controlVibrateButtonsKey)));
+    }
     checkSoundAndVibrateState();
+  }
+
+  private void disableCheckPreference(@NonNull Preference preference) {
+    TwoStatePreference twoStatePreference = null;
+    if (preference instanceof CheckBoxPreference) {
+      twoStatePreference = (CheckBoxPreference) preference;
+    } else if (preference instanceof SwitchPreference) {
+      twoStatePreference = (SwitchPreference) preference;
+    }
+    if (twoStatePreference != null) {
+      twoStatePreference.setChecked(false);
+    }
+    preference.setEnabled(false);
   }
 
   private void bindPreference(@NonNull Preference preference) {

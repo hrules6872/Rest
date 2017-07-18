@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2016. Héctor de Isidro - hrules6872
+ * Copyright (c) 2017. Héctor de Isidro - hrules6872
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -32,30 +32,40 @@ public final class VibratorHelper {
       VIBRATE_NO_DELAY_MILLI, VIBRATE_SHORT_MILLI, VIBRATE_DELAY_MILLI, VIBRATE_SHORT_MILLI
   };
   private static final long[] VIBRATE_LONG_PATTERN = {
-      VIBRATE_NO_DELAY_MILLI, VIBRATE_SHORT_MILLI, VIBRATE_DELAY_MILLI, VIBRATE_SHORT_MILLI, VIBRATE_DELAY_MILLI,
-      VIBRATE_SHORT_MILLI
+      VIBRATE_NO_DELAY_MILLI, VIBRATE_SHORT_MILLI, VIBRATE_DELAY_MILLI, VIBRATE_SHORT_MILLI, VIBRATE_DELAY_MILLI, VIBRATE_SHORT_MILLI
   };
 
-  private VibratorHelper() {
+  private final Vibrator vibrator;
+
+  public VibratorHelper(@NonNull Context context) {
+    this.vibrator = (Vibrator) context.getSystemService(Context.VIBRATOR_SERVICE);
   }
 
-  public static void vibrateShort(@NonNull Context context) {
-    Vibrator vibrator = (Vibrator) context.getSystemService(Context.VIBRATOR_SERVICE);
-    vibrator.vibrate(VIBRATE_SHORT_MILLI);
+  public void vibrateShort() {
+    if (hasVibrator()) {
+      vibrator.vibrate(VIBRATE_SHORT_MILLI);
+    }
   }
 
-  public static void vibrateShort2(@NonNull Context context) {
-    Vibrator vibrator = (Vibrator) context.getSystemService(Context.VIBRATOR_SERVICE);
-    vibrator.vibrate(VIBRATE_SHORT2_PATTERN, VIBRATE_NO_REPEAT);
+  public void vibrateShortTwice() {
+    if (hasVibrator()) {
+      vibrator.vibrate(VIBRATE_SHORT2_PATTERN, VIBRATE_NO_REPEAT);
+    }
   }
 
-  public static void vibrateLong(@NonNull Context context) {
-    Vibrator vibrator = (Vibrator) context.getSystemService(Context.VIBRATOR_SERVICE);
-    vibrator.vibrate(VIBRATE_LONG_PATTERN, VIBRATE_NO_REPEAT);
+  public void vibrateLong() {
+    if (hasVibrator()) {
+      vibrator.vibrate(VIBRATE_LONG_PATTERN, VIBRATE_NO_REPEAT);
+    }
   }
 
-  public static void vibrateClick(@NonNull Context context) {
-    Vibrator vibrator = (Vibrator) context.getSystemService(Context.VIBRATOR_SERVICE);
-    vibrator.vibrate(VIBRATE_CLICK_MILLI);
+  public void vibrateClick() {
+    if (hasVibrator()) {
+      vibrator.vibrate(VIBRATE_CLICK_MILLI);
+    }
+  }
+
+  public boolean hasVibrator() {
+    return vibrator.hasVibrator();
   }
 }

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2016. Héctor de Isidro - hrules6872
+ * Copyright (c) 2017. Héctor de Isidro - hrules6872
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -89,9 +89,11 @@ public final class TimeService extends Service {
   private long lastSecondNotificationUpdate;
   private long remoteViewsWorkaroundSecondsCounter;
 
+  private VibratorHelper vibratorHelper;
   private ZenModeHelper zenModeHelper;
 
   @Override public int onStartCommand(Intent intent, int flags, int startId) {
+    vibratorHelper = new VibratorHelper(this);
     zenModeHelper = new ZenModeHelper(this);
     checkIsDNDModeActive();
 
@@ -363,7 +365,7 @@ public final class TimeService extends Service {
       audioHelper.playShort();
     }
     if (prefsVibrate) {
-      VibratorHelper.vibrateShort(this);
+      vibratorHelper.vibrateShort();
     }
   }
 
@@ -375,7 +377,7 @@ public final class TimeService extends Service {
       audioHelper.playShort2();
     }
     if (prefsVibrate) {
-      VibratorHelper.vibrateShort2(this);
+      vibratorHelper.vibrateShortTwice();
     }
   }
 
@@ -387,13 +389,13 @@ public final class TimeService extends Service {
       audioHelper.playLong();
     }
     if (prefsVibrate) {
-      VibratorHelper.vibrateLong(this);
+      vibratorHelper.vibrateLong();
     }
   }
 
   private void checkVibrateOnClickState() {
     if (prefsVibrateButtons) {
-      VibratorHelper.vibrateClick(TimeService.this);
+      vibratorHelper.vibrateClick();
     }
   }
 
