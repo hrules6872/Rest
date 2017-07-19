@@ -31,6 +31,7 @@ import android.support.annotation.IdRes;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.annotation.StringRes;
+import android.support.annotation.StyleRes;
 import android.support.v7.app.ActionBar;
 import android.support.v7.widget.ListPopupWindow;
 import android.support.v7.widget.Toolbar;
@@ -84,6 +85,7 @@ public final class MainActivityView extends DRMVPAppCompatActivity<MainActivityP
   @BindView(R.id.text_editSeparator) TextView textEditSeparator;
   @BindView(R.id.button_favorites) ImageButton buttonFavorites;
   @BindView(R.id.text_countDown) ScaleAnimatedTextView textCountdown;
+  @BindView(R.id.layout_stopwatch) RelativeLayout layoutStopwatch;
   @BindView(R.id.text_stopwatch) TextView textStopwatch;
   @BindView(R.id.text_stopwatchLast) TextView textStopwatchLast;
   @BindView(R.id.button_stopwatchChangeState) ImageButton buttonStopwatchChangeState;
@@ -372,8 +374,28 @@ public final class MainActivityView extends DRMVPAppCompatActivity<MainActivityP
   //endregion
 
   //region STOPWATCH
+
+  @SuppressWarnings("deprecation") @Override public void setStopwatchTextSizes(@StyleRes int primaryStyle, @StyleRes int secondaryStyle) {
+    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+      textStopwatch.setTextAppearance(primaryStyle);
+      textStopwatchLast.setTextAppearance(secondaryStyle);
+    } else {
+      textStopwatch.setTextAppearance(this, primaryStyle);
+      textStopwatchLast.setTextAppearance(this, secondaryStyle);
+    }
+    layoutStopwatch.invalidate();
+  }
+
   @Override public void updateStopwatch(long milli) {
     textStopwatch.setText(TimeUtils.milliToStopwatchHoursMinutesSecondsMilliString(milli, getResources()));
+  }
+
+  @Override public void setStopwatchButtonChangeStateResource(@DrawableRes int resId) {
+    buttonStopwatchChangeState.setImageResource(resId);
+  }
+
+  @Override public void setStopwatchTextLastTime(long milli) {
+    textStopwatchLast.setText(TimeUtils.milliToStopwatchHoursMinutesSecondsMilliString(milli, getResources()));
   }
 
   @OnClick(R.id.button_stopwatchChangeState) void onButtonStopwatchChangeStateClick() {
@@ -383,14 +405,6 @@ public final class MainActivityView extends DRMVPAppCompatActivity<MainActivityP
   @OnLongClick(R.id.button_stopwatchChangeState) boolean onButtonStopwatchChangeStateLongClick() {
     getPresenter().onButtonStopwatchChangeStateLongClick();
     return true;
-  }
-
-  @Override public void setStopwatchButtonChangeStateResource(@DrawableRes int resId) {
-    buttonStopwatchChangeState.setImageResource(resId);
-  }
-
-  @Override public void setStopwatchTextLastTime(long milli) {
-    textStopwatchLast.setText(TimeUtils.milliToStopwatchHoursMinutesSecondsMilliString(milli, getResources()));
   }
   //endregion
 }

@@ -80,6 +80,15 @@
         android:negativeButtonText="@null"
         android:positiveButtonText="@null"
         android:title="@string/prefs_displayOrientation"/>
+
+    <ListPreference
+        android:defaultValue="@integer/prefs_stopwatchSizeDefault"
+        android:entries="@array/prefs_stopwatchSizeTitles"
+        android:entryValues="@array/prefs_stopwatchSizeValues"
+        android:key="@string/prefs_stopwatchSizeKey"
+        android:negativeButtonText="@null"
+        android:positiveButtonText="@null"
+        android:title="@string/prefs_stopwatchSize"/>
   </PreferenceCategory>
 
   <PreferenceCategory

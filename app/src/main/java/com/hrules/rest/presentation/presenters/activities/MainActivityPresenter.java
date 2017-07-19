@@ -29,6 +29,7 @@ import android.support.annotation.DrawableRes;
 import android.support.annotation.IdRes;
 import android.support.annotation.NonNull;
 import android.support.annotation.StringRes;
+import android.support.annotation.StyleRes;
 import android.text.TextUtils;
 import android.view.KeyEvent;
 import android.view.View;
@@ -123,10 +124,8 @@ public final class MainActivityPresenter extends DRMVPPresenter<MainActivityPres
     String landscape = resources.getString(R.string.prefs_displayOrientationValuesLandscape);
     int orientation = ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED;
     if (orientationFromPrefs.equals(portrait)) {
-      // portrait
       orientation = ActivityInfo.SCREEN_ORIENTATION_PORTRAIT;
     } else if (orientationFromPrefs.equals(landscape)) {
-      // landscape
       orientation = ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE;
     }
     getView().setDisplayOptions(keepScreenOn, orientation);
@@ -176,6 +175,15 @@ public final class MainActivityPresenter extends DRMVPPresenter<MainActivityPres
   private void getPreferences() {
     prefsVibrateButtons = preferences.getBoolean(resources.getString(R.string.prefs_controlVibrateButtonsKey),
         resources.getBoolean(R.bool.prefs_controlVibrateButtonsDefault));
+
+    String stopwatchSize = preferences.getString(resources.getString(R.string.prefs_stopwatchSizeKey),
+        String.valueOf(resources.getInteger(R.integer.prefs_stopwatchSizeDefault)));
+    String stopwatchSizeNormal = resources.getString(R.string.prefs_stopwatchSizeValuesNormal);
+    if (stopwatchSize.equals(stopwatchSizeNormal)) {
+      getView().setStopwatchTextSizes(R.style.StopwatchPrimarySizeNormal, R.style.StopwatchSecondarySizeNormal);
+    } else {
+      getView().setStopwatchTextSizes(R.style.StopwatchPrimarySizeLarge, R.style.StopwatchSecondarySizeLarge);
+    }
   }
 
   private final SharedPreferences.OnSharedPreferenceChangeListener sharedPreferenceChangeListener =
@@ -505,6 +513,8 @@ public final class MainActivityPresenter extends DRMVPPresenter<MainActivityPres
     //endregion
 
     // region STOPWATCH
+    void setStopwatchTextSizes(@StyleRes int primaryStyle, @StyleRes int secondaryStyle);
+
     void updateStopwatch(long milli);
 
     void setStopwatchTextLastTime(long milli);

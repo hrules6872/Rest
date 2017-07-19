@@ -30,6 +30,7 @@
   <string name="prefs_displayCategory">Display</string>
   <string name="prefs_displayKeepScreenOn">Keep screen on</string>
   <string name="prefs_displayOrientation">Orientation</string>
+  <string name="prefs_stopwatchSize">Stopwatch size</string>
   <string name="prefs_miscCategory">Miscellaneous</string>
   <string name="prefs_controlVibrateButtons">Vibrate buttons</string>
   <string name="prefs_stopwatchAutoStop">Auto-stop stopwatch</string>

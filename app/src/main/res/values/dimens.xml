@@ -28,7 +28,7 @@
   <dimen name="notification_actionMargin">72dp</dimen>
   <dimen name="notification_separatorHeight">1px</dimen>
 
-  <dimen name="textCountdownSize">42sp</dimen>
+  <dimen name="textCountdownSize">46sp</dimen>
   <dimen name="edit_minWidth">40dp</dimen>
   <dimen name="buttonWidth">50dp</dimen>
   <dimen name="buttonHeight">50dp</dimen>

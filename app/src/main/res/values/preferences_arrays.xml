@@ -16,14 +16,14 @@
   -->
 
 <resources>
-  <!--arrays-->
-  <string name="prefs_displayOrientationTitleAuto">Auto</string>
-  <string name="prefs_displayOrientationTitlePortrait">Portrait</string>
-  <string name="prefs_displayOrientationTitleLandscape">Landscape</string>
+  <!--Orientation-->
+  <string name="prefs_displayOrientationTitlesAuto">Auto</string>
+  <string name="prefs_displayOrientationTitlesPortrait">Portrait</string>
+  <string name="prefs_displayOrientationTitlesLandscape">Landscape</string>
   <string-array name="prefs_displayOrientationTitles">
-    <item>@string/prefs_displayOrientationTitleAuto</item>
-    <item>@string/prefs_displayOrientationTitlePortrait</item>
-    <item>@string/prefs_displayOrientationTitleLandscape</item>
+    <item>@string/prefs_displayOrientationTitlesAuto</item>
+    <item>@string/prefs_displayOrientationTitlesPortrait</item>
+    <item>@string/prefs_displayOrientationTitlesLandscape</item>
   </string-array>
 
   <string name="prefs_displayOrientationValuesAuto">1</string>
@@ -33,5 +33,20 @@
     <item>@string/prefs_displayOrientationValuesAuto</item>
     <item>@string/prefs_displayOrientationValuesPortrait</item>
     <item>@string/prefs_displayOrientationValuesLandscape</item>
+  </string-array>
+
+  <!--Stopwatch size-->
+  <string name="prefs_stopwatchSizeTitlesNormal">Normal</string>
+  <string name="prefs_stopwatchSizeTitlesLarge">Large</string>
+  <string-array name="prefs_stopwatchSizeTitles">
+    <item>@string/prefs_stopwatchSizeTitlesNormal</item>
+    <item>@string/prefs_stopwatchSizeTitlesLarge</item>
+  </string-array>
+
+  <string name="prefs_stopwatchSizeValuesNormal">1</string>
+  <string name="prefs_stopwatchSizeValuesLarge">2</string>
+  <string-array name="prefs_stopwatchSizeValues">
+    <item>@string/prefs_stopwatchSizeValuesNormal</item>
+    <item>@string/prefs_stopwatchSizeValuesLarge</item>
   </string-array>
 </resources>

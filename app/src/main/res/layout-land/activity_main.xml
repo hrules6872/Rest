@@ -63,11 +63,12 @@
   </android.support.v7.widget.Toolbar>
 
   <RelativeLayout
+      android:id="@+id/layout_stopwatch"
       android:layout_width="match_parent"
       android:layout_height="wrap_content"
   >
     <LinearLayout
-        android:id="@+id/layout_stopwatch"
+        android:id="@+id/layout_stopwatch_time"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerInParent="true"
@@ -78,8 +79,7 @@
           android:layout_width="match_parent"
           android:layout_height="wrap_content"
           android:gravity="center"
-          android:textAppearance="?android:attr/textAppearanceMedium"
-          android:textColor="@color/textColorPrimary"
+          android:textAppearance="@style/StopwatchPrimarySizeNormal"
           tools:text="00:00.00"
       />
 
@@ -88,8 +88,7 @@
           android:layout_width="match_parent"
           android:layout_height="wrap_content"
           android:gravity="center"
-          android:textAppearance="?android:attr/textAppearanceSmall"
-          android:textColor="@color/textColorSecondary"
+          android:textAppearance="@style/StopwatchSecondarySizeNormal"
           tools:text="00:00.00"
       />
     </LinearLayout>
@@ -98,7 +97,7 @@
         android:id="@+id/button_stopwatchChangeState"
         android:layout_width="@dimen/buttonWidth"
         android:layout_height="@dimen/buttonHeight"
-        android:layout_toRightOf="@id/layout_stopwatch"
+        android:layout_toRightOf="@id/layout_stopwatch_time"
         android:src="@drawable/ic_play_stopwatch"
         style="?attr/borderlessButtonStyle"
     />

@@ -32,4 +32,22 @@
     <item name="colorPrimaryDark">@color/colorPrimaryDarkPreferences</item>
     <item name="colorAccent">@color/colorAccentPreferences</item>
   </style>
+
+  <style name="StopwatchPrimarySizeNormal" parent="@android:style/TextAppearance.Medium">
+    <item name="android:textColor">@color/textColorPrimary</item>
+  </style>
+
+  <style name="StopwatchSecondarySizeNormal" parent="@android:style/TextAppearance.Small">
+    <item name="android:textColor">@color/textColorSecondary</item>
+  </style>
+
+  <style name="StopwatchPrimarySizeLarge" parent="@android:style/TextAppearance.Large">
+    <item name="android:textSize">25sp</item>
+    <item name="android:textColor">@color/textColorPrimary</item>
+  </style>
+
+  <style name="StopwatchSecondarySizeLarge" parent="@android:style/TextAppearance.Medium">
+    <item name="android:textSize">21sp</item>
+    <item name="android:textColor">@color/textColorSecondary</item>
+  </style>
 </resources>

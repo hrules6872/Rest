@@ -54,6 +54,7 @@ public final class PreferenceFragmentView extends PreferenceFragment
 
     // bind summary to value
     bindPreferenceSummaryToValue(findPreference(getString(R.string.prefs_displayOrientationKey)));
+    bindPreferenceSummaryToValue(findPreference(getString(R.string.prefs_stopwatchSizeKey)));
 
     // check states
     VibratorHelper vibratorHelper = new VibratorHelper(getActivity());
