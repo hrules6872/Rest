@@ -18,7 +18,7 @@ package com.hrules.rest;
 
 import android.app.Application;
 
-public class App extends Application {
+public final class App extends Application {
   private static App application;
 
   @Override public void onCreate() {

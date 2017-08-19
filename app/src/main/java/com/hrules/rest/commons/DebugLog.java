@@ -39,8 +39,8 @@ public final class DebugLog {
   private static @NonNull String formatMessage(@NonNull String message) {
     StackTraceElement[] stackTrace = (new Throwable().getStackTrace());
     if (stackTrace.length >= 2) {
-      return String.format("[%s:%s] -> %s(): %s", stackTrace[2].getFileName(), stackTrace[2].getLineNumber(),
-          stackTrace[2].getMethodName(), message);
+      return String.format("[%s:%s] -> %s(): %s", stackTrace[2].getFileName(), stackTrace[2].getLineNumber(), stackTrace[2].getMethodName(),
+          message);
     } else {
       return message;
     }
@@ -86,42 +86,6 @@ public final class DebugLog {
   public static void e(@NonNull Object message, @NonNull Throwable tr) {
     if (isDebuggable()) {
       Log.e(getApplicationId(), formatMessage(String.valueOf(message)), tr);
-    }
-  }
-
-  public static void i(@NonNull Object... messages) {
-    if (isDebuggable()) {
-      Log.i(getApplicationId(), formatMessage(concatenate(messages)));
-    }
-  }
-
-  public static void i(@NonNull Object message, @NonNull Throwable tr) {
-    if (isDebuggable()) {
-      Log.i(getApplicationId(), formatMessage(String.valueOf(message)), tr);
-    }
-  }
-
-  public static void v(@NonNull Object... messages) {
-    if (isDebuggable()) {
-      Log.v(getApplicationId(), formatMessage(concatenate(messages)));
-    }
-  }
-
-  public static void v(@NonNull Object message, @NonNull Throwable tr) {
-    if (isDebuggable()) {
-      Log.v(getApplicationId(), formatMessage(String.valueOf(message)), tr);
-    }
-  }
-
-  public static void w(@NonNull Object... messages) {
-    if (isDebuggable()) {
-      Log.w(getApplicationId(), formatMessage(concatenate(messages)));
-    }
-  }
-
-  public static void w(@NonNull Object message, @NonNull Throwable tr) {
-    if (isDebuggable()) {
-      Log.w(getApplicationId(), formatMessage(String.valueOf(message)), tr);
     }
   }
 }
