@@ -15,10 +15,10 @@
  */
 
 ext {
-  androidBuildToolsVersion = '26.0.0'
+  androidBuildToolsVersion = '26.0.1'
   androidBuildMinSDKVersion = '16'
-  androidBuildTargetSDKVersion = '25'
-  androidBuildCompileSDKVersion = 'android-25'
+  androidBuildTargetSDKVersion = '26'
+  androidBuildCompileSDKVersion = 'android-26'
 
   // internal
   def appVersionMajor = 1
@@ -30,7 +30,7 @@ ext {
   appVersionName = "${appVersionMajor}.${appVersionMinor}.${appVersionPatch}"
 
   // support libraries
-  supportLibraryVersion = '25.4.+'
+  supportLibraryVersion = '26.0.+'
   supportDependencies = [recyclerView      : "com.android.support:recyclerview-v7:${supportLibraryVersion}",
                          appCompat         : "com.android.support:appcompat-v7:${supportLibraryVersion}",
                          supportAnnotations: "com.android.support:support-annotations:${supportLibraryVersion}",
@@ -38,7 +38,7 @@ ext {
                          cardView          : "com.android.support:cardview-v7:${supportLibraryVersion}"]
 
   // project dependencies
-  butterKnifeVersion = '8.+'
+  butterKnifeVersion = '8.8.+'
   daRealMVPVersion = '0.20.+'
   projectDependencies = [butterKnife: "com.jakewharton:butterknife:${butterKnifeVersion}",
                          daRealMVP  : "com.hrules:darealmvp:${daRealMVPVersion}"]
