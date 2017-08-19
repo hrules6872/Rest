@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.hrules.rest.presentation.components;
+package com.hrules.rest.presentation.commons.components;
 
 import android.content.Context;
 import android.content.res.Resources;
@@ -60,8 +60,7 @@ public final class ToolTipView {
     final int viewHeight = view.getHeight();
     final int viewCenterX = screenPos[0] + viewWidth / 2;
     final int screenWidth = resources.getDisplayMetrics().widthPixels;
-    final int estimatedToastHeight =
-        (int) (DEFAULT_ESTIMATED_TOAST_HEIGHT_DIPS * resources.getDisplayMetrics().density);
+    final int estimatedToastHeight = (int) (DEFAULT_ESTIMATED_TOAST_HEIGHT_DIPS * resources.getDisplayMetrics().density);
 
     Toast toast = Toast.makeText(context, text, duration);
     boolean showBelow = screenPos[1] < estimatedToastHeight;

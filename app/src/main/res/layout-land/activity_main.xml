@@ -26,13 +26,13 @@
     android:focusableInTouchMode="true"
 >
 
-  <com.hrules.rest.presentation.components.ProgressCountdownView
+  <com.hrules.rest.presentation.commons.components.ProgressCountdownView
       android:id="@+id/progress_view"
       android:layout_width="match_parent"
       android:layout_height="match_parent"
   />
 
-  <com.hrules.rest.presentation.components.RevealBackgroundView
+  <com.hrules.rest.presentation.commons.components.RevealBackgroundView
       android:id="@+id/reveal_background"
       android:layout_width="match_parent"
       android:layout_height="match_parent"
@@ -103,7 +103,7 @@
     />
   </RelativeLayout>
 
-  <com.hrules.rest.presentation.components.ScaleAnimatedTextView
+  <com.hrules.rest.presentation.commons.components.ScaleAnimatedTextView
       android:id="@+id/text_countDown"
       android:layout_width="match_parent"
       android:layout_height="wrap_content"
@@ -114,7 +114,7 @@
   />
 
   <!--app:useCompatPadding="true" doesn't work fine here-->
-  <com.hrules.rest.presentation.components.ChangeStateFloatingActionButton
+  <com.hrules.rest.presentation.commons.components.ChangeStateFloatingActionButton
       android:id="@+id/button_changeState"
       android:layout_width="wrap_content"
       android:layout_height="wrap_content"
@@ -126,7 +126,7 @@
   />
 
   <!--app:useCompatPadding="true" doesn't work fine here-->
-  <com.hrules.rest.presentation.components.ReplayFloatingActionButton
+  <com.hrules.rest.presentation.commons.components.ReplayFloatingActionButton
       android:id="@+id/button_replay"
       android:layout_width="wrap_content"
       android:layout_height="wrap_content"

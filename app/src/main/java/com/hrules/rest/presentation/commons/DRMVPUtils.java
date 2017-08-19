@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.hrules.rest.presentation.views.utils;
+package com.hrules.rest.presentation.commons;
 
 import android.support.annotation.NonNull;
 import java.lang.reflect.ParameterizedType;

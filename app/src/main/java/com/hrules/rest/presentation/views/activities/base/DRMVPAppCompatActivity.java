@@ -24,7 +24,7 @@ import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import com.hrules.darealmvp.DRMVPPresenter;
 import com.hrules.darealmvp.DRMVPView;
-import com.hrules.rest.presentation.views.utils.DRMVPUtils;
+import com.hrules.rest.presentation.commons.DRMVPUtils;
 
 @SuppressWarnings("unchecked") public abstract class DRMVPAppCompatActivity<P extends DRMVPPresenter<V>, V extends DRMVPView>
     extends AppCompatActivity {

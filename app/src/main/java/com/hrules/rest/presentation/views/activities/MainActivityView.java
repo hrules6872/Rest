@@ -59,12 +59,12 @@ import com.hrules.rest.presentation.commons.ResUtils;
 import com.hrules.rest.presentation.commons.TimeUtils;
 import com.hrules.rest.presentation.commons.ViewUtils;
 import com.hrules.rest.presentation.commons.annotations.Visibility;
-import com.hrules.rest.presentation.components.ChangeStateFloatingActionButton;
-import com.hrules.rest.presentation.components.ProgressCountdownView;
-import com.hrules.rest.presentation.components.ReplayFloatingActionButton;
-import com.hrules.rest.presentation.components.RevealBackgroundView;
-import com.hrules.rest.presentation.components.ScaleAnimatedTextView;
-import com.hrules.rest.presentation.components.ToolTipView;
+import com.hrules.rest.presentation.commons.components.ChangeStateFloatingActionButton;
+import com.hrules.rest.presentation.commons.components.ProgressCountdownView;
+import com.hrules.rest.presentation.commons.components.ReplayFloatingActionButton;
+import com.hrules.rest.presentation.commons.components.RevealBackgroundView;
+import com.hrules.rest.presentation.commons.components.ScaleAnimatedTextView;
+import com.hrules.rest.presentation.commons.components.ToolTipView;
 import com.hrules.rest.presentation.models.base.Favorite;
 import com.hrules.rest.presentation.presenters.activities.MainActivityPresenter;
 import com.hrules.rest.presentation.views.activities.base.DRMVPAppCompatActivity;
@@ -316,7 +316,7 @@ public final class MainActivityView extends DRMVPAppCompatActivity<MainActivityP
   }
 
   @Override public void setEditText(@IdRes int editTextResId, @NonNull String text) {
-    EditText editText = (EditText) findViewById(editTextResId);
+    EditText editText = findViewById(editTextResId);
     editText.removeTextChangedListener(editTextChangedListener);
     editText.setText(text);
     editText.addTextChangedListener(editTextChangedListener);

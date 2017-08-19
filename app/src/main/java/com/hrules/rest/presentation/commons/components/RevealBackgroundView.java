@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.hrules.rest.presentation.components;
+package com.hrules.rest.presentation.commons.components;
 
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
