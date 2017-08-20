@@ -67,13 +67,15 @@ import com.hrules.rest.presentation.commons.components.ScaleAnimatedTextView;
 import com.hrules.rest.presentation.commons.components.ToolTipView;
 import com.hrules.rest.presentation.models.base.Favorite;
 import com.hrules.rest.presentation.presenters.activities.MainActivityPresenter;
+import com.hrules.rest.presentation.presenters.activities.extras.CountdownPresenter;
+import com.hrules.rest.presentation.presenters.activities.extras.StopwatchPresenter;
 import com.hrules.rest.presentation.views.activities.base.DRMVPAppCompatActivity;
 import com.hrules.rest.services.TimeService;
 import com.hrules.rest.services.TimeServiceReceiver;
 import java.util.List;
 
 public final class MainActivityView extends DRMVPAppCompatActivity<MainActivityPresenter, MainActivityPresenter.Contract>
-    implements MainActivityPresenter.Contract {
+    implements CountdownPresenter.Contract, StopwatchPresenter.Contract {
   @BindView(R.id.layout_root) RelativeLayout layoutRoot;
   @BindView(R.id.progress_view) ProgressCountdownView progressView;
   @BindView(R.id.button_changeState) ChangeStateFloatingActionButton buttonChangeState;
