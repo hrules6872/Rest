@@ -21,20 +21,28 @@
   <string name="prefs_soundUseMediaStream">Use music stream</string>
   <string name="prefs_soundMuteMediaStream">Mute music stream</string>
   <string name="prefs_soundMuteMediaStreamSummary">Mute music stream while playing alerts</string>
+
   <string name="prefs_alertVibrate">Vibrate</string>
   <string name="prefs_alertTypeCategory">Alert types</string>
   <string name="prefs_alertHalfway">Halfway alert</string>
   <string name="prefs_alertHalfwaySummary">Minimum countdown 30 seconds</string>
   <string name="prefs_alertTenSeconds">Ten seconds alert</string>
   <string name="prefs_alertThreeSeconds">Three seconds countdown</string>
+
   <string name="prefs_displayCategory">Display</string>
   <string name="prefs_displayKeepScreenOn">Keep screen on</string>
   <string name="prefs_displayOrientation">Orientation</string>
+
+  <string name="prefs_stopwatchCategory">Stopwatch</string>
+  <string name="prefs_stopwatchSmart">Smart stopwatch</string>
+  <string name="prefs_stopwatchAutoStop">Auto-stop stopwatch</string>
   <string name="prefs_stopwatchSize">Stopwatch size</string>
+  <string name="prefs_stopwatchSmartSummary">Daily usage</string>
+  <string name="prefs_stopwatchAutoStopSummary">Stop stopwatch when notification is closed</string>
+
   <string name="prefs_miscCategory">Miscellaneous</string>
   <string name="prefs_controlVibrateButtons">Vibrate buttons</string>
-  <string name="prefs_stopwatchAutoStop">Auto-stop stopwatch</string>
-  <string name="prefs_stopwatchAutoStopSummary">Stop stopwatch when notification is closed</string>
+
   <string name="prefs_infoCategory">Information</string>
   <string name="prefs_appRateIt">Rate this app on Google Play</string>
   <string name="prefs_appSendFeedback">Send feedback to developer</string>

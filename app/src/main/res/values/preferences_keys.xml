@@ -27,10 +27,12 @@
 
   <string name="prefs_displayKeepScreenOnKey">prefs_displayKeepScreenOnKey</string>
   <string name="prefs_displayOrientationKey">prefs_displayOrientationKey</string>
+
+  <string name="prefs_stopwatchSmartKey">prefs_stopwatchSmartKey</string>
   <string name="prefs_stopwatchSizeKey">prefs_stopwatchSizeKey</string>
+  <string name="prefs_stopwatchAutoStopKey">prefs_stopwatchAutoStopKey</string>
 
   <string name="prefs_controlVibrateButtonsKey">prefs_controlVibrateButtonsKey</string>
-  <string name="prefs_stopwatchAutoStopKey">prefs_stopwatchAutoStopKey</string>
 
   <string name="prefs_appRateItKey">prefs_appRateItKey</string>
   <string name="prefs_appSendFeedbackKey">prefs_appSendFeedbackKey</string>

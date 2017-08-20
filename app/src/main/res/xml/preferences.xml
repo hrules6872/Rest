@@ -80,6 +80,24 @@
         android:negativeButtonText="@null"
         android:positiveButtonText="@null"
         android:title="@string/prefs_displayOrientation"/>
+  </PreferenceCategory>
+
+  <PreferenceCategory
+      android:title="@string/prefs_stopwatchCategory">
+
+    <CheckBoxPreference
+        android:defaultValue="@bool/prefs_stopwatchSmartDefault"
+        android:disableDependentsState="true"
+        android:key="@string/prefs_stopwatchSmartKey"
+        android:summary="@string/prefs_stopwatchSmartSummary"
+        android:title="@string/prefs_stopwatchSmart"/>
+
+    <CheckBoxPreference
+        android:defaultValue="@bool/prefs_stopwatchAutoStopDefault"
+        android:dependency="@string/prefs_stopwatchSmartKey"
+        android:key="@string/prefs_stopwatchAutoStopKey"
+        android:summary="@string/prefs_stopwatchAutoStopSummary"
+        android:title="@string/prefs_stopwatchAutoStop"/>
 
     <ListPreference
         android:defaultValue="@integer/prefs_stopwatchSizeDefault"
@@ -98,13 +116,6 @@
         android:defaultValue="@bool/prefs_controlVibrateButtonsDefault"
         android:key="@string/prefs_controlVibrateButtonsKey"
         android:title="@string/prefs_controlVibrateButtons"/>
-
-    <CheckBoxPreference
-        android:defaultValue="@bool/prefs_stopwatchAutoStopDefault"
-        android:key="@string/prefs_stopwatchAutoStopKey"
-        android:summary="@string/prefs_stopwatchAutoStopSummary"
-        android:title="@string/prefs_stopwatchAutoStop"/>
-
   </PreferenceCategory>
 
   <PreferenceCategory

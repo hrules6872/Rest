@@ -27,8 +27,10 @@
 
   <bool name="prefs_displayKeepScreenOnDefault">false</bool>
   <integer name="prefs_displayOrientationDefault">1</integer>
+
+  <bool name="prefs_stopwatchSmartDefault">false</bool>
+  <bool name="prefs_stopwatchAutoStopDefault">false</bool>
   <integer name="prefs_stopwatchSizeDefault">1</integer>
 
   <bool name="prefs_controlVibrateButtonsDefault">true</bool>
-  <bool name="prefs_stopwatchAutoStopDefault">false</bool>
 </resources>
