@@ -77,6 +77,9 @@ public class CountdownPresenter extends DRMVPPresenter<CountdownPresenter.Contra
   }
 
   public void onViewReady() {
+    getPreferences();
+    preferences.addListener(sharedPreferenceChangeListener);
+
     TimeManager.INSTANCE.setCountdownTimeMilli(
         preferences.getLong(AppConstants.PREFS.COUNTDOWN_MILLI, AppConstants.PREFS.DEFAULTS.COUNTDOWN_MILLI));
 

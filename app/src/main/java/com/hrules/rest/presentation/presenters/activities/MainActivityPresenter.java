@@ -16,19 +16,10 @@
 
 package com.hrules.rest.presentation.presenters.activities;
 
-import android.content.BroadcastReceiver;
-import android.content.Context;
-import android.content.Intent;
-import android.content.IntentFilter;
-import android.content.SharedPreferences;
 import android.content.pm.ActivityInfo;
-import android.os.Handler;
-import android.os.Looper;
-import android.support.annotation.DrawableRes;
 import android.support.annotation.IdRes;
 import android.support.annotation.NonNull;
 import android.support.annotation.StringRes;
-import android.support.annotation.StyleRes;
 import android.view.KeyEvent;
 import android.view.View;
 import android.widget.EditText;
@@ -36,42 +27,21 @@ import android.widget.TextView;
 import com.hrules.darealmvp.DRMVPPresenter;
 import com.hrules.darealmvp.DRMVPView;
 import com.hrules.rest.App;
-import com.hrules.rest.AppConstants;
 import com.hrules.rest.R;
 import com.hrules.rest.commons.Preferences;
-import com.hrules.rest.core.alerts.VibratorHelper;
 import com.hrules.rest.core.commons.ZenModeHelper;
 import com.hrules.rest.presentation.commons.ResUtils;
 import com.hrules.rest.presentation.commons.annotations.Visibility;
 import com.hrules.rest.presentation.models.base.Favorite;
 import com.hrules.rest.presentation.presenters.activities.extras.CountdownPresenter;
 import com.hrules.rest.presentation.presenters.activities.extras.StopwatchPresenter;
-import java.util.concurrent.ScheduledFuture;
-import java.util.concurrent.ScheduledThreadPoolExecutor;
-import java.util.concurrent.TimeUnit;
 
 public final class MainActivityPresenter extends DRMVPPresenter<MainActivityPresenter.Contract> {
-  public static final String ACTION_STOPWATCHSTOP = "com.hrules.rest.ACTION_STOPWATCHSTOP";
-
-  private static final long DEFAULT_EDIT_STATE_EMPTY = 0;
   private static final boolean DEFAULT_KEEP_SCREEN_ON_STATE = false;
-
-  private static final int DEFAULT_EXECUTOR_CORE_POOL_SIZE = 1;
-
-  private static final long DEFAULT_STOPWATCH_DELAY_MILLI = 0;
-  private static final long DEFAULT_STOPWATCH_PERIOD_MILLI = 33;
 
   private ResUtils resources;
   private Preferences preferences;
-  private boolean prefsVibrateButtons;
 
-  private final Handler stopwatchHandler = new Handler(Looper.getMainLooper());
-  private final ScheduledThreadPoolExecutor scheduledThreadPoolExecutor = new ScheduledThreadPoolExecutor(DEFAULT_EXECUTOR_CORE_POOL_SIZE);
-  private ScheduledFuture scheduledFutureStopwatch;
-
-  private long stopwatchStartTime;
-
-  private VibratorHelper vibratorHelper;
   private ZenModeHelper zenModeHelper;
 
   private CountdownPresenter countdownPresenter;
@@ -81,7 +51,6 @@ public final class MainActivityPresenter extends DRMVPPresenter<MainActivityPres
     super.bind(view);
     resources = new ResUtils(App.getAppContext());
     preferences = new Preferences(App.getAppContext());
-    vibratorHelper = new VibratorHelper(App.getAppContext());
     zenModeHelper = new ZenModeHelper(App.getAppContext());
 
     // countdown
@@ -93,15 +62,27 @@ public final class MainActivityPresenter extends DRMVPPresenter<MainActivityPres
     stopwatchPresenter.bind((StopwatchPresenter.Contract) view);
   }
 
-  public void onViewReady() {
-    getPreferences();
-    preferences.addListener(sharedPreferenceChangeListener);
+  @Override public void unbind() {
+    super.unbind();
+    zenModeHelper.release();
+    zenModeHelper = null;
 
+    // countdown
+    countdownPresenter.unbind();
+
+    // stopwatch
+    stopwatchPresenter.unbind();
+  }
+
+  public void onViewReady() {
     getView().setZenModeAlertVisibility(zenModeHelper.isZenModeActive() ? View.VISIBLE : View.GONE);
     zenModeHelper.setListener(zenModeManagerListener);
 
     // countdown
     countdownPresenter.onViewReady();
+
+    // stopwatch
+    stopwatchPresenter.onViewReady();
   }
 
   public void onViewResume() {
@@ -124,10 +105,7 @@ public final class MainActivityPresenter extends DRMVPPresenter<MainActivityPres
     countdownPresenter.onViewResume();
 
     // stopwatch
-    setStopwatchLastTime();
-    manageStopwatchState(preferences.getLong(AppConstants.PREFS.STOPWATCH_MILLI, AppConstants.PREFS.DEFAULTS.STOPWATCH_MILLI));
-
-    registerStopwatchReceiver();
+    stopwatchPresenter.onViewResume();
   }
 
   public void onViewStop() {
@@ -139,40 +117,8 @@ public final class MainActivityPresenter extends DRMVPPresenter<MainActivityPres
     countdownPresenter.onViewStop();
 
     // stopwatch
-    stopStopwatchRunnable();
-    unregisterStopwatchReceiver();
+    stopwatchPresenter.onViewStop();
   }
-
-  @Override public void unbind() {
-    super.unbind();
-    zenModeHelper.release();
-    zenModeHelper = null;
-
-    // countdown
-    countdownPresenter.unbind();
-
-    // stopwatch
-    scheduledThreadPoolExecutor.shutdown();
-    stopwatchHandler.removeCallbacksAndMessages(null);
-  }
-
-  private void getPreferences() {
-    // stopwatch
-    prefsVibrateButtons = preferences.getBoolean(resources.getString(R.string.prefs_controlVibrateButtonsKey),
-        resources.getBoolean(R.bool.prefs_controlVibrateButtonsDefault));
-
-    String stopwatchSize = preferences.getString(resources.getString(R.string.prefs_stopwatchSizeKey),
-        String.valueOf(resources.getInteger(R.integer.prefs_stopwatchSizeDefault)));
-    String stopwatchSizeNormal = resources.getString(R.string.prefs_stopwatchSizeValuesNormal);
-    if (stopwatchSize.equals(stopwatchSizeNormal)) {
-      getView().setStopwatchTextSizes(R.style.StopwatchPrimarySizeNormal, R.style.StopwatchSecondarySizeNormal);
-    } else {
-      getView().setStopwatchTextSizes(R.style.StopwatchPrimarySizeLarge, R.style.StopwatchSecondarySizeLarge);
-    }
-  }
-
-  private final SharedPreferences.OnSharedPreferenceChangeListener sharedPreferenceChangeListener =
-      (sharedPreferences, key) -> getPreferences();
 
   private final ZenModeHelper.ZenModeManagerListener zenModeManagerListener =
       newState -> getView().setZenModeAlertVisibility(newState ? View.VISIBLE : View.GONE);
@@ -216,109 +162,13 @@ public final class MainActivityPresenter extends DRMVPPresenter<MainActivityPres
   //endregion
 
   // region STOPWATCH
-  private void checkVibrateOnClickState() {
-    if (prefsVibrateButtons) {
-      vibratorHelper.vibrateClick();
-    }
-  }
-
-  private void startStopwatchRunnable() {
-    stopStopwatchRunnable();
-    scheduledFutureStopwatch = scheduledThreadPoolExecutor.scheduleAtFixedRate(updateStopwatchRunnable, DEFAULT_STOPWATCH_DELAY_MILLI,
-        DEFAULT_STOPWATCH_PERIOD_MILLI, TimeUnit.MILLISECONDS);
-  }
-
-  private void stopStopwatchRunnable() {
-    if (scheduledFutureStopwatch != null) {
-      scheduledFutureStopwatch.cancel(false);
-    }
-  }
-
-  private final Runnable updateStopwatchRunnable = new Runnable() {
-    @Override public void run() {
-      final long stopwatch = System.currentTimeMillis() - stopwatchStartTime;
-
-      stopwatchHandler.post(() -> getView().updateStopwatch(
-          stopwatchStartTime != AppConstants.PREFS.DEFAULTS.STOPWATCH_MILLI ? stopwatch : AppConstants.PREFS.DEFAULTS.STOPWATCH_MILLI));
-    }
-  };
-
-  private void manageStopwatchState(long stopwatch) {
-    if (stopwatch != AppConstants.PREFS.DEFAULTS.STOPWATCH_MILLI) {
-      // start countdown
-      getView().setStopwatchButtonChangeStateResource(R.drawable.ic_stop_stopwatch);
-
-      stopwatchStartTime = stopwatch;
-      startStopwatchRunnable();
-    } else {
-      // stop countdown
-      getView().setStopwatchButtonChangeStateResource(R.drawable.ic_play_stopwatch);
-
-      stopwatchStartTime = AppConstants.PREFS.DEFAULTS.STOPWATCH_MILLI;
-      stopStopwatchRunnable();
-      getView().updateStopwatch(AppConstants.PREFS.DEFAULTS.STOPWATCH_MILLI);
-    }
-  }
-
-  private void setStopwatchLastTime() {
-    getView().setStopwatchTextLastTime(
-        preferences.getLong(AppConstants.PREFS.STOPWATCH_MILLI_LAST, AppConstants.PREFS.DEFAULTS.STOPWATCH_MILLI_LAST));
-  }
-
   public void onButtonStopwatchChangeStateClick() {
-    long stopwatch = preferences.getLong(AppConstants.PREFS.STOPWATCH_MILLI, AppConstants.PREFS.DEFAULTS.STOPWATCH_MILLI);
-    if (stopwatch == AppConstants.PREFS.DEFAULTS.STOPWATCH_MILLI) {
-      // stopwatch will be started
-      checkVibrateOnClickState();
-
-      stopwatch = System.currentTimeMillis();
-      preferences.save(AppConstants.PREFS.STOPWATCH_MILLI, stopwatch);
-
-      setStopwatchLastTime();
-      manageStopwatchState(stopwatch);
-    } else {
-      getView().showTooltip(R.id.button_stopwatchChangeState, R.string.text_longClickStopwatch);
-    }
+    stopwatchPresenter.onButtonStopwatchChangeStateClick();
   }
 
   public void onButtonStopwatchChangeStateLongClick() {
-    long stopwatch = preferences.getLong(AppConstants.PREFS.STOPWATCH_MILLI, AppConstants.PREFS.DEFAULTS.STOPWATCH_MILLI);
-    if (stopwatch != AppConstants.PREFS.DEFAULTS.STOPWATCH_MILLI) {
-      //stopwatch will be stopped
-      checkVibrateOnClickState();
-
-      preferences.save(AppConstants.PREFS.STOPWATCH_MILLI_LAST, System.currentTimeMillis() - stopwatch);
-
-      stopwatch = AppConstants.PREFS.DEFAULTS.STOPWATCH_MILLI;
-      preferences.save(AppConstants.PREFS.STOPWATCH_MILLI, stopwatch);
-
-      setStopwatchLastTime();
-      manageStopwatchState(stopwatch);
-    }
+    stopwatchPresenter.onButtonStopwatchChangeStateLongClick();
   }
-
-  private void registerStopwatchReceiver() {
-    IntentFilter intentFilter = new IntentFilter();
-    intentFilter.addAction(ACTION_STOPWATCHSTOP);
-    App.getAppContext().registerReceiver(stopwatchReceiver, intentFilter);
-  }
-
-  private void unregisterStopwatchReceiver() {
-    try {
-      App.getAppContext().unregisterReceiver(stopwatchReceiver);
-    } catch (IllegalArgumentException ignored) {
-    }
-  }
-
-  private final BroadcastReceiver stopwatchReceiver = new BroadcastReceiver() {
-    @Override public void onReceive(@NonNull Context context, Intent intent) {
-      if (intent.getAction().equals(ACTION_STOPWATCHSTOP)) {
-        // update UI
-        setStopwatchLastTime();
-        manageStopwatchState(AppConstants.PREFS.DEFAULTS.STOPWATCH_MILLI);
-      }
-    }
-  };
   //endregion
 
   public interface Contract extends DRMVPView {
@@ -327,15 +177,5 @@ public final class MainActivityPresenter extends DRMVPPresenter<MainActivityPres
     void showTooltip(@IdRes int viewResId, @StringRes int stringResId);
 
     void setZenModeAlertVisibility(@Visibility int visibility);
-
-    // region STOPWATCH
-    void setStopwatchTextSizes(@StyleRes int primaryStyle, @StyleRes int secondaryStyle);
-
-    void updateStopwatch(long milli);
-
-    void setStopwatchTextLastTime(long milli);
-
-    void setStopwatchButtonChangeStateResource(@DrawableRes int resId);
-    //endregion
   }
 }

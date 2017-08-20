@@ -43,7 +43,7 @@ import com.hrules.rest.core.commons.ZenModeHelper;
 import com.hrules.rest.core.time.TimeManager;
 import com.hrules.rest.presentation.commons.ResUtils;
 import com.hrules.rest.presentation.commons.TimeUtils;
-import com.hrules.rest.presentation.presenters.activities.MainActivityPresenter;
+import com.hrules.rest.presentation.presenters.activities.extras.StopwatchPresenter;
 import com.hrules.rest.presentation.views.activities.MainActivityView;
 import java.util.concurrent.TimeUnit;
 
@@ -407,7 +407,7 @@ public final class TimeService extends Service {
         preferences.save(AppConstants.PREFS.STOPWATCH_MILLI_LAST, System.currentTimeMillis() - stopwatch);
         preferences.save(AppConstants.PREFS.STOPWATCH_MILLI, AppConstants.PREFS.DEFAULTS.STOPWATCH_MILLI);
 
-        sendBroadcast(new Intent(MainActivityPresenter.ACTION_STOPWATCHSTOP));
+        sendBroadcast(new Intent(StopwatchPresenter.ACTION_STOPWATCHSTOP));
       } else {
         Toast.makeText(this, R.string.text_stopwatchStillRunning, Toast.LENGTH_LONG).show();
       }
