@@ -41,6 +41,7 @@ import com.hrules.rest.core.alerts.AudioHelper;
 import com.hrules.rest.core.alerts.VibratorHelper;
 import com.hrules.rest.core.commons.ZenModeHelper;
 import com.hrules.rest.core.time.TimeManager;
+import com.hrules.rest.core.time.TimeManagerListener;
 import com.hrules.rest.presentation.commons.ResUtils;
 import com.hrules.rest.presentation.commons.TimeUtils;
 import com.hrules.rest.presentation.presenters.extras.StopwatchPresenter;
@@ -422,7 +423,7 @@ public final class TimeService extends Service {
     }
   }
 
-  private final TimeManager.TimeManagerListener timeManagerListener = new TimeManager.TimeManagerListener() {
+  private final TimeManagerListener timeManagerListener = new TimeManagerListener() {
     @Override public void onStateChanged() {
       resetAlertCounters();
       updateNotification();

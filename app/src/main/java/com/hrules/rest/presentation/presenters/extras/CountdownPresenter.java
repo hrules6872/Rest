@@ -36,6 +36,7 @@ import com.hrules.rest.R;
 import com.hrules.rest.commons.Preferences;
 import com.hrules.rest.core.alerts.VibratorHelper;
 import com.hrules.rest.core.time.TimeManager;
+import com.hrules.rest.core.time.TimeManagerListener;
 import com.hrules.rest.presentation.commons.ResUtils;
 import com.hrules.rest.presentation.commons.TimeUtils;
 import com.hrules.rest.presentation.commons.annotations.Visibility;
@@ -287,7 +288,7 @@ public class CountdownPresenter extends DRMVPPresenter<CountdownPresenter.Contra
   private final SharedPreferences.OnSharedPreferenceChangeListener sharedPreferenceChangeListener =
       (sharedPreferences, key) -> getPreferences();
 
-  private final TimeManager.TimeManagerListener timeManagerListener = new TimeManager.TimeManagerListener() {
+  private final TimeManagerListener timeManagerListener = new TimeManagerListener() {
     @Override public void onStateChanged() {
       internalOnStateChanged(true);
     }

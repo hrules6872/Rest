@@ -39,8 +39,8 @@ public final class DebugLog {
   private static @NonNull String formatMessage(@NonNull String message) {
     StackTraceElement[] stackTrace = (new Throwable().getStackTrace());
     if (stackTrace.length >= 2) {
-      return String.format("[%s:%s] -> %s(): %s", stackTrace[2].getFileName(), stackTrace[2].getLineNumber(), stackTrace[2].getMethodName(),
-          message);
+      return String.format("[%s:%s] -> %s(): %s", stackTrace[2].getFileName(), stackTrace[2].getLineNumber(),
+          stackTrace[2].getMethodName(), message);
     } else {
       return message;
     }
