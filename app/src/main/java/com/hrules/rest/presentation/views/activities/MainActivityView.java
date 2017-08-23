@@ -67,15 +67,16 @@ import com.hrules.rest.presentation.commons.components.ScaleAnimatedTextView;
 import com.hrules.rest.presentation.commons.components.ToolTipView;
 import com.hrules.rest.presentation.models.base.Favorite;
 import com.hrules.rest.presentation.presenters.activities.MainActivityPresenter;
-import com.hrules.rest.presentation.presenters.activities.extras.CountdownPresenter;
-import com.hrules.rest.presentation.presenters.activities.extras.StopwatchPresenter;
+import com.hrules.rest.presentation.presenters.extras.CountdownPresenter;
+import com.hrules.rest.presentation.presenters.extras.StopwatchPresenter;
 import com.hrules.rest.presentation.views.activities.base.DRMVPAppCompatActivity;
 import com.hrules.rest.services.TimeService;
 import com.hrules.rest.services.TimeServiceReceiver;
 import java.util.List;
 
-public final class MainActivityView extends DRMVPAppCompatActivity<MainActivityPresenter, MainActivityPresenter.Contract>
-    implements CountdownPresenter.Contract, StopwatchPresenter.Contract {
+public final class MainActivityView
+    extends DRMVPAppCompatActivity<MainActivityPresenter, MainActivityPresenter.Contract>
+    implements MainActivityPresenter.Contract, CountdownPresenter.Contract, StopwatchPresenter.Contract {
   @BindView(R.id.layout_root) RelativeLayout layoutRoot;
   @BindView(R.id.progress_view) ProgressCountdownView progressView;
   @BindView(R.id.button_changeState) ChangeStateFloatingActionButton buttonChangeState;
@@ -223,8 +224,10 @@ public final class MainActivityView extends DRMVPAppCompatActivity<MainActivityP
   }
 
   @Override public void updateCountdown(boolean animate) {
-    textCountdown.setText(TimeUtils.milliToMinutesSecondsMilliString(TimeUtils.getCountdownMilliUnsigned(), getResources()), animate,
-        TimeManager.INSTANCE.isRunning() ? ScaleAnimatedTextView.ANIM_TYPE_SCALE_OUT : ScaleAnimatedTextView.ANIM_TYPE_SCALE_IN);
+    textCountdown.setText(
+        TimeUtils.milliToMinutesSecondsMilliString(TimeUtils.getCountdownMilliUnsigned(), getResources()), animate,
+        TimeManager.INSTANCE.isRunning() ? ScaleAnimatedTextView.ANIM_TYPE_SCALE_OUT
+            : ScaleAnimatedTextView.ANIM_TYPE_SCALE_IN);
     textCountdown.setTextColor(TimeUtils.getTextColorFromMilli(new ResUtils(App.getAppContext())));
 
     if (TimeManager.INSTANCE.isRunning()
@@ -242,7 +245,8 @@ public final class MainActivityView extends DRMVPAppCompatActivity<MainActivityP
     }
   }
 
-  @Override public void setButtonChangeStateAttributes(boolean animate, @DrawableRes int drawableResId, @ColorRes int colorResId) {
+  @Override public void setButtonChangeStateAttributes(boolean animate, @DrawableRes int drawableResId,
+      @ColorRes int colorResId) {
     if (animate) {
       doRevealBackground();
     } else {
@@ -270,8 +274,9 @@ public final class MainActivityView extends DRMVPAppCompatActivity<MainActivityP
 
   private void doRevealBackground() {
     int height = revealBackgroundView.getHeight();
-    long forecastHeight = ((progressView.getCurrentProgress() + revealBackgroundView.getAnimDurationMilli()) * progressView.getHeight())
-        / progressView.getMaxProgress();
+    long forecastHeight =
+        ((progressView.getCurrentProgress() + revealBackgroundView.getAnimDurationMilli()) * progressView.getHeight())
+            / progressView.getMaxProgress();
     int heightReveal = (int) (height - forecastHeight);
     int[] revealStartPosition = ViewUtils.getRevealStartPosition(this, buttonChangeState);
 
@@ -377,7 +382,8 @@ public final class MainActivityView extends DRMVPAppCompatActivity<MainActivityP
 
   //region STOPWATCH
 
-  @SuppressWarnings("deprecation") @Override public void setStopwatchTextSizes(@StyleRes int primaryStyle, @StyleRes int secondaryStyle) {
+  @SuppressWarnings("deprecation") @Override
+  public void setStopwatchTextSizes(@StyleRes int primaryStyle, @StyleRes int secondaryStyle) {
     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
       textStopwatch.setTextAppearance(primaryStyle);
       textStopwatchLast.setTextAppearance(secondaryStyle);

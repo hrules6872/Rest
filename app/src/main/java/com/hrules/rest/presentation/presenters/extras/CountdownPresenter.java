@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.hrules.rest.presentation.presenters.activities.extras;
+package com.hrules.rest.presentation.presenters.extras;
 
 import android.content.SharedPreferences;
 import android.os.Handler;
@@ -29,6 +29,7 @@ import android.view.View;
 import android.widget.EditText;
 import android.widget.TextView;
 import com.hrules.darealmvp.DRMVPPresenter;
+import com.hrules.darealmvp.DRMVPView;
 import com.hrules.rest.App;
 import com.hrules.rest.AppConstants;
 import com.hrules.rest.R;
@@ -42,7 +43,6 @@ import com.hrules.rest.presentation.models.FavoriteAdd;
 import com.hrules.rest.presentation.models.FavoriteSeconds;
 import com.hrules.rest.presentation.models.base.Favorite;
 import com.hrules.rest.presentation.models.comparators.FavoriteSecondsAscendingComparator;
-import com.hrules.rest.presentation.presenters.activities.MainActivityPresenter;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashSet;
@@ -179,7 +179,8 @@ public class CountdownPresenter extends DRMVPPresenter<CountdownPresenter.Contra
 
       if (text.isEmpty()) {
         if (editText.getId() == R.id.edit_seconds) {
-          getView().setEditText(R.id.edit_seconds, TimeUtils.getSecondsFormattedWithLeadingZeros(DEFAULT_EDIT_STATE_EMPTY));
+          getView().setEditText(R.id.edit_seconds,
+              TimeUtils.getSecondsFormattedWithLeadingZeros(DEFAULT_EDIT_STATE_EMPTY));
         } else {
           getView().setEditText(R.id.edit_minutes, String.valueOf(DEFAULT_EDIT_STATE_EMPTY));
         }
@@ -221,11 +222,13 @@ public class CountdownPresenter extends DRMVPPresenter<CountdownPresenter.Contra
   public void onButtonFavoritesClick(@NonNull String editMinutes, @NonNull String editSeconds) {
     List<Favorite> favorites = new ArrayList<>();
 
-    Set<String> favoritesSet = new HashSet<>(preferences.getStringSet(AppConstants.PREFS.FAVORITES, AppConstants.PREFS.DEFAULTS.FAVORITES));
+    Set<String> favoritesSet =
+        new HashSet<>(preferences.getStringSet(AppConstants.PREFS.FAVORITES, AppConstants.PREFS.DEFAULTS.FAVORITES));
     for (String secondsFromStringSet : favoritesSet) {
       long milli = Integer.valueOf(secondsFromStringSet) * TimeUnit.SECONDS.toMillis(1);
       int seconds = Integer.valueOf(secondsFromStringSet);
-      favorites.add(new FavoriteSeconds(TimeUtils.milliToFavoriteMinutesSecondsString(milli, resources.getResources()), seconds));
+      favorites.add(
+          new FavoriteSeconds(TimeUtils.milliToFavoriteMinutesSecondsString(milli, resources.getResources()), seconds));
     }
     Collections.sort(favorites, new FavoriteSecondsAscendingComparator());
 
@@ -258,13 +261,14 @@ public class CountdownPresenter extends DRMVPPresenter<CountdownPresenter.Contra
   }
 
   public void onFavoriteActionAddClick(@NonNull String editMinutes, @NonNull String editSeconds) {
-    Set<String> favoritesSet = new HashSet<>(preferences.getStringSet(AppConstants.PREFS.FAVORITES, AppConstants.PREFS.DEFAULTS.FAVORITES));
+    Set<String> favoritesSet =
+        new HashSet<>(preferences.getStringSet(AppConstants.PREFS.FAVORITES, AppConstants.PREFS.DEFAULTS.FAVORITES));
 
     try {
       long minutes = Long.parseLong(editMinutes);
       long seconds = Long.parseLong(editSeconds);
-      String secondsStringToSave =
-          String.valueOf(Math.round(TimeUtils.getMilliFromMinutesSecond(minutes, seconds) / TimeUnit.SECONDS.toMillis(1)));
+      String secondsStringToSave = String.valueOf(
+          Math.round(TimeUtils.getMilliFromMinutesSecond(minutes, seconds) / TimeUnit.SECONDS.toMillis(1)));
       favoritesSet.add(secondsStringToSave);
 
       preferences.save(AppConstants.PREFS.FAVORITES, favoritesSet);
@@ -273,7 +277,8 @@ public class CountdownPresenter extends DRMVPPresenter<CountdownPresenter.Contra
   }
 
   public void onFavoriteDeleteClick(@NonNull Favorite favorite) {
-    Set<String> favoritesSet = new HashSet<>(preferences.getStringSet(AppConstants.PREFS.FAVORITES, AppConstants.PREFS.DEFAULTS.FAVORITES));
+    Set<String> favoritesSet =
+        new HashSet<>(preferences.getStringSet(AppConstants.PREFS.FAVORITES, AppConstants.PREFS.DEFAULTS.FAVORITES));
     favoritesSet.remove(String.valueOf(favorite.getSeconds()));
 
     preferences.save(AppConstants.PREFS.FAVORITES, favoritesSet);
@@ -302,7 +307,7 @@ public class CountdownPresenter extends DRMVPPresenter<CountdownPresenter.Contra
     }
   };
 
-  public interface Contract extends MainActivityPresenter.Contract {
+  public interface Contract extends DRMVPView {
     void startServiceIfNotRunning();
 
     void updateCountdown(boolean animate);

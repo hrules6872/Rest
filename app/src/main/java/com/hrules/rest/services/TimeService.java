@@ -43,7 +43,7 @@ import com.hrules.rest.core.commons.ZenModeHelper;
 import com.hrules.rest.core.time.TimeManager;
 import com.hrules.rest.presentation.commons.ResUtils;
 import com.hrules.rest.presentation.commons.TimeUtils;
-import com.hrules.rest.presentation.presenters.activities.extras.StopwatchPresenter;
+import com.hrules.rest.presentation.presenters.extras.StopwatchPresenter;
 import com.hrules.rest.presentation.views.activities.MainActivityView;
 import java.util.concurrent.TimeUnit;
 
@@ -55,7 +55,8 @@ public final class TimeService extends Service {
   private static final long VOLUME_MUTE_ALERT_DURATION_MILLI = 900;
   private static final long VOLUME_MUTE_HALFWAY_DURATION_MILLI = VOLUME_MUTE_ALERT_DURATION_MILLI;
   private static final long VOLUME_MUTE_TEN_SECONDS_DURATION_MILLI = VOLUME_MUTE_ALERT_DURATION_MILLI / 2;
-  private static final long VOLUME_MUTE_THREE_SECONDS_DURATION_MILLI = TimeUnit.SECONDS.toMillis(3) + VOLUME_MUTE_ALERT_DURATION_MILLI;
+  private static final long VOLUME_MUTE_THREE_SECONDS_DURATION_MILLI =
+      TimeUnit.SECONDS.toMillis(3) + VOLUME_MUTE_ALERT_DURATION_MILLI;
 
   private static final long REMOTEVIEWS_WORKAROUND_TRIGGER_SECONDS = 5;
 
@@ -142,13 +143,13 @@ public final class TimeService extends Service {
   private void getPreferences() {
     Resources resources = getResources();
 
-    prefsSound =
-        preferences.getBoolean(resources.getString(R.string.prefs_alertSoundKey), resources.getBoolean(R.bool.prefs_alertSoundDefault));
-    prefsVibrate =
-        preferences.getBoolean(resources.getString(R.string.prefs_alertVibrateKey), resources.getBoolean(R.bool.prefs_alertVibrateDefault));
+    prefsSound = preferences.getBoolean(resources.getString(R.string.prefs_alertSoundKey),
+        resources.getBoolean(R.bool.prefs_alertSoundDefault));
+    prefsVibrate = preferences.getBoolean(resources.getString(R.string.prefs_alertVibrateKey),
+        resources.getBoolean(R.bool.prefs_alertVibrateDefault));
 
-    prefsHalfwayAlert =
-        preferences.getBoolean(resources.getString(R.string.prefs_alertHalfwayKey), resources.getBoolean(R.bool.prefs_alertHalfwayDefault));
+    prefsHalfwayAlert = preferences.getBoolean(resources.getString(R.string.prefs_alertHalfwayKey),
+        resources.getBoolean(R.bool.prefs_alertHalfwayDefault));
     prefsTenSecondsAlert = preferences.getBoolean(resources.getString(R.string.prefs_alertTenSecondsKey),
         resources.getBoolean(R.bool.prefs_alertTenSecondsDefault));
     prefsThreeSecondsBeep = preferences.getBoolean(resources.getString(R.string.prefs_alertThreeSecondsKey),
@@ -172,7 +173,8 @@ public final class TimeService extends Service {
   private Notification buildNotification() {
     Intent notificationIntent = new Intent(this, MainActivityView.class);
     notificationIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
-    PendingIntent pendingIntent = PendingIntent.getActivity(this, PendingIntent.FLAG_UPDATE_CURRENT, notificationIntent, 0);
+    PendingIntent pendingIntent =
+        PendingIntent.getActivity(this, PendingIntent.FLAG_UPDATE_CURRENT, notificationIntent, 0);
     builder.setContentIntent(pendingIntent);
     builder.setPriority(NotificationCompat.PRIORITY_MAX);
     builder.setVisibility(NotificationCompat.VISIBILITY_PUBLIC);
@@ -234,7 +236,8 @@ public final class TimeService extends Service {
     updateRemoteView(remoteView);
     setOnClickPendingIntentOnRemoteView(remoteView);
     remoteView.setOnClickPendingIntent(R.id.button_exit,
-        PendingIntent.getBroadcast(this, 0, new Intent(TimeServiceReceiver.ACTION_EXIT, null), PendingIntent.FLAG_UPDATE_CURRENT));
+        PendingIntent.getBroadcast(this, 0, new Intent(TimeServiceReceiver.ACTION_EXIT, null),
+            PendingIntent.FLAG_UPDATE_CURRENT));
 
     return remoteView;
   }
@@ -250,9 +253,11 @@ public final class TimeService extends Service {
 
   private void setOnClickPendingIntentOnRemoteView(@NonNull RemoteViews remoteView) {
     remoteView.setOnClickPendingIntent(R.id.button_changeState,
-        PendingIntent.getBroadcast(this, 0, new Intent(TimeServiceReceiver.ACTION_CHANGESTATE, null), PendingIntent.FLAG_UPDATE_CURRENT));
+        PendingIntent.getBroadcast(this, 0, new Intent(TimeServiceReceiver.ACTION_CHANGESTATE, null),
+            PendingIntent.FLAG_UPDATE_CURRENT));
     remoteView.setOnClickPendingIntent(R.id.button_replay,
-        PendingIntent.getBroadcast(this, 0, new Intent(TimeServiceReceiver.ACTION_REPLAY, null), PendingIntent.FLAG_UPDATE_CURRENT));
+        PendingIntent.getBroadcast(this, 0, new Intent(TimeServiceReceiver.ACTION_REPLAY, null),
+            PendingIntent.FLAG_UPDATE_CURRENT));
   }
 
   private void updateRemoteView(@NonNull RemoteViews remoteView) {
@@ -269,7 +274,8 @@ public final class TimeService extends Service {
 
     remoteView.setTextViewText(R.id.text_countDown,
         TimeUtils.milliToMinutesSecondsString(TimeUtils.getCountdownMilliUnsigned(), getResources()));
-    remoteView.setTextColor(R.id.text_countDown, TimeUtils.getNotificationTextColorFromMilli(new ResUtils(App.getAppContext())));
+    remoteView.setTextColor(R.id.text_countDown,
+        TimeUtils.getNotificationTextColorFromMilli(new ResUtils(App.getAppContext())));
   }
 
   private void registerTimeServiceReceiver() {
@@ -289,7 +295,8 @@ public final class TimeService extends Service {
   }
 
   private void createAudioHelper() {
-    audioHelper = new AudioHelper(this, prefsUseMediaStream ? AudioManager.STREAM_MUSIC : AudioManager.STREAM_NOTIFICATION);
+    audioHelper =
+        new AudioHelper(this, prefsUseMediaStream ? AudioManager.STREAM_MUSIC : AudioManager.STREAM_NOTIFICATION);
   }
 
   private void releaseAudioHelper() {
@@ -400,7 +407,8 @@ public final class TimeService extends Service {
   }
 
   private void checkStopwatchState() {
-    long stopwatch = preferences.getLong(AppConstants.PREFS.STOPWATCH_MILLI, AppConstants.PREFS.DEFAULTS.STOPWATCH_MILLI);
+    long stopwatch =
+        preferences.getLong(AppConstants.PREFS.STOPWATCH_MILLI, AppConstants.PREFS.DEFAULTS.STOPWATCH_MILLI);
     if (stopwatch != AppConstants.PREFS.DEFAULTS.STOPWATCH_MILLI) {
       // stopwatch is running
       if (prefsAutoStopStopwatch) {
@@ -454,10 +462,11 @@ public final class TimeService extends Service {
         }
       };
 
-  private final SharedPreferences.OnSharedPreferenceChangeListener sharedPreferenceChangeListener = (sharedPreferences, key) -> {
-    getPreferences();
+  private final SharedPreferences.OnSharedPreferenceChangeListener sharedPreferenceChangeListener =
+      (sharedPreferences, key) -> {
+        getPreferences();
 
-    releaseAudioHelper();
-    createAudioHelper();
-  };
+        releaseAudioHelper();
+        createAudioHelper();
+      };
 }

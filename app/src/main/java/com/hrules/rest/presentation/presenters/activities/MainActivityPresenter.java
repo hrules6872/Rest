@@ -17,9 +17,7 @@
 package com.hrules.rest.presentation.presenters.activities;
 
 import android.content.pm.ActivityInfo;
-import android.support.annotation.IdRes;
 import android.support.annotation.NonNull;
-import android.support.annotation.StringRes;
 import android.view.KeyEvent;
 import android.view.View;
 import android.widget.EditText;
@@ -33,8 +31,8 @@ import com.hrules.rest.core.commons.ZenModeHelper;
 import com.hrules.rest.presentation.commons.ResUtils;
 import com.hrules.rest.presentation.commons.annotations.Visibility;
 import com.hrules.rest.presentation.models.base.Favorite;
-import com.hrules.rest.presentation.presenters.activities.extras.CountdownPresenter;
-import com.hrules.rest.presentation.presenters.activities.extras.StopwatchPresenter;
+import com.hrules.rest.presentation.presenters.extras.CountdownPresenter;
+import com.hrules.rest.presentation.presenters.extras.StopwatchPresenter;
 
 public final class MainActivityPresenter extends DRMVPPresenter<MainActivityPresenter.Contract> {
   private static final boolean DEFAULT_KEEP_SCREEN_ON_STATE = false;
@@ -173,8 +171,6 @@ public final class MainActivityPresenter extends DRMVPPresenter<MainActivityPres
 
   public interface Contract extends DRMVPView {
     void setDisplayOptions(boolean keepScreenOn, int screenOrientationSensor);
-
-    void showTooltip(@IdRes int viewResId, @StringRes int stringResId);
 
     void setZenModeAlertVisibility(@Visibility int visibility);
   }
