@@ -40,9 +40,9 @@ import java.util.concurrent.ScheduledFuture;
 import java.util.concurrent.ScheduledThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 
-public class StopwatchPresenter extends DRMVPPresenter<StopwatchPresenter.Contract> {
-  public static final String ACTION_STOPWATCHSTOP = "com.hrules.rest.ACTION_STOPWATCHSTOP";
+import static com.hrules.rest.services.TimeService.ACTION_SERVICE_SHUTDOWN;
 
+public class StopwatchPresenter extends DRMVPPresenter<StopwatchPresenter.Contract> {
   private static final long DEFAULT_STOPWATCH_DELAY_MILLI = 0;
   private static final long DEFAULT_STOPWATCH_PERIOD_MILLI = 33;
 
@@ -159,7 +159,7 @@ public class StopwatchPresenter extends DRMVPPresenter<StopwatchPresenter.Contra
 
   private void registerStopwatchReceiver() {
     IntentFilter intentFilter = new IntentFilter();
-    intentFilter.addAction(ACTION_STOPWATCHSTOP);
+    intentFilter.addAction(ACTION_SERVICE_SHUTDOWN);
     App.getAppContext().registerReceiver(stopwatchReceiver, intentFilter);
   }
 
@@ -209,7 +209,7 @@ public class StopwatchPresenter extends DRMVPPresenter<StopwatchPresenter.Contra
 
   private final BroadcastReceiver stopwatchReceiver = new BroadcastReceiver() {
     @Override public void onReceive(@NonNull Context context, Intent intent) {
-      if (intent.getAction().equals(ACTION_STOPWATCHSTOP)) {
+      if (intent.getAction().equals(ACTION_SERVICE_SHUTDOWN)) {
         // update UI
         setStopwatchLastTime();
         manageStopwatchState(AppConstants.PREFS.DEFAULTS.STOPWATCH_MILLI);

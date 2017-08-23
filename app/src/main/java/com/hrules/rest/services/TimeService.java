@@ -44,12 +44,13 @@ import com.hrules.rest.core.time.TimeManager;
 import com.hrules.rest.core.time.TimeManagerListener;
 import com.hrules.rest.presentation.commons.ResUtils;
 import com.hrules.rest.presentation.commons.TimeUtils;
-import com.hrules.rest.presentation.presenters.extras.StopwatchPresenter;
 import com.hrules.rest.presentation.views.activities.MainActivityView;
 import java.util.concurrent.TimeUnit;
 
 public final class TimeService extends Service {
   public static final int NOTIFICATION_ID = 22011982;
+
+  public static final String ACTION_SERVICE_SHUTDOWN = "com.hrules.rest.ACTION_SERVICE_SHUTDOWN";
 
   private static final long MIN_TIME_TO_DISPATCH_HALFWAYALERT_MILLI = TimeUnit.MINUTES.toMillis(1) / 2;
 
@@ -94,7 +95,7 @@ public final class TimeService extends Service {
   private VibratorHelper vibratorHelper;
   private ZenModeHelper zenModeHelper;
 
-  @Override public int onStartCommand(Intent intent, int flags, int startId) {
+  @SuppressWarnings("deprecation") @Override public int onStartCommand(Intent intent, int flags, int startId) {
     vibratorHelper = new VibratorHelper(this);
     zenModeHelper = new ZenModeHelper(this);
     checkIsDNDModeActive();
@@ -119,6 +120,8 @@ public final class TimeService extends Service {
   }
 
   @Override public void onDestroy() {
+    checkStopwatchState();
+
     TimeManager.INSTANCE.removeListener(timeManagerListener);
 
     unregisterTimeServiceReceiver();
@@ -416,7 +419,7 @@ public final class TimeService extends Service {
         preferences.save(AppConstants.PREFS.STOPWATCH_MILLI_LAST, System.currentTimeMillis() - stopwatch);
         preferences.save(AppConstants.PREFS.STOPWATCH_MILLI, AppConstants.PREFS.DEFAULTS.STOPWATCH_MILLI);
 
-        sendBroadcast(new Intent(StopwatchPresenter.ACTION_STOPWATCHSTOP));
+        sendBroadcast(new Intent(ACTION_SERVICE_SHUTDOWN));
       } else {
         Toast.makeText(this, R.string.text_stopwatchStillRunning, Toast.LENGTH_LONG).show();
       }
@@ -455,9 +458,6 @@ public final class TimeService extends Service {
 
         @Override public void onActionExit() {
           TimeManager.INSTANCE.stop();
-
-          checkStopwatchState();
-
           stopForeground(true);
           stopSelf();
         }
