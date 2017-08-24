@@ -3,12 +3,12 @@ package com.hrules.rest.core.time;
 import com.hrules.rest.core.time.base.TimeManagerListenerInterface;
 
 public abstract class TimeManagerListener implements TimeManagerListenerInterface {
-  public void onStateChanged() {
+  @Override public void onStateChanged() {
   }
 
-  public void onCountdownTimeChanged() {
+  @Override public void onCountdownTimeChanged() {
   }
 
-  public void onCountdownTick() {
+  @Override public void onCountdownTick() {
   }
 }

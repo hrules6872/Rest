@@ -31,12 +31,14 @@ public final class AppConstants {
     public static final String COUNTDOWN_MILLI = "COUNTDOWN_MILLI";
     public static final String STOPWATCH_MILLI = "STOPWATCH_MILLI";
     public static final String STOPWATCH_MILLI_LAST = "STOPWATCH_MILLI_LAST";
+    public static final String STOPWATCH_MILLI_LAST_BACKUP = "STOPWATCH_MILLI_LAST_BACKUP";
     public static final String FAVORITES = "FAVORITES";
 
     public static final class DEFAULTS {
       public static final long COUNTDOWN_MILLI = DEFAULT_COUNTDOWN_MILLI;
       public static final long STOPWATCH_MILLI = 0;
       public static final long STOPWATCH_MILLI_LAST = 0;
+      public static final long STOPWATCH_MILLI_LAST_BACKUP = 0;
       public static final Set<String> FAVORITES = new HashSet<>(Arrays.asList("60", "120", "90", "180"));
     }
   }

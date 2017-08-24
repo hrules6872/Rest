@@ -46,6 +46,7 @@ import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
@@ -75,8 +76,7 @@ import com.hrules.rest.services.TimeService;
 import com.hrules.rest.services.TimeServiceReceiver;
 import java.util.List;
 
-public final class MainActivityView
-    extends DRMVPAppCompatActivity<MainActivityPresenter, MainActivityPresenter.Contract>
+public final class MainActivityView extends DRMVPAppCompatActivity<MainActivityPresenter, MainActivityPresenter.Contract>
     implements MainActivityPresenter.Contract, CountdownPresenter.Contract, StopwatchPresenter.Contract {
   @BindView(R.id.layout_root) RelativeLayout layoutRoot;
   @BindView(R.id.progress_view) ProgressCountdownView progressView;
@@ -165,6 +165,11 @@ public final class MainActivityView
     getPresenter().onViewStop();
   }
 
+  @Override protected void onDestroy() {
+    sendBroadcast(new Intent(TimeServiceReceiver.ACTION_EXIT));
+    super.onDestroy();
+  }
+
   private boolean isNotificationVisible() {
     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
       NotificationManager notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
@@ -197,6 +202,10 @@ public final class MainActivityView
     new Handler(Looper.getMainLooper()).post(() -> setRequestedOrientation(screenOrientationSensor));
   }
 
+  @Override public void showToast(@StringRes int stringResId) {
+    Toast.makeText(this, getString(stringResId), Toast.LENGTH_LONG).show();
+  }
+
   @Override public void showTooltip(@IdRes int viewResId, @StringRes int stringResId) {
     ToolTipView.show(findViewById(viewResId), getString(stringResId), ToolTipView.LENGTH_SHORT);
   }
@@ -223,10 +232,8 @@ public final class MainActivityView
   }
 
   @Override public void updateCountdown(boolean animate) {
-    textCountdown.setText(
-        TimeUtils.milliToMinutesSecondsMilliString(TimeUtils.getCountdownMilliUnsigned(), getResources()), animate,
-        TimeManager.INSTANCE.isRunning() ? ScaleAnimatedTextView.ANIM_TYPE_SCALE_OUT
-            : ScaleAnimatedTextView.ANIM_TYPE_SCALE_IN);
+    textCountdown.setText(TimeUtils.milliToMinutesSecondsMilliString(TimeUtils.getCountdownMilliUnsigned(), getResources()), animate,
+        TimeManager.INSTANCE.isRunning() ? ScaleAnimatedTextView.ANIM_TYPE_SCALE_OUT : ScaleAnimatedTextView.ANIM_TYPE_SCALE_IN);
     textCountdown.setTextColor(TimeUtils.getTextColorFromMilli(new ResUtils(App.getAppContext())));
 
     if (TimeManager.INSTANCE.isRunning()
@@ -244,8 +251,7 @@ public final class MainActivityView
     }
   }
 
-  @Override public void setButtonChangeStateAttributes(boolean animate, @DrawableRes int drawableResId,
-      @ColorRes int colorResId) {
+  @Override public void setButtonChangeStateAttributes(boolean animate, @DrawableRes int drawableResId, @ColorRes int colorResId) {
     if (animate) {
       doRevealBackground();
     } else {
@@ -273,9 +279,8 @@ public final class MainActivityView
 
   private void doRevealBackground() {
     int height = revealBackgroundView.getHeight();
-    long forecastHeight =
-        ((progressView.getCurrentProgress() + revealBackgroundView.getAnimDurationMilli()) * progressView.getHeight())
-            / progressView.getMaxProgress();
+    long forecastHeight = ((progressView.getCurrentProgress() + revealBackgroundView.getAnimDurationMilli()) * progressView.getHeight())
+        / progressView.getMaxProgress();
     int heightReveal = (int) (height - forecastHeight);
     int[] revealStartPosition = ViewUtils.getRevealStartPosition(this, buttonChangeState);
 
@@ -385,8 +390,8 @@ public final class MainActivityView
     layoutStopwatchTime.setText(TimeUtils.milliToStopwatchHoursMinutesSecondsMilliString(milli, getResources()));
   }
 
-  @Override public void setStopwatchTimeLastTime(long milli) {
-    layoutStopwatchTime.setLastText(TimeUtils.milliToStopwatchHoursMinutesSecondsMilliString(milli, getResources()));
+  @Override public void setStopwatchTimeLastTime(@NonNull String text) {
+    layoutStopwatchTime.setLastText(text);
   }
 
   @SuppressWarnings("deprecation") @Override public void setStopwatchTimeSize(@StopwatchTimeLayout.Size int size) {
