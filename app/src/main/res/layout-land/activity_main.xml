@@ -24,19 +24,19 @@
     android:layout_height="match_parent"
     android:focusable="true"
     android:focusableInTouchMode="true"
->
+    >
 
   <com.hrules.rest.presentation.commons.components.ProgressCountdownView
       android:id="@+id/progress_view"
       android:layout_width="match_parent"
       android:layout_height="match_parent"
-  />
+      />
 
   <com.hrules.rest.presentation.commons.components.RevealBackgroundView
       android:id="@+id/reveal_background"
       android:layout_width="match_parent"
       android:layout_height="match_parent"
-  />
+      />
 
   <android.support.v7.widget.Toolbar
       android:id="@+id/toolbar"
@@ -44,7 +44,8 @@
       android:layout_height="?attr/actionBarSize"
       android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
       app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
-  >
+      >
+
     <TextView
         android:id="@+id/zenmode_alert"
         android:layout_width="wrap_content"
@@ -59,48 +60,29 @@
         android:textAllCaps="true"
         android:textColor="@android:color/white"
         android:textSize="@dimen/message_alertTextSize"
-    />
+        />
   </android.support.v7.widget.Toolbar>
 
   <RelativeLayout
-      android:id="@+id/layout_stopwatch"
       android:layout_width="match_parent"
       android:layout_height="wrap_content"
-  >
-    <LinearLayout
-        android:id="@+id/layout_stopwatch_time"
+      >
+
+    <com.hrules.rest.presentation.commons.components.StopwatchTimeLayout
+        android:id="@+id/layout_stopwatchTime"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerInParent="true"
-        android:orientation="vertical"
-    >
-      <TextView
-          android:id="@+id/text_stopwatch"
-          android:layout_width="match_parent"
-          android:layout_height="wrap_content"
-          android:gravity="center"
-          android:textAppearance="@style/StopwatchPrimarySizeNormal"
-          tools:text="00:00.00"
-      />
+        />
 
-      <TextView
-          android:id="@+id/text_stopwatchLast"
-          android:layout_width="match_parent"
-          android:layout_height="wrap_content"
-          android:gravity="center"
-          android:textAppearance="@style/StopwatchSecondarySizeNormal"
-          tools:text="00:00.00"
-      />
-    </LinearLayout>
-
-    <ImageButton
+    <com.hrules.rest.presentation.commons.components.StopwatchButton
         android:id="@+id/button_stopwatchChangeState"
         android:layout_width="@dimen/buttonWidth"
         android:layout_height="@dimen/buttonHeight"
-        android:layout_toRightOf="@id/layout_stopwatch_time"
-        android:src="@drawable/ic_play_stopwatch"
+        android:layout_centerVertical="true"
+        android:layout_toRightOf="@id/layout_stopwatchTime"
         style="?attr/borderlessButtonStyle"
-    />
+        />
   </RelativeLayout>
 
   <com.hrules.rest.presentation.commons.components.ScaleAnimatedTextView
@@ -108,10 +90,11 @@
       android:layout_width="match_parent"
       android:layout_height="wrap_content"
       android:layout_centerInParent="true"
+      android:clickable="true"
       android:gravity="center"
       android:textSize="@dimen/textCountdownSize"
       tools:text="00:00:00"
-  />
+      />
 
   <!--app:useCompatPadding="true" doesn't work fine here-->
   <com.hrules.rest.presentation.commons.components.ChangeStateFloatingActionButton
@@ -123,7 +106,7 @@
       android:src="@drawable/ic_play_fab"
       app:fabSize="normal"
       style="@style/FabChangeState"
-  />
+      />
 
   <!--app:useCompatPadding="true" doesn't work fine here-->
   <com.hrules.rest.presentation.commons.components.ReplayFloatingActionButton
@@ -136,7 +119,7 @@
       app:backgroundTint="@color/fab_replayBackground"
       app:fabSize="mini"
       style="@style/FabReplay"
-  />
+      />
 
   <LinearLayout
       android:id="@+id/layout_time"
@@ -146,7 +129,8 @@
       android:layout_marginBottom="@dimen/default_margin"
       android:layout_marginLeft="@dimen/default_marginDouble"
       android:orientation="horizontal"
-  >
+      >
+
     <EditText
         android:id="@+id/edit_minutes"
         android:layout_width="wrap_content"
@@ -161,7 +145,7 @@
         android:minWidth="@dimen/edit_minWidth"
         android:selectAllOnFocus="true"
         android:textColor="@color/textColorPrimary"
-    />
+        />
 
     <TextView
         android:id="@+id/text_editSeparator"
@@ -170,7 +154,7 @@
         android:text="@string/text_editSeparator"
         android:textAppearance="?android:attr/textAppearanceMedium"
         android:textColor="@color/textColorSecondary"
-    />
+        />
 
     <EditText
         android:id="@+id/edit_seconds"
@@ -187,7 +171,7 @@
         android:selectAllOnFocus="true"
         android:textAppearance="?android:attr/textAppearanceMedium"
         android:textColor="@color/textColorPrimary"
-    />
+        />
 
     <ImageButton
         android:id="@+id/button_favorites"
@@ -197,6 +181,6 @@
         android:src="@drawable/ic_favorite"
         android:textAppearance="?android:attr/textAppearanceMedium"
         style="?attr/borderlessButtonStyle"
-    />
+        />
   </LinearLayout>
 </RelativeLayout>

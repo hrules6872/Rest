@@ -313,9 +313,9 @@ public class CountdownPresenter extends DRMVPPresenter<CountdownPresenter.Contra
 
     void updateCountdown(boolean animate);
 
-    void setButtonChangeStateAttributes(boolean animate, @DrawableRes int drawableResId, @ColorRes int colorResId);
-
     void setButtonChangeStateEnabled(boolean enabled);
+
+    void setButtonChangeStateAttributes(boolean animate, @DrawableRes int drawableResId, @ColorRes int colorResId);
 
     void setProgressViewAttributes(@Visibility int visibility, long maxProgress, long currentProgress);
 

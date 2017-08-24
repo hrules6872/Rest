@@ -31,7 +31,6 @@ import android.support.annotation.IdRes;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.annotation.StringRes;
-import android.support.annotation.StyleRes;
 import android.support.v7.app.ActionBar;
 import android.support.v7.widget.ListPopupWindow;
 import android.support.v7.widget.Toolbar;
@@ -64,6 +63,8 @@ import com.hrules.rest.presentation.commons.components.ProgressCountdownView;
 import com.hrules.rest.presentation.commons.components.ReplayFloatingActionButton;
 import com.hrules.rest.presentation.commons.components.RevealBackgroundView;
 import com.hrules.rest.presentation.commons.components.ScaleAnimatedTextView;
+import com.hrules.rest.presentation.commons.components.StopwatchButton;
+import com.hrules.rest.presentation.commons.components.StopwatchTimeLayout;
 import com.hrules.rest.presentation.commons.components.ToolTipView;
 import com.hrules.rest.presentation.models.base.Favorite;
 import com.hrules.rest.presentation.presenters.activities.MainActivityPresenter;
@@ -88,10 +89,8 @@ public final class MainActivityView
   @BindView(R.id.text_editSeparator) TextView textEditSeparator;
   @BindView(R.id.button_favorites) ImageButton buttonFavorites;
   @BindView(R.id.text_countDown) ScaleAnimatedTextView textCountdown;
-  @BindView(R.id.layout_stopwatch) RelativeLayout layoutStopwatch;
-  @BindView(R.id.text_stopwatch) TextView textStopwatch;
-  @BindView(R.id.text_stopwatchLast) TextView textStopwatchLast;
-  @BindView(R.id.button_stopwatchChangeState) ImageButton buttonStopwatchChangeState;
+  @BindView(R.id.layout_stopwatchTime) StopwatchTimeLayout layoutStopwatchTime;
+  @BindView(R.id.button_stopwatchChangeState) StopwatchButton buttonStopwatchChangeState;
   @BindView(R.id.reveal_background) RevealBackgroundView revealBackgroundView;
 
   private long defaultAnimDurationMilli;
@@ -382,28 +381,28 @@ public final class MainActivityView
 
   //region STOPWATCH
 
-  @SuppressWarnings("deprecation") @Override
-  public void setStopwatchTextSizes(@StyleRes int primaryStyle, @StyleRes int secondaryStyle) {
-    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-      textStopwatch.setTextAppearance(primaryStyle);
-      textStopwatchLast.setTextAppearance(secondaryStyle);
-    } else {
-      textStopwatch.setTextAppearance(this, primaryStyle);
-      textStopwatchLast.setTextAppearance(this, secondaryStyle);
-    }
-    layoutStopwatch.invalidate();
-  }
-
   @Override public void updateStopwatch(long milli) {
-    textStopwatch.setText(TimeUtils.milliToStopwatchHoursMinutesSecondsMilliString(milli, getResources()));
+    layoutStopwatchTime.setText(TimeUtils.milliToStopwatchHoursMinutesSecondsMilliString(milli, getResources()));
   }
 
-  @Override public void setStopwatchButtonChangeStateResource(@DrawableRes int resId) {
-    buttonStopwatchChangeState.setImageResource(resId);
+  @Override public void setStopwatchTimeLastTime(long milli) {
+    layoutStopwatchTime.setLastText(TimeUtils.milliToStopwatchHoursMinutesSecondsMilliString(milli, getResources()));
   }
 
-  @Override public void setStopwatchTextLastTime(long milli) {
-    textStopwatchLast.setText(TimeUtils.milliToStopwatchHoursMinutesSecondsMilliString(milli, getResources()));
+  @SuppressWarnings("deprecation") @Override public void setStopwatchTimeSize(@StopwatchTimeLayout.Size int size) {
+    layoutStopwatchTime.setSize(size);
+  }
+
+  @Override public void setStopwatchButtonChangeStateSmart(boolean smart, boolean playing) {
+    buttonStopwatchChangeState.setSmart(smart, playing);
+  }
+
+  @Override public void setStopwatchButtonChangeStatePlaying(boolean state) {
+    if (state) {
+      buttonStopwatchChangeState.setPlaying();
+    } else {
+      buttonStopwatchChangeState.setStopped();
+    }
   }
 
   @OnClick(R.id.button_stopwatchChangeState) void onButtonStopwatchChangeStateClick() {

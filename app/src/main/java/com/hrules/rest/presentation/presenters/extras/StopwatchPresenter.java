@@ -23,11 +23,9 @@ import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.os.Handler;
 import android.os.Looper;
-import android.support.annotation.DrawableRes;
 import android.support.annotation.IdRes;
 import android.support.annotation.NonNull;
 import android.support.annotation.StringRes;
-import android.support.annotation.StyleRes;
 import com.hrules.darealmvp.DRMVPPresenter;
 import com.hrules.darealmvp.DRMVPView;
 import com.hrules.rest.App;
@@ -36,6 +34,7 @@ import com.hrules.rest.R;
 import com.hrules.rest.commons.Preferences;
 import com.hrules.rest.core.alerts.VibratorHelper;
 import com.hrules.rest.presentation.commons.ResUtils;
+import com.hrules.rest.presentation.commons.components.StopwatchTimeLayout;
 import java.util.concurrent.ScheduledFuture;
 import java.util.concurrent.ScheduledThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
@@ -50,6 +49,7 @@ public class StopwatchPresenter extends DRMVPPresenter<StopwatchPresenter.Contra
 
   private ResUtils resources;
   private Preferences preferences;
+  private boolean prefsSmartStopwatch;
   private boolean prefsVibrateButtons;
 
   private VibratorHelper vibratorHelper;
@@ -93,6 +93,13 @@ public class StopwatchPresenter extends DRMVPPresenter<StopwatchPresenter.Contra
   }
 
   private void getPreferences() {
+    prefsSmartStopwatch = preferences.getBoolean(resources.getString(R.string.prefs_stopwatchSmartKey),
+        resources.getBoolean(R.bool.prefs_stopwatchSmartDefault));
+    boolean playing =
+        preferences.getLong(AppConstants.PREFS.STOPWATCH_MILLI, AppConstants.PREFS.DEFAULTS.STOPWATCH_MILLI)
+            != AppConstants.PREFS.DEFAULTS.STOPWATCH_MILLI;
+    getView().setStopwatchButtonChangeStateSmart(prefsSmartStopwatch, playing);
+
     prefsVibrateButtons = preferences.getBoolean(resources.getString(R.string.prefs_controlVibrateButtonsKey),
         resources.getBoolean(R.bool.prefs_controlVibrateButtonsDefault));
 
@@ -100,9 +107,9 @@ public class StopwatchPresenter extends DRMVPPresenter<StopwatchPresenter.Contra
         String.valueOf(resources.getInteger(R.integer.prefs_stopwatchSizeDefault)));
     String stopwatchSizeNormal = resources.getString(R.string.prefs_stopwatchSizeValuesNormal);
     if (stopwatchSize.equals(stopwatchSizeNormal)) {
-      getView().setStopwatchTextSizes(R.style.StopwatchPrimarySizeNormal, R.style.StopwatchSecondarySizeNormal);
+      getView().setStopwatchTimeSize(StopwatchTimeLayout.STOPWATCH_SIZE_NORMAL);
     } else {
-      getView().setStopwatchTextSizes(R.style.StopwatchPrimarySizeLarge, R.style.StopwatchSecondarySizeLarge);
+      getView().setStopwatchTimeSize(StopwatchTimeLayout.STOPWATCH_SIZE_LARGE);
     }
   }
 
@@ -138,22 +145,23 @@ public class StopwatchPresenter extends DRMVPPresenter<StopwatchPresenter.Contra
   private void manageStopwatchState(long stopwatch) {
     if (stopwatch != AppConstants.PREFS.DEFAULTS.STOPWATCH_MILLI) {
       // start countdown
-      getView().setStopwatchButtonChangeStateResource(R.drawable.ic_stop_stopwatch);
+      getView().setStopwatchButtonChangeStatePlaying(true);
 
       stopwatchStartTime = stopwatch;
       startStopwatchRunnable();
     } else {
       // stop countdown
-      getView().setStopwatchButtonChangeStateResource(R.drawable.ic_play_stopwatch);
+      getView().setStopwatchButtonChangeStatePlaying(false);
 
       stopwatchStartTime = AppConstants.PREFS.DEFAULTS.STOPWATCH_MILLI;
       stopStopwatchRunnable();
+
       getView().updateStopwatch(AppConstants.PREFS.DEFAULTS.STOPWATCH_MILLI);
     }
   }
 
   private void setStopwatchLastTime() {
-    getView().setStopwatchTextLastTime(
+    getView().setStopwatchTimeLastTime(
         preferences.getLong(AppConstants.PREFS.STOPWATCH_MILLI_LAST, AppConstants.PREFS.DEFAULTS.STOPWATCH_MILLI_LAST));
   }
 
@@ -220,12 +228,14 @@ public class StopwatchPresenter extends DRMVPPresenter<StopwatchPresenter.Contra
   public interface Contract extends DRMVPView {
     void showTooltip(@IdRes int viewResId, @StringRes int stringResId);
 
-    void setStopwatchTextSizes(@StyleRes int primaryStyle, @StyleRes int secondaryStyle);
-
     void updateStopwatch(long milli);
 
-    void setStopwatchTextLastTime(long milli);
+    void setStopwatchTimeLastTime(long milli);
 
-    void setStopwatchButtonChangeStateResource(@DrawableRes int resId);
+    void setStopwatchTimeSize(@StopwatchTimeLayout.Size int size);
+
+    void setStopwatchButtonChangeStateSmart(boolean smart, boolean playing);
+
+    void setStopwatchButtonChangeStatePlaying(boolean playing);
   }
 }

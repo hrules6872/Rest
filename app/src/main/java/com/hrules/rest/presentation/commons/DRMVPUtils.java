@@ -21,7 +21,11 @@ import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
 
 public final class DRMVPUtils {
-  @SuppressWarnings({ "unchecked", "TryWithIdenticalCatches" }) public static <P> P getDeclaredPresenter(@NonNull Class clazz) {
+  private DRMVPUtils() {
+  }
+
+  @SuppressWarnings({ "unchecked", "TryWithIdenticalCatches" })
+  public static <P> P getDeclaredPresenter(@NonNull Class clazz) {
     Type genericSuperclass;
     for (; ; ) {
       genericSuperclass = clazz.getGenericSuperclass();
