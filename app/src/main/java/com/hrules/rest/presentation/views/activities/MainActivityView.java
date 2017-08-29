@@ -384,7 +384,7 @@ public final class MainActivityView extends DRMVPAppCompatActivity<MainActivityP
     layoutStopwatchTime.setLastText(text);
   }
 
-  @SuppressWarnings("deprecation") @Override public void setStopwatchTimeSize(@StopwatchTimeLayout.Size int size) {
+  @Override public void setStopwatchTimeSize(@StopwatchTimeLayout.Size int size) {
     layoutStopwatchTime.setSize(size);
   }
 

@@ -2,6 +2,7 @@ package com.hrules.rest.presentation.commons.components;
 
 import android.content.Context;
 import android.util.AttributeSet;
+import android.view.View;
 import com.hrules.rest.R;
 
 public class StopwatchButton extends android.support.v7.widget.AppCompatImageButton {
@@ -27,7 +28,8 @@ public class StopwatchButton extends android.support.v7.widget.AppCompatImageBut
   public void setSmart(boolean smart, boolean playing) {
     this.smart = smart;
     if (smart) {
-      setImageResource(R.drawable.ic_smart_stopwatch);
+      setEnabled(false);
+      setVisibility(View.GONE);
     } else {
       if (playing) {
         setPlaying();
@@ -35,17 +37,20 @@ public class StopwatchButton extends android.support.v7.widget.AppCompatImageBut
         setStopped();
       }
     }
-    setEnabled(!smart);
   }
 
   public void setPlaying() {
     if (!smart) {
+      setEnabled(true);
+      setVisibility(View.VISIBLE);
       setImageResource(R.drawable.ic_stop_stopwatch);
     }
   }
 
   public void setStopped() {
     if (!smart) {
+      setEnabled(true);
+      setVisibility(View.VISIBLE);
       setImageResource(R.drawable.ic_play_stopwatch);
     }
   }
