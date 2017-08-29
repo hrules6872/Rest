@@ -46,7 +46,6 @@ import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
@@ -165,11 +164,6 @@ public final class MainActivityView extends DRMVPAppCompatActivity<MainActivityP
     getPresenter().onViewStop();
   }
 
-  @Override protected void onDestroy() {
-    sendBroadcast(new Intent(TimeServiceReceiver.ACTION_EXIT));
-    super.onDestroy();
-  }
-
   private boolean isNotificationVisible() {
     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
       NotificationManager notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
@@ -200,10 +194,6 @@ public final class MainActivityView extends DRMVPAppCompatActivity<MainActivityP
     }
 
     new Handler(Looper.getMainLooper()).post(() -> setRequestedOrientation(screenOrientationSensor));
-  }
-
-  @Override public void showToast(@StringRes int stringResId) {
-    Toast.makeText(this, getString(stringResId), Toast.LENGTH_LONG).show();
   }
 
   @Override public void showTooltip(@IdRes int viewResId, @StringRes int stringResId) {

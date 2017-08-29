@@ -37,6 +37,7 @@ import com.hrules.rest.core.alerts.VibratorHelper;
 import com.hrules.rest.core.time.TimeManager;
 import com.hrules.rest.core.time.TimeManagerListener;
 import com.hrules.rest.presentation.commons.ResUtils;
+import com.hrules.rest.presentation.commons.StopwatchHelper;
 import com.hrules.rest.presentation.commons.TimeUtils;
 import com.hrules.rest.presentation.commons.components.StopwatchTimeLayout;
 import java.util.Locale;
@@ -52,10 +53,11 @@ public class StopwatchPresenter extends DRMVPPresenter<StopwatchPresenter.Contra
 
   private static final int DEFAULT_EXECUTOR_CORE_POOL_SIZE = 1;
 
+  private StopwatchHelper stopwatchHelper;
+
   private ResUtils resources;
   private Preferences preferences;
   private boolean prefsSmartStopwatch;
-  private boolean prefsAutoStopStopwatch;
   private boolean prefsVibrateButtons;
 
   private VibratorHelper vibratorHelper;
@@ -68,8 +70,9 @@ public class StopwatchPresenter extends DRMVPPresenter<StopwatchPresenter.Contra
 
   @Override public void bind(@NonNull Contract view) {
     super.bind(view);
-    resources = new ResUtils(App.getAppContext());
     preferences = new Preferences(App.getAppContext());
+    stopwatchHelper = new StopwatchHelper(preferences);
+    resources = new ResUtils(App.getAppContext());
     vibratorHelper = new VibratorHelper(App.getAppContext());
 
     registerStopwatchReceiver();
@@ -78,10 +81,6 @@ public class StopwatchPresenter extends DRMVPPresenter<StopwatchPresenter.Contra
 
   @Override public void unbind() {
     super.unbind();
-    if (isRunning()) {
-      stop();
-    }
-
     unregisterStopwatchReceiver();
     TimeManager.INSTANCE.removeListener(timeManagerListener);
 
@@ -96,33 +95,17 @@ public class StopwatchPresenter extends DRMVPPresenter<StopwatchPresenter.Contra
 
   public void onViewResume() {
     setStopwatchLastTime();
-    manageStopwatchState(getStopwatchMilli());
+    manageStopwatchState(stopwatchHelper.getStopwatchMilli());
   }
 
   public void onViewStop() {
     stopStopwatchRunnable();
   }
 
-  private boolean isRunning() {
-    long stopwatch = getStopwatchMilli();
-    return stopwatch != AppConstants.PREFS.DEFAULTS.STOPWATCH_MILLI;
-  }
-
-  private long getStopwatchMilli() {
-    return preferences.getLong(AppConstants.PREFS.STOPWATCH_MILLI, AppConstants.PREFS.DEFAULTS.STOPWATCH_MILLI);
-  }
-
-  private long getStopwatchMilliLast() {
-    return preferences.getLong(AppConstants.PREFS.STOPWATCH_MILLI_LAST, AppConstants.PREFS.DEFAULTS.STOPWATCH_MILLI_LAST);
-  }
-
   private void getPreferences() {
     prefsSmartStopwatch = preferences.getBoolean(resources.getString(R.string.prefs_stopwatchSmartKey),
         resources.getBoolean(R.bool.prefs_stopwatchSmartDefault));
-    getView().setStopwatchButtonChangeStateSmart(prefsSmartStopwatch, isRunning());
-
-    prefsAutoStopStopwatch = preferences.getBoolean(resources.getString(R.string.prefs_stopwatchAutoStopKey),
-        resources.getBoolean(R.bool.prefs_stopwatchAutoStopDefault));
+    getView().setStopwatchButtonChangeStateSmart(prefsSmartStopwatch, stopwatchHelper.isRunning());
 
     prefsVibrateButtons = preferences.getBoolean(resources.getString(R.string.prefs_controlVibrateButtonsKey),
         resources.getBoolean(R.bool.prefs_controlVibrateButtonsDefault));
@@ -184,12 +167,12 @@ public class StopwatchPresenter extends DRMVPPresenter<StopwatchPresenter.Contra
   private void setStopwatchLastTime() {
     String text;
     if (prefsSmartStopwatch) {
-      if (!isRunning() && !DateUtils.isToday(
+      if (!stopwatchHelper.isRunning() && !DateUtils.isToday(
           preferences.getLong(AppConstants.PREFS.STOPWATCH_MILLI_BACKUP, AppConstants.PREFS.DEFAULTS.STOPWATCH_MILLI_BACKUP))) {
-        preferences.save(AppConstants.PREFS.STOPWATCH_MILLI_LAST_BACKUP, getStopwatchMilliLast());
+        preferences.save(AppConstants.PREFS.STOPWATCH_MILLI_LAST_BACKUP, stopwatchHelper.getStopwatchMilliLast());
         preferences.save(AppConstants.PREFS.STOPWATCH_MILLI_LAST, AppConstants.PREFS.DEFAULTS.STOPWATCH_MILLI_LAST);
       }
-      long current = getStopwatchMilliLast();
+      long current = stopwatchHelper.getStopwatchMilliLast();
       long last =
           preferences.getLong(AppConstants.PREFS.STOPWATCH_MILLI_LAST_BACKUP, AppConstants.PREFS.DEFAULTS.STOPWATCH_MILLI_LAST_BACKUP);
 
@@ -197,7 +180,7 @@ public class StopwatchPresenter extends DRMVPPresenter<StopwatchPresenter.Contra
           TimeUtils.milliToStopwatchHoursMinutesSecondsMilliString(current, resources.getResources()),
           TimeUtils.milliToStopwatchHoursMinutesSecondsMilliString(last, resources.getResources()));
     } else {
-      long last = getStopwatchMilliLast();
+      long last = stopwatchHelper.getStopwatchMilliLast();
       text = String.valueOf(TimeUtils.milliToStopwatchHoursMinutesSecondsMilliString(last, resources.getResources()));
     }
 
@@ -205,21 +188,14 @@ public class StopwatchPresenter extends DRMVPPresenter<StopwatchPresenter.Contra
   }
 
   private void play() {
-    long stopwatchStartTime = System.currentTimeMillis();
-    preferences.save(AppConstants.PREFS.STOPWATCH_MILLI, stopwatchStartTime);
-    preferences.save(AppConstants.PREFS.STOPWATCH_MILLI_BACKUP, stopwatchStartTime);
+    stopwatchHelper.play();
 
     setStopwatchLastTime();
-    manageStopwatchState(stopwatchStartTime);
+    manageStopwatchState(stopwatchHelper.getStopwatchMilli());
   }
 
   private void stop() {
-    long last = 0;
-    if (prefsSmartStopwatch) {
-      last = getStopwatchMilliLast();
-    }
-    preferences.save(AppConstants.PREFS.STOPWATCH_MILLI_LAST, last + (System.currentTimeMillis() - stopwatchStartTime));
-    preferences.save(AppConstants.PREFS.STOPWATCH_MILLI, AppConstants.PREFS.DEFAULTS.STOPWATCH_MILLI);
+    stopwatchHelper.stop(prefsSmartStopwatch);
 
     setStopwatchLastTime();
     manageStopwatchState(AppConstants.PREFS.DEFAULTS.STOPWATCH_MILLI);
@@ -240,7 +216,7 @@ public class StopwatchPresenter extends DRMVPPresenter<StopwatchPresenter.Contra
 
   public void onButtonStopwatchChangeStateClick() {
     if (!prefsSmartStopwatch) {
-      if (isRunning()) {
+      if (stopwatchHelper.isRunning()) {
         getView().showTooltip(R.id.button_stopwatchChangeState, R.string.text_longClickStopwatch);
       } else {
         // stopwatch will be started
@@ -252,7 +228,7 @@ public class StopwatchPresenter extends DRMVPPresenter<StopwatchPresenter.Contra
 
   public void onButtonStopwatchChangeStateLongClick() {
     if (!prefsSmartStopwatch) {
-      if (isRunning()) {
+      if (stopwatchHelper.isRunning()) {
         // stopwatch will be stopped
         checkVibrateOnClickState();
         stop();
@@ -265,7 +241,7 @@ public class StopwatchPresenter extends DRMVPPresenter<StopwatchPresenter.Contra
 
   private final TimeManagerListener timeManagerListener = new TimeManagerListener() {
     @Override public void onStateChanged() {
-      if (prefsSmartStopwatch && TimeManager.INSTANCE.isRunning() && !isRunning()) {
+      if (prefsSmartStopwatch && TimeManager.INSTANCE.isRunning() && !stopwatchHelper.isRunning()) {
         play();
       }
     }
@@ -274,20 +250,13 @@ public class StopwatchPresenter extends DRMVPPresenter<StopwatchPresenter.Contra
   private final BroadcastReceiver stopwatchReceiver = new BroadcastReceiver() {
     @Override public void onReceive(@NonNull Context context, Intent intent) {
       if (intent.getAction().equals(ACTION_SERVICE_SHUTDOWN)) {
-        if (isRunning()) {
-          if (prefsSmartStopwatch | prefsAutoStopStopwatch) {
-            stop();
-          } else {
-            getView().showToast(R.string.text_stopwatchStillRunning);
-          }
-        }
+        setStopwatchLastTime();
+        manageStopwatchState(AppConstants.PREFS.DEFAULTS.STOPWATCH_MILLI);
       }
     }
   };
 
   public interface Contract extends DRMVPView {
-    void showToast(@StringRes int stringResId);
-
     void showTooltip(@IdRes int viewResId, @StringRes int stringResId);
 
     void updateStopwatch(long milli);

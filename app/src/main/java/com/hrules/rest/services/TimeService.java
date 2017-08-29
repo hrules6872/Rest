@@ -43,6 +43,7 @@ import com.hrules.rest.core.commons.ZenModeHelper;
 import com.hrules.rest.core.time.TimeManager;
 import com.hrules.rest.core.time.TimeManagerListener;
 import com.hrules.rest.presentation.commons.ResUtils;
+import com.hrules.rest.presentation.commons.StopwatchHelper;
 import com.hrules.rest.presentation.commons.TimeUtils;
 import com.hrules.rest.presentation.views.activities.MainActivityView;
 import java.util.concurrent.TimeUnit;
@@ -68,6 +69,8 @@ public final class TimeService extends Service {
 
   private BroadcastReceiver timeServiceReceiver;
 
+  private StopwatchHelper stopwatchHelper;
+
   private Preferences preferences;
   private boolean prefsSound;
   private boolean prefsVibrate;
@@ -76,6 +79,8 @@ public final class TimeService extends Service {
   private boolean prefsThreeSecondsBeep;
   private boolean prefsUseMediaStream;
   private boolean prefsMuteMediaStream;
+  private boolean prefsSmartStopwatch;
+  private boolean prefsAutoStopStopwatch;
   private boolean prefsVibrateButtons;
 
   private boolean dispatchedAlert;
@@ -102,6 +107,8 @@ public final class TimeService extends Service {
     getPreferences();
     preferences.addListener(sharedPreferenceChangeListener);
 
+    stopwatchHelper = new StopwatchHelper(preferences);
+
     resetAlertCounters();
     TimeManager.INSTANCE.setCountdownTimeMilli(
         preferences.getLong(AppConstants.PREFS.COUNTDOWN_MILLI, AppConstants.PREFS.DEFAULTS.COUNTDOWN_MILLI));
@@ -118,6 +125,7 @@ public final class TimeService extends Service {
   }
 
   @Override public void onDestroy() {
+    stopStopwatch();
     sendBroadcast(new Intent(ACTION_SERVICE_SHUTDOWN));
 
     TimeManager.INSTANCE.removeListener(timeManagerListener);
@@ -160,6 +168,11 @@ public final class TimeService extends Service {
         resources.getBoolean(R.bool.prefs_alertUseMediaStreamDefault));
     prefsMuteMediaStream = preferences.getBoolean(resources.getString(R.string.prefs_alertMuteMediaStreamKey),
         resources.getBoolean(R.bool.prefs_alertMuteMediaStreamKeyDefault));
+
+    prefsSmartStopwatch = preferences.getBoolean(resources.getString(R.string.prefs_stopwatchSmartKey),
+        resources.getBoolean(R.bool.prefs_stopwatchSmartDefault));
+    prefsAutoStopStopwatch = preferences.getBoolean(resources.getString(R.string.prefs_stopwatchAutoStopKey),
+        resources.getBoolean(R.bool.prefs_stopwatchAutoStopDefault));
 
     prefsVibrateButtons = preferences.getBoolean(resources.getString(R.string.prefs_controlVibrateButtonsKey),
         resources.getBoolean(R.bool.prefs_controlVibrateButtonsDefault));
@@ -397,6 +410,16 @@ public final class TimeService extends Service {
   private void checkVibrateOnClickState() {
     if (prefsVibrateButtons) {
       vibratorHelper.vibrateClick();
+    }
+  }
+
+  private void stopStopwatch() {
+    if (stopwatchHelper.isRunning()) {
+      if (prefsSmartStopwatch | prefsAutoStopStopwatch) {
+        stopwatchHelper.stop(prefsSmartStopwatch);
+      } else {
+        Toast.makeText(this, getString(R.string.text_stopwatchStillRunning), Toast.LENGTH_LONG).show();
+      }
     }
   }
 
