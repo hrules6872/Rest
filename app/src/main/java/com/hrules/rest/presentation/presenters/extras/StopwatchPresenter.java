@@ -78,8 +78,7 @@ public class StopwatchPresenter extends DRMVPPresenter<StopwatchPresenter.Contra
 
   @Override public void unbind() {
     super.unbind();
-    long stopwatch = preferences.getLong(AppConstants.PREFS.STOPWATCH_MILLI, AppConstants.PREFS.DEFAULTS.STOPWATCH_MILLI);
-    if (stopwatch != AppConstants.PREFS.DEFAULTS.STOPWATCH_MILLI) {
+    if (isRunning()) {
       stop();
     }
 
@@ -97,19 +96,30 @@ public class StopwatchPresenter extends DRMVPPresenter<StopwatchPresenter.Contra
 
   public void onViewResume() {
     setStopwatchLastTime();
-    manageStopwatchState(preferences.getLong(AppConstants.PREFS.STOPWATCH_MILLI, AppConstants.PREFS.DEFAULTS.STOPWATCH_MILLI));
+    manageStopwatchState(getStopwatchMilli());
   }
 
   public void onViewStop() {
     stopStopwatchRunnable();
   }
 
+  private boolean isRunning() {
+    long stopwatch = getStopwatchMilli();
+    return stopwatch != AppConstants.PREFS.DEFAULTS.STOPWATCH_MILLI;
+  }
+
+  private long getStopwatchMilli() {
+    return preferences.getLong(AppConstants.PREFS.STOPWATCH_MILLI, AppConstants.PREFS.DEFAULTS.STOPWATCH_MILLI);
+  }
+
+  private long getStopwatchMilliLast() {
+    return preferences.getLong(AppConstants.PREFS.STOPWATCH_MILLI_LAST, AppConstants.PREFS.DEFAULTS.STOPWATCH_MILLI_LAST);
+  }
+
   private void getPreferences() {
     prefsSmartStopwatch = preferences.getBoolean(resources.getString(R.string.prefs_stopwatchSmartKey),
         resources.getBoolean(R.bool.prefs_stopwatchSmartDefault));
-    boolean playing = preferences.getLong(AppConstants.PREFS.STOPWATCH_MILLI, AppConstants.PREFS.DEFAULTS.STOPWATCH_MILLI)
-        != AppConstants.PREFS.DEFAULTS.STOPWATCH_MILLI;
-    getView().setStopwatchButtonChangeStateSmart(prefsSmartStopwatch, playing);
+    getView().setStopwatchButtonChangeStateSmart(prefsSmartStopwatch, isRunning());
 
     prefsAutoStopStopwatch = preferences.getBoolean(resources.getString(R.string.prefs_stopwatchAutoStopKey),
         resources.getBoolean(R.bool.prefs_stopwatchAutoStopDefault));
@@ -148,7 +158,6 @@ public class StopwatchPresenter extends DRMVPPresenter<StopwatchPresenter.Contra
   private final Runnable updateStopwatchRunnable = new Runnable() {
     @Override public void run() {
       final long stopwatch = System.currentTimeMillis() - stopwatchStartTime;
-
       stopwatchHandler.post(() -> getView().updateStopwatch(
           stopwatchStartTime != AppConstants.PREFS.DEFAULTS.STOPWATCH_MILLI ? stopwatch : AppConstants.PREFS.DEFAULTS.STOPWATCH_MILLI));
     }
@@ -175,7 +184,12 @@ public class StopwatchPresenter extends DRMVPPresenter<StopwatchPresenter.Contra
   private void setStopwatchLastTime() {
     String text;
     if (prefsSmartStopwatch) {
-      long current = preferences.getLong(AppConstants.PREFS.STOPWATCH_MILLI_LAST, AppConstants.PREFS.DEFAULTS.STOPWATCH_MILLI_LAST);
+      if (!isRunning() && !DateUtils.isToday(
+          preferences.getLong(AppConstants.PREFS.STOPWATCH_MILLI_BACKUP, AppConstants.PREFS.DEFAULTS.STOPWATCH_MILLI_BACKUP))) {
+        preferences.save(AppConstants.PREFS.STOPWATCH_MILLI_LAST_BACKUP, getStopwatchMilliLast());
+        preferences.save(AppConstants.PREFS.STOPWATCH_MILLI_LAST, AppConstants.PREFS.DEFAULTS.STOPWATCH_MILLI_LAST);
+      }
+      long current = getStopwatchMilliLast();
       long last =
           preferences.getLong(AppConstants.PREFS.STOPWATCH_MILLI_LAST_BACKUP, AppConstants.PREFS.DEFAULTS.STOPWATCH_MILLI_LAST_BACKUP);
 
@@ -183,32 +197,28 @@ public class StopwatchPresenter extends DRMVPPresenter<StopwatchPresenter.Contra
           TimeUtils.milliToStopwatchHoursMinutesSecondsMilliString(current, resources.getResources()),
           TimeUtils.milliToStopwatchHoursMinutesSecondsMilliString(last, resources.getResources()));
     } else {
-      long last = preferences.getLong(AppConstants.PREFS.STOPWATCH_MILLI_LAST, AppConstants.PREFS.DEFAULTS.STOPWATCH_MILLI_LAST);
+      long last = getStopwatchMilliLast();
       text = String.valueOf(TimeUtils.milliToStopwatchHoursMinutesSecondsMilliString(last, resources.getResources()));
     }
+
     getView().setStopwatchTimeLastTime(text);
   }
 
   private void play() {
-    long stopwatch = System.currentTimeMillis();
-    preferences.save(AppConstants.PREFS.STOPWATCH_MILLI, stopwatch);
+    long stopwatchStartTime = System.currentTimeMillis();
+    preferences.save(AppConstants.PREFS.STOPWATCH_MILLI, stopwatchStartTime);
+    preferences.save(AppConstants.PREFS.STOPWATCH_MILLI_BACKUP, stopwatchStartTime);
 
     setStopwatchLastTime();
-    manageStopwatchState(stopwatch);
+    manageStopwatchState(stopwatchStartTime);
   }
 
   private void stop() {
+    long last = 0;
     if (prefsSmartStopwatch) {
-      long last = preferences.getLong(AppConstants.PREFS.STOPWATCH_MILLI_LAST, AppConstants.PREFS.DEFAULTS.STOPWATCH_MILLI_LAST);
-      if (DateUtils.isToday(stopwatchStartTime)) {
-        preferences.save(AppConstants.PREFS.STOPWATCH_MILLI_LAST, last + (System.currentTimeMillis() - stopwatchStartTime));
-      } else {
-        preferences.save(AppConstants.PREFS.STOPWATCH_MILLI_LAST_BACKUP, last + (System.currentTimeMillis() - stopwatchStartTime));
-        preferences.save(AppConstants.PREFS.STOPWATCH_MILLI_LAST, AppConstants.PREFS.DEFAULTS.STOPWATCH_MILLI_LAST);
-      }
-    } else {
-      preferences.save(AppConstants.PREFS.STOPWATCH_MILLI_LAST, System.currentTimeMillis() - stopwatchStartTime);
+      last = getStopwatchMilliLast();
     }
+    preferences.save(AppConstants.PREFS.STOPWATCH_MILLI_LAST, last + (System.currentTimeMillis() - stopwatchStartTime));
     preferences.save(AppConstants.PREFS.STOPWATCH_MILLI, AppConstants.PREFS.DEFAULTS.STOPWATCH_MILLI);
 
     setStopwatchLastTime();
@@ -230,22 +240,20 @@ public class StopwatchPresenter extends DRMVPPresenter<StopwatchPresenter.Contra
 
   public void onButtonStopwatchChangeStateClick() {
     if (!prefsSmartStopwatch) {
-      long stopwatch = preferences.getLong(AppConstants.PREFS.STOPWATCH_MILLI, AppConstants.PREFS.DEFAULTS.STOPWATCH_MILLI);
-      if (stopwatch == AppConstants.PREFS.DEFAULTS.STOPWATCH_MILLI) {
+      if (isRunning()) {
+        getView().showTooltip(R.id.button_stopwatchChangeState, R.string.text_longClickStopwatch);
+      } else {
         // stopwatch will be started
         checkVibrateOnClickState();
         play();
-      } else {
-        getView().showTooltip(R.id.button_stopwatchChangeState, R.string.text_longClickStopwatch);
       }
     }
   }
 
   public void onButtonStopwatchChangeStateLongClick() {
     if (!prefsSmartStopwatch) {
-      long stopwatch = preferences.getLong(AppConstants.PREFS.STOPWATCH_MILLI, AppConstants.PREFS.DEFAULTS.STOPWATCH_MILLI);
-      if (stopwatch != AppConstants.PREFS.DEFAULTS.STOPWATCH_MILLI) {
-        //stopwatch will be stopped
+      if (isRunning()) {
+        // stopwatch will be stopped
         checkVibrateOnClickState();
         stop();
       }
@@ -257,8 +265,7 @@ public class StopwatchPresenter extends DRMVPPresenter<StopwatchPresenter.Contra
 
   private final TimeManagerListener timeManagerListener = new TimeManagerListener() {
     @Override public void onStateChanged() {
-      long stopwatch = preferences.getLong(AppConstants.PREFS.STOPWATCH_MILLI, AppConstants.PREFS.DEFAULTS.STOPWATCH_MILLI);
-      if (prefsSmartStopwatch && TimeManager.INSTANCE.isRunning() && (stopwatch == AppConstants.PREFS.DEFAULTS.STOPWATCH_MILLI)) {
+      if (prefsSmartStopwatch && TimeManager.INSTANCE.isRunning() && !isRunning()) {
         play();
       }
     }
@@ -267,9 +274,7 @@ public class StopwatchPresenter extends DRMVPPresenter<StopwatchPresenter.Contra
   private final BroadcastReceiver stopwatchReceiver = new BroadcastReceiver() {
     @Override public void onReceive(@NonNull Context context, Intent intent) {
       if (intent.getAction().equals(ACTION_SERVICE_SHUTDOWN)) {
-        long stopwatch = preferences.getLong(AppConstants.PREFS.STOPWATCH_MILLI, AppConstants.PREFS.DEFAULTS.STOPWATCH_MILLI);
-        if (stopwatch != AppConstants.PREFS.DEFAULTS.STOPWATCH_MILLI) {
-          // stopwatch is running
+        if (isRunning()) {
           if (prefsSmartStopwatch | prefsAutoStopStopwatch) {
             stop();
           } else {
