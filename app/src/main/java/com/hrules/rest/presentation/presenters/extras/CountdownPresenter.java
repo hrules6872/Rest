@@ -94,7 +94,7 @@ public class CountdownPresenter extends DRMVPPresenter<CountdownPresenter.Contra
   }
 
   public void onViewResume() {
-    getView().startServiceIfNotRunning();
+    getView().startService();
     internalOnStateChanged(false);
     updateButtonChangeStateEnabled();
 
@@ -123,7 +123,7 @@ public class CountdownPresenter extends DRMVPPresenter<CountdownPresenter.Contra
 
     if (TimeManager.INSTANCE.isRunning()) {
       // start countdown
-      getView().startServiceIfNotRunning();
+      getView().startService();
 
       getView().setProgressViewAttributes(View.INVISIBLE, TimeManager.INSTANCE.getCountdownTimeMilli(),
           TimeManager.INSTANCE.getElapsedTime());
@@ -180,8 +180,7 @@ public class CountdownPresenter extends DRMVPPresenter<CountdownPresenter.Contra
 
       if (text.isEmpty()) {
         if (editText.getId() == R.id.edit_seconds) {
-          getView().setEditText(R.id.edit_seconds,
-              TimeUtils.getSecondsFormattedWithLeadingZeros(DEFAULT_EDIT_STATE_EMPTY));
+          getView().setEditText(R.id.edit_seconds, TimeUtils.getSecondsFormattedWithLeadingZeros(DEFAULT_EDIT_STATE_EMPTY));
         } else {
           getView().setEditText(R.id.edit_minutes, String.valueOf(DEFAULT_EDIT_STATE_EMPTY));
         }
@@ -223,13 +222,11 @@ public class CountdownPresenter extends DRMVPPresenter<CountdownPresenter.Contra
   public void onButtonFavoritesClick(@NonNull String editMinutes, @NonNull String editSeconds) {
     List<Favorite> favorites = new ArrayList<>();
 
-    Set<String> favoritesSet =
-        new HashSet<>(preferences.getStringSet(AppConstants.PREFS.FAVORITES, AppConstants.PREFS.DEFAULTS.FAVORITES));
+    Set<String> favoritesSet = new HashSet<>(preferences.getStringSet(AppConstants.PREFS.FAVORITES, AppConstants.PREFS.DEFAULTS.FAVORITES));
     for (String secondsFromStringSet : favoritesSet) {
       long milli = Integer.valueOf(secondsFromStringSet) * TimeUnit.SECONDS.toMillis(1);
       int seconds = Integer.valueOf(secondsFromStringSet);
-      favorites.add(
-          new FavoriteSeconds(TimeUtils.milliToFavoriteMinutesSecondsString(milli, resources.getResources()), seconds));
+      favorites.add(new FavoriteSeconds(TimeUtils.milliToFavoriteMinutesSecondsString(milli, resources.getResources()), seconds));
     }
     Collections.sort(favorites, new FavoriteSecondsAscendingComparator());
 
@@ -262,14 +259,13 @@ public class CountdownPresenter extends DRMVPPresenter<CountdownPresenter.Contra
   }
 
   public void onFavoriteActionAddClick(@NonNull String editMinutes, @NonNull String editSeconds) {
-    Set<String> favoritesSet =
-        new HashSet<>(preferences.getStringSet(AppConstants.PREFS.FAVORITES, AppConstants.PREFS.DEFAULTS.FAVORITES));
+    Set<String> favoritesSet = new HashSet<>(preferences.getStringSet(AppConstants.PREFS.FAVORITES, AppConstants.PREFS.DEFAULTS.FAVORITES));
 
     try {
       long minutes = Long.parseLong(editMinutes);
       long seconds = Long.parseLong(editSeconds);
-      String secondsStringToSave = String.valueOf(
-          Math.round(TimeUtils.getMilliFromMinutesSecond(minutes, seconds) / TimeUnit.SECONDS.toMillis(1)));
+      String secondsStringToSave =
+          String.valueOf(Math.round(TimeUtils.getMilliFromMinutesSecond(minutes, seconds) / TimeUnit.SECONDS.toMillis(1)));
       favoritesSet.add(secondsStringToSave);
 
       preferences.save(AppConstants.PREFS.FAVORITES, favoritesSet);
@@ -278,8 +274,7 @@ public class CountdownPresenter extends DRMVPPresenter<CountdownPresenter.Contra
   }
 
   public void onFavoriteDeleteClick(@NonNull Favorite favorite) {
-    Set<String> favoritesSet =
-        new HashSet<>(preferences.getStringSet(AppConstants.PREFS.FAVORITES, AppConstants.PREFS.DEFAULTS.FAVORITES));
+    Set<String> favoritesSet = new HashSet<>(preferences.getStringSet(AppConstants.PREFS.FAVORITES, AppConstants.PREFS.DEFAULTS.FAVORITES));
     favoritesSet.remove(String.valueOf(favorite.getSeconds()));
 
     preferences.save(AppConstants.PREFS.FAVORITES, favoritesSet);
@@ -309,7 +304,7 @@ public class CountdownPresenter extends DRMVPPresenter<CountdownPresenter.Contra
   };
 
   public interface Contract extends DRMVPView {
-    void startServiceIfNotRunning();
+    void startService();
 
     void updateCountdown(boolean animate);
 

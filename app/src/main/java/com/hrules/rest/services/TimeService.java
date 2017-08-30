@@ -98,7 +98,7 @@ public final class TimeService extends Service {
   private VibratorHelper vibratorHelper;
   private ZenModeHelper zenModeHelper;
 
-  @SuppressWarnings("deprecation") @Override public int onStartCommand(Intent intent, int flags, int startId) {
+  @Override public void onCreate() {
     vibratorHelper = new VibratorHelper(this);
     zenModeHelper = new ZenModeHelper(this);
     checkIsDNDModeActive();
@@ -121,7 +121,6 @@ public final class TimeService extends Service {
     createNotification();
 
     TimeManager.INSTANCE.addListener(timeManagerListener);
-    return START_STICKY;
   }
 
   @Override public void onDestroy() {
@@ -136,8 +135,6 @@ public final class TimeService extends Service {
 
     zenModeHelper.release();
     zenModeHelper = null;
-
-    super.onDestroy();
   }
 
   @Override public IBinder onBind(Intent intent) {

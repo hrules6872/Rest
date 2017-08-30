@@ -16,7 +16,6 @@
 
 package com.hrules.rest.presentation.views.activities;
 
-import android.app.ActivityManager;
 import android.app.NotificationManager;
 import android.content.Context;
 import android.content.Intent;
@@ -205,20 +204,8 @@ public final class MainActivityView extends DRMVPAppCompatActivity<MainActivityP
   }
 
   //region COUNTDOWN
-  @Override public void startServiceIfNotRunning() {
-    if (!isServiceRunning()) {
-      startService(new Intent(this, TimeService.class));
-    }
-  }
-
-  private boolean isServiceRunning() {
-    ActivityManager manager = (ActivityManager) getSystemService(Context.ACTIVITY_SERVICE);
-    for (ActivityManager.RunningServiceInfo service : manager.getRunningServices(Integer.MAX_VALUE)) {
-      if (TimeService.class.getName().equals(service.service.getClassName())) {
-        return true;
-      }
-    }
-    return false;
+  @Override public void startService() {
+    startService(new Intent(this, TimeService.class));
   }
 
   @Override public void updateCountdown(boolean animate) {
