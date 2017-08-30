@@ -38,6 +38,7 @@ import com.hrules.rest.core.time.TimeManager;
 import com.hrules.rest.core.time.TimeManagerListener;
 import com.hrules.rest.presentation.commons.ResUtils;
 import com.hrules.rest.presentation.commons.StopwatchHelper;
+import com.hrules.rest.presentation.commons.StringSpan;
 import com.hrules.rest.presentation.commons.TimeUtils;
 import com.hrules.rest.presentation.commons.components.StopwatchTimeLayout;
 import java.util.Locale;
@@ -165,7 +166,7 @@ public class StopwatchPresenter extends DRMVPPresenter<StopwatchPresenter.Contra
   }
 
   private void setStopwatchLastTime() {
-    String text;
+    CharSequence text;
     if (prefsSmartStopwatch) {
       if (!stopwatchHelper.isRunning() && !DateUtils.isToday(
           preferences.getLong(AppConstants.PREFS.STOPWATCH_MILLI_BACKUP, AppConstants.PREFS.DEFAULTS.STOPWATCH_MILLI_BACKUP))) {
@@ -176,12 +177,12 @@ public class StopwatchPresenter extends DRMVPPresenter<StopwatchPresenter.Contra
       long last =
           preferences.getLong(AppConstants.PREFS.STOPWATCH_MILLI_LAST_BACKUP, AppConstants.PREFS.DEFAULTS.STOPWATCH_MILLI_LAST_BACKUP);
 
-      text = String.format(Locale.getDefault(), resources.getString(R.string.text_smartStopWatchFormatted),
+      text = StringSpan.format(Locale.getDefault(), resources.getString(R.string.text_smartStopWatchFormatted),
           TimeUtils.milliToStopwatchHoursMinutesSecondsMilliString(current, resources.getResources()),
           TimeUtils.milliToStopwatchHoursMinutesSecondsMilliString(last, resources.getResources()));
     } else {
       long last = stopwatchHelper.getStopwatchMilliLast();
-      text = String.valueOf(TimeUtils.milliToStopwatchHoursMinutesSecondsMilliString(last, resources.getResources()));
+      text = TimeUtils.milliToStopwatchHoursMinutesSecondsMilliString(last, resources.getResources());
     }
 
     getView().setStopwatchTimeLastTime(text);
@@ -261,7 +262,7 @@ public class StopwatchPresenter extends DRMVPPresenter<StopwatchPresenter.Contra
 
     void updateStopwatch(long milli);
 
-    void setStopwatchTimeLastTime(@NonNull String text);
+    void setStopwatchTimeLastTime(@NonNull CharSequence text);
 
     void setStopwatchTimeSize(@StopwatchTimeLayout.Size int size);
 

@@ -380,7 +380,7 @@ public final class MainActivityView extends DRMVPAppCompatActivity<MainActivityP
     layoutStopwatchTime.setText(TimeUtils.milliToStopwatchHoursMinutesSecondsMilliString(milli, getResources()));
   }
 
-  @Override public void setStopwatchTimeLastTime(@NonNull String text) {
+  @Override public void setStopwatchTimeLastTime(@NonNull CharSequence text) {
     layoutStopwatchTime.setLastText(text);
   }
 
