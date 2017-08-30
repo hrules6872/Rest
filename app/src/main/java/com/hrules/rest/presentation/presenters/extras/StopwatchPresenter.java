@@ -59,6 +59,7 @@ public class StopwatchPresenter extends DRMVPPresenter<StopwatchPresenter.Contra
   private ResUtils resources;
   private Preferences preferences;
   private boolean prefsSmartStopwatch;
+  private boolean prefsAutoStopStopwatch;
   private boolean prefsVibrateButtons;
 
   private VibratorHelper vibratorHelper;
@@ -107,6 +108,9 @@ public class StopwatchPresenter extends DRMVPPresenter<StopwatchPresenter.Contra
     prefsSmartStopwatch = preferences.getBoolean(resources.getString(R.string.prefs_stopwatchSmartKey),
         resources.getBoolean(R.bool.prefs_stopwatchSmartDefault));
     getView().setStopwatchButtonChangeStateSmart(prefsSmartStopwatch, stopwatchHelper.isRunning());
+
+    prefsAutoStopStopwatch = preferences.getBoolean(resources.getString(R.string.prefs_stopwatchAutoStopKey),
+        resources.getBoolean(R.bool.prefs_stopwatchAutoStopDefault));
 
     prefsVibrateButtons = preferences.getBoolean(resources.getString(R.string.prefs_controlVibrateButtonsKey),
         resources.getBoolean(R.bool.prefs_controlVibrateButtonsDefault));
@@ -251,8 +255,10 @@ public class StopwatchPresenter extends DRMVPPresenter<StopwatchPresenter.Contra
   private final BroadcastReceiver stopwatchReceiver = new BroadcastReceiver() {
     @Override public void onReceive(@NonNull Context context, Intent intent) {
       if (intent.getAction().equals(ACTION_SERVICE_SHUTDOWN)) {
-        setStopwatchLastTime();
-        manageStopwatchState(AppConstants.PREFS.DEFAULTS.STOPWATCH_MILLI);
+        if (prefsSmartStopwatch || prefsAutoStopStopwatch) {
+          setStopwatchLastTime();
+          manageStopwatchState(AppConstants.PREFS.DEFAULTS.STOPWATCH_MILLI);
+        }
       }
     }
   };

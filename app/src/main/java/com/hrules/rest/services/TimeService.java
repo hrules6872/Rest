@@ -412,7 +412,7 @@ public final class TimeService extends Service {
 
   private void stopStopwatch() {
     if (stopwatchHelper.isRunning()) {
-      if (prefsSmartStopwatch | prefsAutoStopStopwatch) {
+      if (prefsSmartStopwatch || prefsAutoStopStopwatch) {
         stopwatchHelper.stop(prefsSmartStopwatch);
       } else {
         Toast.makeText(this, getString(R.string.text_stopwatchStillRunning), Toast.LENGTH_LONG).show();
