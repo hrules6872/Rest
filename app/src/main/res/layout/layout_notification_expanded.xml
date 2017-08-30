@@ -19,18 +19,21 @@
     android:id="@+id/layout_buttons"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    >
 
   <LinearLayout
       android:layout_width="match_parent"
       android:layout_height="wrap_content"
       android:minHeight="?android:attr/listPreferredItemHeight"
-      android:orientation="horizontal">
+      android:orientation="horizontal"
+      >
 
     <include
         layout="@layout/layout_notification"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"/>
+        android:layout_height="wrap_content"
+        />
   </LinearLayout>
 
   <ImageView
@@ -38,7 +41,7 @@
       android:layout_height="@dimen/notification_separatorHeight"
       android:layout_marginLeft="@dimen/notification_actionMargin"
       android:background="@color/notification_separator"
-  />
+      />
 
   <Button
       android:id="@+id/button_exit"
@@ -52,7 +55,7 @@
       android:paddingRight="@dimen/default_padding"
       android:scaleType="center"
       android:text="@string/text_notificationStop"
-      android:textAppearance="?android:attr/textAppearanceSmall"
+      android:textAppearance="@style/TextAppearance.AppCompat.Small"
       android:textColor="@color/notification_countDownText"
-  />
+      />
 </LinearLayout>

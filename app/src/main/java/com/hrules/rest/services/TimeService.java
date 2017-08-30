@@ -98,7 +98,7 @@ public final class TimeService extends Service {
   private VibratorHelper vibratorHelper;
   private ZenModeHelper zenModeHelper;
 
-  @Override public void onCreate() {
+  @SuppressWarnings("deprecation") @Override public void onCreate() {
     vibratorHelper = new VibratorHelper(this);
     zenModeHelper = new ZenModeHelper(this);
     checkIsDNDModeActive();

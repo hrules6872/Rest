@@ -18,7 +18,8 @@
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:orientation="horizontal">
+    android:orientation="horizontal"
+    >
 
   <TextView
       android:id="@+id/text_title"
@@ -30,8 +31,8 @@
       android:maxLines="1"
       android:minHeight="?android:attr/listPreferredItemHeightSmall"
       android:paddingLeft="@dimen/default_padding"
-      android:textAppearance="?android:attr/textAppearanceMedium"
-  />
+      android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+      />
 
   <ImageButton
       android:id="@+id/button_delete"
@@ -39,8 +40,7 @@
       android:layout_height="@dimen/favorites_deleteButtonWidth"
       android:layout_gravity="center_vertical|right"
       android:layout_marginRight="@dimen/default_margin"
-      android:background="?attr/selectableItemBackground"
+      android:background="?selectableItemBackgroundBorderless"
       android:src="@drawable/ic_delete"
-      style="?attr/borderlessButtonStyle"
-  />
+      />
 </FrameLayout>

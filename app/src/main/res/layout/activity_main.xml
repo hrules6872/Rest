@@ -87,7 +87,7 @@
         android:layout_height="@dimen/buttonHeight"
         android:layout_centerVertical="true"
         android:layout_toRightOf="@id/layout_stopwatchTime"
-        style="?attr/borderlessButtonStyle"
+        android:background="?selectableItemBackgroundBorderless"
         />
   </RelativeLayout>
 
@@ -155,7 +155,7 @@
           android:maxLines="1"
           android:minWidth="@dimen/edit_minWidth"
           android:selectAllOnFocus="true"
-          android:textAppearance="?android:attr/textAppearanceMedium"
+          android:textAppearance="@style/TextAppearance.AppCompat.Medium"
           android:textColor="@color/textColorPrimary"
           />
 
@@ -164,7 +164,7 @@
           android:layout_width="wrap_content"
           android:layout_height="wrap_content"
           android:text="@string/text_editSeparator"
-          android:textAppearance="?android:attr/textAppearanceMedium"
+          android:textAppearance="@style/TextAppearance.AppCompat.Medium"
           android:textColor="@color/textColorSecondary"
           />
 
@@ -181,7 +181,7 @@
           android:maxLines="1"
           android:minWidth="@dimen/edit_minWidth"
           android:selectAllOnFocus="true"
-          android:textAppearance="?android:attr/textAppearanceMedium"
+          android:textAppearance="@style/TextAppearance.AppCompat.Medium"
           android:textColor="@color/textColorPrimary"
           />
     </LinearLayout>
@@ -193,8 +193,8 @@
         android:layout_marginLeft="@dimen/default_margin"
         android:layout_toRightOf="@id/layout_edit"
         android:src="@drawable/ic_favorite"
-        android:textAppearance="?android:attr/textAppearanceMedium"
-        style="?attr/borderlessButtonStyle"
+        android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+        android:background="?selectableItemBackgroundBorderless"
         />
   </RelativeLayout>
 
