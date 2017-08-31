@@ -16,17 +16,19 @@
 
 package com.hrules.rest.presentation.commons.annotations;
 
+import android.content.pm.ActivityInfo;
 import android.support.annotation.IntDef;
-import android.view.View;
 import java.lang.annotation.Retention;
 
-import static android.view.View.VISIBLE;
-import static com.hrules.rest.presentation.commons.annotations.Visibility.GONE;
-import static com.hrules.rest.presentation.commons.annotations.Visibility.INVISIBLE;
+import static com.hrules.rest.presentation.commons.annotations.Orientation.LANDSCAPE;
+import static com.hrules.rest.presentation.commons.annotations.Orientation.PORTRAIT;
+import static com.hrules.rest.presentation.commons.annotations.Orientation.UNSPECIFIED;
 import static java.lang.annotation.RetentionPolicy.SOURCE;
 
-@Retention(SOURCE) @IntDef({ VISIBLE, INVISIBLE, GONE }) public @interface Visibility {
-  int VISIBLE = View.VISIBLE;
-  int INVISIBLE = View.INVISIBLE;
-  int GONE = View.GONE;
+@Retention(SOURCE) @IntDef({
+    UNSPECIFIED, PORTRAIT, LANDSCAPE
+}) public @interface Orientation {
+  int UNSPECIFIED = ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED;
+  int PORTRAIT = ActivityInfo.SCREEN_ORIENTATION_PORTRAIT;
+  int LANDSCAPE = ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE;
 }

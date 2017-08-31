@@ -16,12 +16,8 @@
 
 package com.hrules.rest.presentation.presenters.activities;
 
-import android.content.pm.ActivityInfo;
 import android.support.annotation.NonNull;
-import android.view.KeyEvent;
-import android.view.View;
 import android.widget.EditText;
-import android.widget.TextView;
 import com.hrules.darealmvp.DRMVPPresenter;
 import com.hrules.darealmvp.DRMVPView;
 import com.hrules.rest.App;
@@ -29,6 +25,7 @@ import com.hrules.rest.R;
 import com.hrules.rest.commons.Preferences;
 import com.hrules.rest.core.commons.ZenModeHelper;
 import com.hrules.rest.presentation.commons.ResUtils;
+import com.hrules.rest.presentation.commons.annotations.Orientation;
 import com.hrules.rest.presentation.commons.annotations.Visibility;
 import com.hrules.rest.presentation.models.base.Favorite;
 import com.hrules.rest.presentation.presenters.extras.CountdownPresenter;
@@ -73,7 +70,7 @@ public final class MainActivityPresenter extends DRMVPPresenter<MainActivityPres
   }
 
   public void onViewReady() {
-    getView().setZenModeAlertVisibility(zenModeHelper.isZenModeActive() ? View.VISIBLE : View.GONE);
+    getView().setZenModeAlertVisibility(zenModeHelper.isZenModeActive() ? Visibility.VISIBLE : Visibility.GONE);
     zenModeHelper.setListener(zenModeManagerListener);
 
     // countdown
@@ -91,11 +88,11 @@ public final class MainActivityPresenter extends DRMVPPresenter<MainActivityPres
         String.valueOf(resources.getInteger(R.integer.prefs_displayOrientationDefault)));
     String portrait = resources.getString(R.string.prefs_displayOrientationValuesPortrait);
     String landscape = resources.getString(R.string.prefs_displayOrientationValuesLandscape);
-    int orientation = ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED;
+    @Orientation int orientation = Orientation.UNSPECIFIED;
     if (orientationFromPrefs.equals(portrait)) {
-      orientation = ActivityInfo.SCREEN_ORIENTATION_PORTRAIT;
+      orientation = Orientation.PORTRAIT;
     } else if (orientationFromPrefs.equals(landscape)) {
-      orientation = ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE;
+      orientation = Orientation.LANDSCAPE;
     }
     getView().setDisplayOptions(keepScreenOn, orientation);
 
@@ -109,7 +106,7 @@ public final class MainActivityPresenter extends DRMVPPresenter<MainActivityPres
   public void onViewStop() {
     // we will stop UI updates in onViewStop() instead of onViewResume()
     // in order to support Multi Window (API >= 24)
-    getView().setDisplayOptions(DEFAULT_KEEP_SCREEN_ON_STATE, ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED);
+    getView().setDisplayOptions(DEFAULT_KEEP_SCREEN_ON_STATE, Orientation.UNSPECIFIED);
 
     // countdown
     countdownPresenter.onViewStop();
@@ -119,7 +116,7 @@ public final class MainActivityPresenter extends DRMVPPresenter<MainActivityPres
   }
 
   private final ZenModeHelper.ZenModeManagerListener zenModeManagerListener =
-      newState -> getView().setZenModeAlertVisibility(newState ? View.VISIBLE : View.GONE);
+      newState -> getView().setZenModeAlertVisibility(newState ? Visibility.VISIBLE : Visibility.GONE);
 
   // region COUNTDOWN
   public void onButtonChangeStateClick() {
@@ -130,8 +127,8 @@ public final class MainActivityPresenter extends DRMVPPresenter<MainActivityPres
     countdownPresenter.onButtonReplayClick();
   }
 
-  public void onEditorAction(@NonNull TextView v, int actionId, KeyEvent event) {
-    countdownPresenter.onEditorAction(v, actionId, event);
+  public void onEditorActionDone() {
+    countdownPresenter.onEditorActionDone();
   }
 
   public void onEditFocusChange(@NonNull EditText editText, boolean hasFocus) {
@@ -170,7 +167,7 @@ public final class MainActivityPresenter extends DRMVPPresenter<MainActivityPres
   //endregion
 
   public interface Contract extends DRMVPView {
-    void setDisplayOptions(boolean keepScreenOn, int screenOrientationSensor);
+    void setDisplayOptions(boolean keepScreenOn, @Orientation int screenOrientationSensor);
 
     void setZenModeAlertVisibility(@Visibility int visibility);
   }

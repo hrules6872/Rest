@@ -56,6 +56,7 @@ import com.hrules.rest.presentation.adapters.FavoritesAdapter;
 import com.hrules.rest.presentation.commons.ResUtils;
 import com.hrules.rest.presentation.commons.TimeUtils;
 import com.hrules.rest.presentation.commons.ViewUtils;
+import com.hrules.rest.presentation.commons.annotations.Orientation;
 import com.hrules.rest.presentation.commons.annotations.Visibility;
 import com.hrules.rest.presentation.commons.components.ChangeStateFloatingActionButton;
 import com.hrules.rest.presentation.commons.components.ProgressCountdownView;
@@ -185,7 +186,7 @@ public final class MainActivityView extends DRMVPAppCompatActivity<MainActivityP
     sendBroadcast(new Intent(TimeServiceReceiver.ACTION_EXIT));
   }
 
-  @Override public void setDisplayOptions(boolean keepScreenOn, final int screenOrientationSensor) {
+  @Override public void setDisplayOptions(boolean keepScreenOn, @Orientation final int screenOrientationSensor) {
     if (keepScreenOn) {
       getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
     } else {
@@ -193,10 +194,6 @@ public final class MainActivityView extends DRMVPAppCompatActivity<MainActivityP
     }
 
     new Handler(Looper.getMainLooper()).post(() -> setRequestedOrientation(screenOrientationSensor));
-  }
-
-  @Override public void showTooltip(@IdRes int viewResId, @StringRes int stringResId) {
-    ToolTipView.show(findViewById(viewResId), getString(stringResId), ToolTipView.LENGTH_SHORT);
   }
 
   @Override public void setZenModeAlertVisibility(@Visibility int visibility) {
@@ -336,7 +333,7 @@ public final class MainActivityView extends DRMVPAppCompatActivity<MainActivityP
 
   private final TextView.OnEditorActionListener editActionListener = (v, actionId, event) -> {
     if (actionId == EditorInfo.IME_ACTION_DONE) {
-      getPresenter().onEditorAction(v, actionId, event);
+      getPresenter().onEditorActionDone();
       return true;
     }
     return false;
@@ -362,6 +359,9 @@ public final class MainActivityView extends DRMVPAppCompatActivity<MainActivityP
   //endregion
 
   //region STOPWATCH
+  @Override public void showTooltip(@IdRes int viewResId, @StringRes int stringResId) {
+    ToolTipView.show(findViewById(viewResId), getString(stringResId), ToolTipView.LENGTH_SHORT);
+  }
 
   @Override public void updateStopwatch(long milli) {
     layoutStopwatchTime.setText(TimeUtils.milliToStopwatchHoursMinutesSecondsMilliString(milli, getResources()));

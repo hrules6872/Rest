@@ -24,10 +24,7 @@ import android.support.annotation.DrawableRes;
 import android.support.annotation.IdRes;
 import android.support.annotation.NonNull;
 import android.text.TextUtils;
-import android.view.KeyEvent;
-import android.view.View;
 import android.widget.EditText;
-import android.widget.TextView;
 import com.hrules.darealmvp.DRMVPPresenter;
 import com.hrules.darealmvp.DRMVPView;
 import com.hrules.rest.App;
@@ -125,14 +122,14 @@ public class CountdownPresenter extends DRMVPPresenter<CountdownPresenter.Contra
       // start countdown
       getView().startService();
 
-      getView().setProgressViewAttributes(View.INVISIBLE, TimeManager.INSTANCE.getCountdownTimeMilli(),
+      getView().setProgressViewAttributes(Visibility.INVISIBLE, TimeManager.INSTANCE.getCountdownTimeMilli(),
           TimeManager.INSTANCE.getElapsedTime());
       updateStopButtonColor(animate);
-      getView().setButtonReplayVisibility(animate, View.VISIBLE);
+      getView().setButtonReplayVisibility(animate, Visibility.VISIBLE);
     } else {
       // stop countdown
       getView().setButtonChangeStateAttributes(animate, R.drawable.ic_play_fab, R.color.fab_playBackground);
-      getView().setButtonReplayVisibility(animate, View.INVISIBLE);
+      getView().setButtonReplayVisibility(animate, Visibility.INVISIBLE);
     }
   }
 
@@ -170,7 +167,7 @@ public class CountdownPresenter extends DRMVPPresenter<CountdownPresenter.Contra
     TimeManager.INSTANCE.reStart();
   }
 
-  @SuppressWarnings("UnusedParameters") public void onEditorAction(@NonNull TextView v, int actionId, KeyEvent event) {
+  public void onEditorActionDone() {
     getView().hideSoftKeyboardAndClearEditFocus();
   }
 
