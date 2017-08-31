@@ -21,34 +21,35 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
-import android.os.Handler;
-import android.os.Looper;
 import android.support.annotation.IdRes;
 import android.support.annotation.NonNull;
-import android.support.annotation.StringRes;
-import android.text.format.DateUtils;
 import com.hrules.darealmvp.DRMVPPresenter;
 import com.hrules.darealmvp.DRMVPView;
 import com.hrules.rest.App;
 import com.hrules.rest.AppConstants;
-import com.hrules.rest.R;
 import com.hrules.rest.commons.Preferences;
 import com.hrules.rest.core.alerts.VibratorHelper;
 import com.hrules.rest.core.time.TimeManager;
 import com.hrules.rest.core.time.TimeManagerListener;
-import com.hrules.rest.presentation.commons.ResUtils;
-import com.hrules.rest.presentation.commons.StopwatchHelper;
-import com.hrules.rest.presentation.commons.StringSpan;
+import com.hrules.rest.presentation.commons.DateUtils;
 import com.hrules.rest.presentation.commons.TimeUtils;
 import com.hrules.rest.presentation.commons.components.StopwatchTimeLayout;
-import java.util.Locale;
+import com.hrules.rest.presentation.commons.extensions.StringSpan;
+import com.hrules.rest.presentation.commons.helpers.StopwatchHelper;
+import com.hrules.rest.presentation.commons.resources.ResBoolean;
+import com.hrules.rest.presentation.commons.resources.ResId;
+import com.hrules.rest.presentation.commons.resources.ResInteger;
+import com.hrules.rest.presentation.commons.resources.ResString;
+import com.hrules.rest.presentation.commons.resources.base.ResWrapper;
+import com.hrules.rest.presentation.commons.threads.UIHandler;
+import com.hrules.rest.presentation.commons.threads.base.Handler;
 import java.util.concurrent.ScheduledFuture;
 import java.util.concurrent.ScheduledThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 
 import static com.hrules.rest.services.TimeService.ACTION_SERVICE_SHUTDOWN;
 
-public class StopwatchPresenter extends DRMVPPresenter<StopwatchPresenter.Contract> {
+public final class StopwatchPresenter extends DRMVPPresenter<StopwatchPresenter.Contract> {
   private static final long DEFAULT_STOPWATCH_DELAY_MILLI = 0;
   private static final long DEFAULT_STOPWATCH_PERIOD_MILLI = 33;
 
@@ -56,7 +57,6 @@ public class StopwatchPresenter extends DRMVPPresenter<StopwatchPresenter.Contra
 
   private StopwatchHelper stopwatchHelper;
 
-  private ResUtils resources;
   private Preferences preferences;
   private boolean prefsSmartStopwatch;
   private boolean prefsAutoStopStopwatch;
@@ -64,7 +64,7 @@ public class StopwatchPresenter extends DRMVPPresenter<StopwatchPresenter.Contra
 
   private VibratorHelper vibratorHelper;
 
-  private final Handler stopwatchHandler = new Handler(Looper.getMainLooper());
+  private final Handler stopwatchHandler = new UIHandler();
   private final ScheduledThreadPoolExecutor scheduledThreadPoolExecutor = new ScheduledThreadPoolExecutor(DEFAULT_EXECUTOR_CORE_POOL_SIZE);
   private ScheduledFuture scheduledFutureStopwatch;
 
@@ -74,7 +74,6 @@ public class StopwatchPresenter extends DRMVPPresenter<StopwatchPresenter.Contra
     super.bind(view);
     preferences = new Preferences(App.getAppContext());
     stopwatchHelper = new StopwatchHelper(preferences);
-    resources = new ResUtils(App.getAppContext());
     vibratorHelper = new VibratorHelper(App.getAppContext());
 
     registerStopwatchReceiver();
@@ -105,19 +104,18 @@ public class StopwatchPresenter extends DRMVPPresenter<StopwatchPresenter.Contra
   }
 
   private void getPreferences() {
-    prefsSmartStopwatch = preferences.getBoolean(resources.getString(R.string.prefs_stopwatchSmartKey),
-        resources.getBoolean(R.bool.prefs_stopwatchSmartDefault));
+    prefsSmartStopwatch = preferences.getBoolean(ResString.getPrefs_stopwatchSmartKey(), ResBoolean.getPrefs_stopwatchSmartDefault());
     getView().setStopwatchButtonChangeStateSmart(prefsSmartStopwatch, stopwatchHelper.isRunning());
 
-    prefsAutoStopStopwatch = preferences.getBoolean(resources.getString(R.string.prefs_stopwatchAutoStopKey),
-        resources.getBoolean(R.bool.prefs_stopwatchAutoStopDefault));
+    prefsAutoStopStopwatch =
+        preferences.getBoolean(ResString.getPrefs_stopwatchAutoStopKey(), ResBoolean.getPrefs_stopwatchAutoStopDefault());
 
-    prefsVibrateButtons = preferences.getBoolean(resources.getString(R.string.prefs_controlVibrateButtonsKey),
-        resources.getBoolean(R.bool.prefs_controlVibrateButtonsDefault));
+    prefsVibrateButtons =
+        preferences.getBoolean(ResString.getPrefs_controlVibrateButtonsKey(), ResBoolean.getPrefs_controlVibrateButtonsDefault());
 
-    String stopwatchSize = preferences.getString(resources.getString(R.string.prefs_stopwatchSizeKey),
-        String.valueOf(resources.getInteger(R.integer.prefs_stopwatchSizeDefault)));
-    String stopwatchSizeNormal = resources.getString(R.string.prefs_stopwatchSizeValuesNormal);
+    String stopwatchSize =
+        preferences.getString(ResString.getPrefs_stopwatchSizeKey(), String.valueOf(ResInteger.getPrefs_stopwatchSizeDefault()));
+    String stopwatchSizeNormal = ResString.getPrefs_stopwatchSizeValuesNormal();
     if (stopwatchSize.equals(stopwatchSizeNormal)) {
       getView().setStopwatchTimeSize(StopwatchTimeLayout.STOPWATCH_SIZE_NORMAL);
     } else {
@@ -181,12 +179,12 @@ public class StopwatchPresenter extends DRMVPPresenter<StopwatchPresenter.Contra
       long last =
           preferences.getLong(AppConstants.PREFS.STOPWATCH_MILLI_LAST_BACKUP, AppConstants.PREFS.DEFAULTS.STOPWATCH_MILLI_LAST_BACKUP);
 
-      text = StringSpan.format(Locale.getDefault(), resources.getString(R.string.text_smartStopWatchFormatted),
-          TimeUtils.milliToStopwatchHoursMinutesSecondsMilliString(current, resources.getResources()),
-          TimeUtils.milliToStopwatchHoursMinutesSecondsMilliString(last, resources.getResources()));
+      text = StringSpan.format(ResString.getText_smartStopWatchFormatted(),
+          TimeUtils.milliToStopwatchHoursMinutesSecondsMilliString(current, ResWrapper.getResources()),
+          TimeUtils.milliToStopwatchHoursMinutesSecondsMilliString(last, ResWrapper.getResources()));
     } else {
       long last = stopwatchHelper.getStopwatchMilliLast();
-      text = TimeUtils.milliToStopwatchHoursMinutesSecondsMilliString(last, resources.getResources());
+      text = TimeUtils.milliToStopwatchHoursMinutesSecondsMilliString(last, ResWrapper.getResources());
     }
 
     getView().setStopwatchTimeLastTime(text);
@@ -222,7 +220,7 @@ public class StopwatchPresenter extends DRMVPPresenter<StopwatchPresenter.Contra
   public void onButtonStopwatchChangeStateClick() {
     if (!prefsSmartStopwatch) {
       if (stopwatchHelper.isRunning()) {
-        getView().showTooltip(R.id.button_stopwatchChangeState, R.string.text_longClickStopwatch);
+        getView().showTooltip(ResId.getButton_stopwatchChangeState(), ResString.getText_longClickStopwatch());
       } else {
         // stopwatch will be started
         checkVibrateOnClickState();
@@ -264,7 +262,7 @@ public class StopwatchPresenter extends DRMVPPresenter<StopwatchPresenter.Contra
   };
 
   public interface Contract extends DRMVPView {
-    void showTooltip(@IdRes int viewResId, @StringRes int stringResId);
+    void showTooltip(@IdRes int viewResId, @NonNull String message);
 
     void updateStopwatch(long milli);
 

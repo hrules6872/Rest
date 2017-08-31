@@ -24,6 +24,7 @@ import android.text.SpannableString;
 import android.text.style.RelativeSizeSpan;
 import com.hrules.rest.R;
 import com.hrules.rest.core.time.TimeManager;
+import com.hrules.rest.presentation.commons.resources.ResColor;
 import java.util.Locale;
 import java.util.concurrent.TimeUnit;
 
@@ -92,19 +93,19 @@ public final class TimeUtils {
     return String.format(Locale.getDefault(), FORMAT_SECONDS_TWO_LEADING_ZEROS, seconds);
   }
 
-  public static @ColorInt int getNotificationTextColorFromMilli(@NonNull ResUtils resources) {
+  public static @ColorInt int getNotificationTextColorFromMilli() {
     if (TimeManager.INSTANCE.isCountdownOver()) {
-      return resources.getColor(R.color.notification_countDownTextOver);
+      return ResColor.getNotification_countDownTextOver();
     } else {
-      return resources.getColor(R.color.notification_countDownText);
+      return ResColor.getNotification_countDownText();
     }
   }
 
-  public static @ColorInt int getTextColorFromMilli(@NonNull ResUtils resources) {
+  public static @ColorInt int getTextColorFromMilli() {
     if (TimeManager.INSTANCE.isCountdownOver()) {
-      return resources.getColor(R.color.countDownTextOver);
+      return ResColor.getCountDownTextOver();
     } else {
-      return resources.getColor(R.color.countDownText);
+      return ResColor.getCountDownText();
     }
   }
 }

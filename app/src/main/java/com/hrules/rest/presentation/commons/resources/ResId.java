@@ -14,17 +14,24 @@
  * limitations under the License.
  */
 
-package com.hrules.rest.presentation.models.comparators;
+package com.hrules.rest.presentation.commons.resources;
 
-import com.hrules.rest.presentation.models.base.Favorite;
-import java.util.Comparator;
+import android.support.annotation.IdRes;
+import com.hrules.rest.R;
 
-public final class FavoriteSecondsAscendingComparator implements Comparator<Favorite> {
-  @Override public int compare(Favorite lhs, Favorite rhs) {
-    return compare(lhs.getSeconds(), rhs.getSeconds());
+public final class ResId {
+  private ResId() {
   }
 
-  private int compare(long lhs, long rhs) {
-    return (lhs < rhs) ? -1 : ((lhs == rhs) ? 0 : 1);
+  public static @IdRes int getButton_stopwatchChangeState() {
+    return R.id.button_stopwatchChangeState;
+  }
+
+  public static @IdRes int getEdit_seconds() {
+    return R.id.edit_seconds;
+  }
+
+  public static @IdRes int getEdit_minutes() {
+    return R.id.edit_minutes;
   }
 }

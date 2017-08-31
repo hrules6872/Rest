@@ -14,17 +14,20 @@
  * limitations under the License.
  */
 
-package com.hrules.rest.presentation.models.comparators;
+package com.hrules.rest.presentation.commons.threads;
 
-import com.hrules.rest.presentation.models.base.Favorite;
-import java.util.Comparator;
+import android.os.Looper;
+import android.support.annotation.NonNull;
+import com.hrules.rest.presentation.commons.threads.base.Handler;
 
-public final class FavoriteSecondsAscendingComparator implements Comparator<Favorite> {
-  @Override public int compare(Favorite lhs, Favorite rhs) {
-    return compare(lhs.getSeconds(), rhs.getSeconds());
+public final class UIHandler implements Handler {
+  private final android.os.Handler handler = new android.os.Handler(Looper.getMainLooper());
+
+  public void post(@NonNull Runnable runnable) {
+    handler.post(runnable);
   }
 
-  private int compare(long lhs, long rhs) {
-    return (lhs < rhs) ? -1 : ((lhs == rhs) ? 0 : 1);
+  @Override public void removeCallbacksAndMessages(Object token) {
+    handler.removeCallbacksAndMessages(token);
   }
 }

@@ -18,11 +18,10 @@ package com.hrules.rest.presentation.commons.components;
 
 import android.content.Context;
 import android.content.res.ColorStateList;
-import android.support.annotation.ColorRes;
+import android.support.annotation.ColorInt;
 import android.support.annotation.DrawableRes;
 import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
-import android.support.v4.content.ContextCompat;
 import android.util.AttributeSet;
 import android.view.animation.AnticipateInterpolator;
 import android.view.animation.Interpolator;
@@ -45,15 +44,14 @@ public final class ChangeStateFloatingActionButton extends FloatingActionButton 
     super(context, attrs, defStyleAttr);
   }
 
-  public void setState(boolean animate, @DrawableRes final int drawableResId, @ColorRes final int colorResId,
-      final long animDurationMilli) {
+  public void setState(boolean animate, @DrawableRes final int drawableResId, @ColorInt final int color, final long animDurationMilli) {
     if (animate) {
       animate().scaleX(DEFAULT_SCALE_OUT)
           .scaleY(DEFAULT_SCALE_OUT)
           .setDuration(animDurationMilli)
           .setInterpolator(DEFAULT_INTERPOLATOR)
           .withEndAction(() -> {
-            internalSetState(drawableResId, colorResId);
+            internalSetState(drawableResId, color);
             animate().scaleX(DEFAULT_SCALE).scaleY(DEFAULT_SCALE).setDuration(animDurationMilli).withEndAction(() -> {
               setScaleX(DEFAULT_SCALE);
               setScaleY(DEFAULT_SCALE);
@@ -61,12 +59,12 @@ public final class ChangeStateFloatingActionButton extends FloatingActionButton 
           })
           .start();
     } else {
-      internalSetState(drawableResId, colorResId);
+      internalSetState(drawableResId, color);
     }
   }
 
-  private void internalSetState(@DrawableRes int drawableResId, @ColorRes int colorResId) {
+  private void internalSetState(@DrawableRes int drawableResId, @ColorInt int color) {
     setImageResource(drawableResId);
-    setBackgroundTintList(ColorStateList.valueOf(ContextCompat.getColor(getContext(), colorResId)));
+    setBackgroundTintList(ColorStateList.valueOf(color));
   }
 }

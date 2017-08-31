@@ -14,17 +14,24 @@
  * limitations under the License.
  */
 
-package com.hrules.rest.presentation.models.comparators;
+package com.hrules.rest.presentation.commons.resources;
 
-import com.hrules.rest.presentation.models.base.Favorite;
-import java.util.Comparator;
+import android.support.annotation.DrawableRes;
+import com.hrules.rest.R;
 
-public final class FavoriteSecondsAscendingComparator implements Comparator<Favorite> {
-  @Override public int compare(Favorite lhs, Favorite rhs) {
-    return compare(lhs.getSeconds(), rhs.getSeconds());
+public final class ResDrawableId {
+  private ResDrawableId() {
   }
 
-  private int compare(long lhs, long rhs) {
-    return (lhs < rhs) ? -1 : ((lhs == rhs) ? 0 : 1);
+  public static @DrawableRes int getIc_play_fab() {
+    return R.drawable.ic_play_fab;
+  }
+
+  public static @DrawableRes int getIc_stop_over_fab() {
+    return R.drawable.ic_stop_over_fab;
+  }
+
+  public static @DrawableRes int getIc_stop_fab() {
+    return R.drawable.ic_stop_fab;
   }
 }

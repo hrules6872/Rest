@@ -14,9 +14,8 @@
  * limitations under the License.
  */
 
-package com.hrules.rest.presentation.commons;
+package com.hrules.rest.presentation.commons.resources.base;
 
-import android.content.Context;
 import android.content.res.Resources;
 import android.support.annotation.BoolRes;
 import android.support.annotation.ColorRes;
@@ -24,31 +23,29 @@ import android.support.annotation.IntegerRes;
 import android.support.annotation.NonNull;
 import android.support.annotation.StringRes;
 import android.support.v4.content.ContextCompat;
+import com.hrules.rest.App;
 
-public final class ResUtils {
-  private final Context context;
-
-  public ResUtils(@NonNull Context context) {
-    this.context = context;
+public final class ResWrapper {
+  private ResWrapper() {
   }
 
-  public boolean getBoolean(@BoolRes int resId) {
-    return context.getResources().getBoolean(resId);
+  public static boolean getBoolean(@BoolRes int resId) {
+    return App.getAppContext().getResources().getBoolean(resId);
   }
 
-  public @NonNull String getString(@StringRes int resId) {
-    return context.getResources().getString(resId);
+  public static @NonNull String getString(@StringRes int resId) {
+    return App.getAppContext().getResources().getString(resId);
   }
 
-  public @NonNull Resources getResources() {
-    return context.getResources();
+  public static @NonNull Resources getResources() {
+    return App.getAppContext().getResources();
   }
 
-  public int getInteger(@IntegerRes int resId) {
-    return context.getResources().getInteger(resId);
+  public static int getInteger(@IntegerRes int resId) {
+    return App.getAppContext().getResources().getInteger(resId);
   }
 
-  int getColor(@ColorRes int resId) {
-    return ContextCompat.getColor(context, resId);
+  public static int getColor(@ColorRes int resId) {
+    return ContextCompat.getColor(App.getAppContext(), resId);
   }
 }

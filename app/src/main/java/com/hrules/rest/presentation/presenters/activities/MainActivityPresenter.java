@@ -16,17 +16,19 @@
 
 package com.hrules.rest.presentation.presenters.activities;
 
+import android.support.annotation.IdRes;
 import android.support.annotation.NonNull;
-import android.widget.EditText;
+import android.support.annotation.Nullable;
 import com.hrules.darealmvp.DRMVPPresenter;
 import com.hrules.darealmvp.DRMVPView;
 import com.hrules.rest.App;
-import com.hrules.rest.R;
 import com.hrules.rest.commons.Preferences;
 import com.hrules.rest.core.commons.ZenModeHelper;
-import com.hrules.rest.presentation.commons.ResUtils;
 import com.hrules.rest.presentation.commons.annotations.Orientation;
 import com.hrules.rest.presentation.commons.annotations.Visibility;
+import com.hrules.rest.presentation.commons.resources.ResBoolean;
+import com.hrules.rest.presentation.commons.resources.ResInteger;
+import com.hrules.rest.presentation.commons.resources.ResString;
 import com.hrules.rest.presentation.models.base.Favorite;
 import com.hrules.rest.presentation.presenters.extras.CountdownPresenter;
 import com.hrules.rest.presentation.presenters.extras.StopwatchPresenter;
@@ -34,7 +36,6 @@ import com.hrules.rest.presentation.presenters.extras.StopwatchPresenter;
 public final class MainActivityPresenter extends DRMVPPresenter<MainActivityPresenter.Contract> {
   private static final boolean DEFAULT_KEEP_SCREEN_ON_STATE = false;
 
-  private ResUtils resources;
   private Preferences preferences;
 
   private ZenModeHelper zenModeHelper;
@@ -44,7 +45,6 @@ public final class MainActivityPresenter extends DRMVPPresenter<MainActivityPres
 
   @Override public void bind(@NonNull Contract view) {
     super.bind(view);
-    resources = new ResUtils(App.getAppContext());
     preferences = new Preferences(App.getAppContext());
     zenModeHelper = new ZenModeHelper(App.getAppContext());
 
@@ -81,13 +81,13 @@ public final class MainActivityPresenter extends DRMVPPresenter<MainActivityPres
   }
 
   public void onViewResume() {
-    boolean keepScreenOn = preferences.getBoolean(resources.getString(R.string.prefs_displayKeepScreenOnKey),
-        resources.getBoolean(R.bool.prefs_displayKeepScreenOnDefault));
+    boolean keepScreenOn =
+        preferences.getBoolean(ResString.getPrefs_displayKeepScreenOnKey(), ResBoolean.getPrefs_displayKeepScreenOnDefault());
 
-    String orientationFromPrefs = preferences.getString(resources.getString(R.string.prefs_displayOrientationKey),
-        String.valueOf(resources.getInteger(R.integer.prefs_displayOrientationDefault)));
-    String portrait = resources.getString(R.string.prefs_displayOrientationValuesPortrait);
-    String landscape = resources.getString(R.string.prefs_displayOrientationValuesLandscape);
+    String orientationFromPrefs =
+        preferences.getString(ResString.getPrefs_displayOrientationKey(), String.valueOf(ResInteger.getPrefs_displayOrientationDefault()));
+    String portrait = ResString.getPrefs_displayOrientationValuesPortrait();
+    String landscape = ResString.getPrefs_displayOrientationValuesLandscape();
     @Orientation int orientation = Orientation.UNSPECIFIED;
     if (orientationFromPrefs.equals(portrait)) {
       orientation = Orientation.PORTRAIT;
@@ -131,24 +131,24 @@ public final class MainActivityPresenter extends DRMVPPresenter<MainActivityPres
     countdownPresenter.onEditorActionDone();
   }
 
-  public void onEditFocusChange(@NonNull EditText editText, boolean hasFocus) {
-    countdownPresenter.onEditFocusChange(editText, hasFocus);
+  public void onEditFocusChange(@IdRes int editTextResId, @Nullable String text, boolean hasFocus) {
+    countdownPresenter.onEditFocusChange(editTextResId, text, hasFocus);
   }
 
-  public void editAfterTextChanged(@NonNull String editMinutes, @NonNull String editSeconds) {
-    countdownPresenter.editAfterTextChanged(editMinutes, editSeconds);
+  public void editAfterTextChanged(@NonNull String minutes, @NonNull String seconds) {
+    countdownPresenter.editAfterTextChanged(minutes, seconds);
   }
 
-  public void onButtonFavoritesClick(@NonNull String editMinutes, @NonNull String editSeconds) {
-    countdownPresenter.onButtonFavoritesClick(editMinutes, editSeconds);
+  public void onButtonFavoritesClick(@NonNull String minutes, @NonNull String seconds) {
+    countdownPresenter.onButtonFavoritesClick(minutes, seconds);
   }
 
   public void onFavoriteTitleClick(@NonNull Favorite favorite) {
     countdownPresenter.onFavoriteTitleClick(favorite);
   }
 
-  public void onFavoriteActionAddClick(@NonNull String editMinutes, @NonNull String editSeconds) {
-    countdownPresenter.onFavoriteActionAddClick(editMinutes, editSeconds);
+  public void onFavoriteActionAddClick(@NonNull String minutes, @NonNull String seconds) {
+    countdownPresenter.onFavoriteActionAddClick(minutes, seconds);
   }
 
   public void onFavoriteDeleteClick(@NonNull Favorite favorite) {

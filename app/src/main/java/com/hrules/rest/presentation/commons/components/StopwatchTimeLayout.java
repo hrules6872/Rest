@@ -17,7 +17,7 @@ import java.lang.annotation.RetentionPolicy;
 
 import static com.hrules.rest.R.id.text_stopwatch;
 
-public class StopwatchTimeLayout extends FrameLayout {
+public final class StopwatchTimeLayout extends FrameLayout {
   @BindView(text_stopwatch) TextView textStopwatch;
   @BindView(R.id.text_stopwatchLast) TextView textStopwatchLast;
 
@@ -65,10 +65,8 @@ public class StopwatchTimeLayout extends FrameLayout {
   }
 
   @SuppressWarnings("deprecation") public void setSize(@Size int size) {
-    int primaryStyle =
-        size == STOPWATCH_SIZE_NORMAL ? R.style.StopwatchPrimarySizeNormal : R.style.StopwatchPrimarySizeLarge;
-    int secondaryStyle =
-        size == STOPWATCH_SIZE_NORMAL ? R.style.StopwatchSecondarySizeNormal : R.style.StopwatchSecondarySizeLarge;
+    int primaryStyle = size == STOPWATCH_SIZE_NORMAL ? R.style.StopwatchPrimarySizeNormal : R.style.StopwatchPrimarySizeLarge;
+    int secondaryStyle = size == STOPWATCH_SIZE_NORMAL ? R.style.StopwatchSecondarySizeNormal : R.style.StopwatchSecondarySizeLarge;
 
     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
       textStopwatch.setTextAppearance(primaryStyle);

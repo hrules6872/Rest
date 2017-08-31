@@ -14,17 +14,13 @@
  * limitations under the License.
  */
 
-package com.hrules.rest.presentation.models.comparators;
+package com.hrules.rest.presentation.commons;
 
-import com.hrules.rest.presentation.models.base.Favorite;
-import java.util.Comparator;
-
-public final class FavoriteSecondsAscendingComparator implements Comparator<Favorite> {
-  @Override public int compare(Favorite lhs, Favorite rhs) {
-    return compare(lhs.getSeconds(), rhs.getSeconds());
+public final class DateUtils {
+  private DateUtils() {
   }
 
-  private int compare(long lhs, long rhs) {
-    return (lhs < rhs) ? -1 : ((lhs == rhs) ? 0 : 1);
+  public static boolean isToday(long when) {
+    return android.text.format.DateUtils.isToday(when);
   }
 }

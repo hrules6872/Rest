@@ -14,17 +14,15 @@
  * limitations under the License.
  */
 
-package com.hrules.rest.presentation.models.comparators;
+package com.hrules.rest.presentation.commons;
 
-import com.hrules.rest.presentation.models.base.Favorite;
-import java.util.Comparator;
+import android.support.annotation.Nullable;
 
-public final class FavoriteSecondsAscendingComparator implements Comparator<Favorite> {
-  @Override public int compare(Favorite lhs, Favorite rhs) {
-    return compare(lhs.getSeconds(), rhs.getSeconds());
+public final class PreConditions {
+  private PreConditions() {
   }
 
-  private int compare(long lhs, long rhs) {
-    return (lhs < rhs) ? -1 : ((lhs == rhs) ? 0 : 1);
+  public static boolean isStringNullOrEmpty(@Nullable String string) {
+    return string == null || string.length() == 0;
   }
 }

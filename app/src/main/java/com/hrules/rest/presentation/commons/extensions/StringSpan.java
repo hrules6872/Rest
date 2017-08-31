@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.hrules.rest.presentation.commons;
+package com.hrules.rest.presentation.commons.extensions;
 
 import android.support.annotation.NonNull;
 import android.text.SpannableStringBuilder;
@@ -27,7 +27,7 @@ import java.util.regex.Pattern;
  * +info: https://gist.github.com/hrules6872/f214f0391f20610f502c085c54b3079f
  */
 
-public class StringSpan {
+public final class StringSpan {
   private static final Pattern PATTERN = Pattern.compile("%([^a-zA-z%]*)([[a-zA-Z%]&&[^tT]]|[tT][a-zA-Z])");
 
   private StringSpan() {
@@ -37,7 +37,7 @@ public class StringSpan {
     return format(Locale.getDefault(), format, args);
   }
 
-  @SuppressWarnings("ConstantConditions")
+  @SuppressWarnings({ "ConstantConditions", "IfCanBeSwitch", "WeakerAccess" })
   public static CharSequence format(@NonNull Locale locale, @NonNull CharSequence format, Object... args) {
     if (locale == null || format == null) {
       return format;

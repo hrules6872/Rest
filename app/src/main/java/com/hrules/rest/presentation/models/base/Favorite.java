@@ -23,7 +23,7 @@ import java.lang.annotation.RetentionPolicy;
 
 public class Favorite {
   private final String title;
-  protected int seconds = 0;
+  protected long seconds = 0;
   private final @Type int type;
 
   @IntDef({
@@ -42,7 +42,7 @@ public class Favorite {
     return title;
   }
 
-  public int getSeconds() {
+  public long getSeconds() {
     return seconds;
   }
 

@@ -5,7 +5,7 @@ import android.util.AttributeSet;
 import android.view.View;
 import com.hrules.rest.R;
 
-public class StopwatchButton extends android.support.v7.widget.AppCompatImageButton {
+public final class StopwatchButton extends android.support.v7.widget.AppCompatImageButton {
   private boolean smart = false;
 
   public StopwatchButton(Context context) {

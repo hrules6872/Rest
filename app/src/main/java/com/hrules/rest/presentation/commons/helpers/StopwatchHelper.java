@@ -1,10 +1,10 @@
-package com.hrules.rest.presentation.commons;
+package com.hrules.rest.presentation.commons.helpers;
 
 import android.support.annotation.NonNull;
 import com.hrules.rest.AppConstants;
 import com.hrules.rest.commons.Preferences;
 
-public class StopwatchHelper {
+public final class StopwatchHelper {
   private final Preferences preferences;
 
   public StopwatchHelper(@NonNull Preferences preferences) {

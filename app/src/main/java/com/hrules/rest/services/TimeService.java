@@ -33,7 +33,6 @@ import android.support.v4.app.NotificationCompat;
 import android.view.View;
 import android.widget.RemoteViews;
 import android.widget.Toast;
-import com.hrules.rest.App;
 import com.hrules.rest.AppConstants;
 import com.hrules.rest.R;
 import com.hrules.rest.commons.Preferences;
@@ -42,9 +41,8 @@ import com.hrules.rest.core.alerts.VibratorHelper;
 import com.hrules.rest.core.commons.ZenModeHelper;
 import com.hrules.rest.core.time.TimeManager;
 import com.hrules.rest.core.time.TimeManagerListener;
-import com.hrules.rest.presentation.commons.ResUtils;
-import com.hrules.rest.presentation.commons.StopwatchHelper;
 import com.hrules.rest.presentation.commons.TimeUtils;
+import com.hrules.rest.presentation.commons.helpers.StopwatchHelper;
 import com.hrules.rest.presentation.views.activities.MainActivityView;
 import java.util.concurrent.TimeUnit;
 
@@ -280,7 +278,7 @@ public final class TimeService extends Service {
 
     remoteView.setTextViewText(R.id.text_countDown,
         TimeUtils.milliToMinutesSecondsString(TimeUtils.getCountdownMilliUnsigned(), getResources()));
-    remoteView.setTextColor(R.id.text_countDown, TimeUtils.getNotificationTextColorFromMilli(new ResUtils(App.getAppContext())));
+    remoteView.setTextColor(R.id.text_countDown, TimeUtils.getNotificationTextColorFromMilli());
   }
 
   private void registerTimeServiceReceiver() {

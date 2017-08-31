@@ -32,7 +32,7 @@ import java.lang.annotation.RetentionPolicy;
  * +info: https://gist.github.com/romannurik/3982005
  */
 
-public final class ToolTipView {
+@SuppressWarnings("WeakerAccess") public final class ToolTipView {
   public static final int LENGTH_SHORT = Toast.LENGTH_SHORT;
   public static final int LENGTH_LONG = Toast.LENGTH_LONG;
 
@@ -60,8 +60,7 @@ public final class ToolTipView {
     final int viewHeight = view.getHeight();
     final int viewCenterX = screenPos[0] + viewWidth / 2;
     final int screenWidth = resources.getDisplayMetrics().widthPixels;
-    final int estimatedToastHeight =
-        (int) (DEFAULT_ESTIMATED_TOAST_HEIGHT_DIPS * resources.getDisplayMetrics().density);
+    final int estimatedToastHeight = (int) (DEFAULT_ESTIMATED_TOAST_HEIGHT_DIPS * resources.getDisplayMetrics().density);
 
     Toast toast = Toast.makeText(context, text, duration);
     boolean showBelow = screenPos[1] < estimatedToastHeight;

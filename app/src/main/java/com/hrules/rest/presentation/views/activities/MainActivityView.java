@@ -21,15 +21,12 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
-import android.os.Handler;
-import android.os.Looper;
 import android.service.notification.StatusBarNotification;
-import android.support.annotation.ColorRes;
+import android.support.annotation.ColorInt;
 import android.support.annotation.DrawableRes;
 import android.support.annotation.IdRes;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.support.annotation.StringRes;
 import android.support.v7.app.ActionBar;
 import android.support.v7.widget.ListPopupWindow;
 import android.support.v7.widget.Toolbar;
@@ -49,11 +46,9 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import butterknife.OnLongClick;
-import com.hrules.rest.App;
 import com.hrules.rest.R;
 import com.hrules.rest.core.time.TimeManager;
 import com.hrules.rest.presentation.adapters.FavoritesAdapter;
-import com.hrules.rest.presentation.commons.ResUtils;
 import com.hrules.rest.presentation.commons.TimeUtils;
 import com.hrules.rest.presentation.commons.ViewUtils;
 import com.hrules.rest.presentation.commons.annotations.Orientation;
@@ -66,6 +61,7 @@ import com.hrules.rest.presentation.commons.components.ScaleAnimatedTextView;
 import com.hrules.rest.presentation.commons.components.StopwatchButton;
 import com.hrules.rest.presentation.commons.components.StopwatchTimeLayout;
 import com.hrules.rest.presentation.commons.components.ToolTipView;
+import com.hrules.rest.presentation.commons.threads.UIHandler;
 import com.hrules.rest.presentation.models.base.Favorite;
 import com.hrules.rest.presentation.presenters.activities.MainActivityPresenter;
 import com.hrules.rest.presentation.presenters.extras.CountdownPresenter;
@@ -193,7 +189,7 @@ public final class MainActivityView extends DRMVPAppCompatActivity<MainActivityP
       getWindow().clearFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
     }
 
-    new Handler(Looper.getMainLooper()).post(() -> setRequestedOrientation(screenOrientationSensor));
+    new UIHandler().post(() -> setRequestedOrientation(screenOrientationSensor));
   }
 
   @Override public void setZenModeAlertVisibility(@Visibility int visibility) {
@@ -208,7 +204,7 @@ public final class MainActivityView extends DRMVPAppCompatActivity<MainActivityP
   @Override public void updateCountdown(boolean animate) {
     textCountdown.setText(TimeUtils.milliToMinutesSecondsMilliString(TimeUtils.getCountdownMilliUnsigned(), getResources()), animate,
         TimeManager.INSTANCE.isRunning() ? ScaleAnimatedTextView.ANIM_TYPE_SCALE_OUT : ScaleAnimatedTextView.ANIM_TYPE_SCALE_IN);
-    textCountdown.setTextColor(TimeUtils.getTextColorFromMilli(new ResUtils(App.getAppContext())));
+    textCountdown.setTextColor(TimeUtils.getTextColorFromMilli());
 
     if (TimeManager.INSTANCE.isRunning()
         && !TimeManager.INSTANCE.isCountdownOver()
@@ -225,7 +221,7 @@ public final class MainActivityView extends DRMVPAppCompatActivity<MainActivityP
     }
   }
 
-  @Override public void setButtonChangeStateAttributes(boolean animate, @DrawableRes int drawableResId, @ColorRes int colorResId) {
+  @Override public void setButtonChangeStateAttributes(boolean animate, @DrawableRes int drawableResId, @ColorInt int color) {
     if (animate) {
       doRevealBackground();
     } else {
@@ -233,7 +229,7 @@ public final class MainActivityView extends DRMVPAppCompatActivity<MainActivityP
         revealBackgroundView.setState(RevealBackgroundView.STATE_FINISHED);
       }
     }
-    buttonChangeState.setState(animate, drawableResId, colorResId, defaultAnimDurationMilli);
+    buttonChangeState.setState(animate, drawableResId, color, defaultAnimDurationMilli);
   }
 
   @Override public void setButtonChangeStateEnabled(boolean enabled) {
@@ -341,7 +337,7 @@ public final class MainActivityView extends DRMVPAppCompatActivity<MainActivityP
 
   private final View.OnFocusChangeListener editFocusChangeListener = (v, hasFocus) -> {
     if (v instanceof EditText) {
-      getPresenter().onEditFocusChange((EditText) v, hasFocus);
+      getPresenter().onEditFocusChange(v.getId(), ((EditText) v).getText().toString(), hasFocus);
     }
   };
 
@@ -359,8 +355,8 @@ public final class MainActivityView extends DRMVPAppCompatActivity<MainActivityP
   //endregion
 
   //region STOPWATCH
-  @Override public void showTooltip(@IdRes int viewResId, @StringRes int stringResId) {
-    ToolTipView.show(findViewById(viewResId), getString(stringResId), ToolTipView.LENGTH_SHORT);
+  @Override public void showTooltip(@IdRes int viewResId, @NonNull String message) {
+    ToolTipView.show(findViewById(viewResId), message, ToolTipView.LENGTH_SHORT);
   }
 
   @Override public void updateStopwatch(long milli) {
