@@ -48,11 +48,9 @@ public final class MainActivityPresenter extends DRMVPPresenter<MainActivityPres
     preferences = new Preferences(App.getAppContext());
     zenModeHelper = new ZenModeHelper(App.getAppContext());
 
-    // countdown
     countdownPresenter = new CountdownPresenter();
     countdownPresenter.bind((CountdownPresenter.Contract) view);
 
-    // stopwatch
     stopwatchPresenter = new StopwatchPresenter();
     stopwatchPresenter.bind((StopwatchPresenter.Contract) view);
   }
@@ -62,10 +60,7 @@ public final class MainActivityPresenter extends DRMVPPresenter<MainActivityPres
     zenModeHelper.release();
     zenModeHelper = null;
 
-    // countdown
     countdownPresenter.unbind();
-
-    // stopwatch
     stopwatchPresenter.unbind();
   }
 
@@ -73,11 +68,7 @@ public final class MainActivityPresenter extends DRMVPPresenter<MainActivityPres
     getView().setZenModeAlertVisibility(zenModeHelper.isZenModeActive() ? Visibility.VISIBLE : Visibility.GONE);
     zenModeHelper.setListener(zenModeManagerListener);
 
-    // countdown
     countdownPresenter.onViewReady();
-
-    // stopwatch
-    stopwatchPresenter.onViewReady();
   }
 
   public void onViewResume() {
@@ -96,10 +87,7 @@ public final class MainActivityPresenter extends DRMVPPresenter<MainActivityPres
     }
     getView().setDisplayOptions(keepScreenOn, orientation);
 
-    // countdown
     countdownPresenter.onViewResume();
-
-    // stopwatch
     stopwatchPresenter.onViewResume();
   }
 
@@ -108,10 +96,7 @@ public final class MainActivityPresenter extends DRMVPPresenter<MainActivityPres
     // in order to support Multi Window (API >= 24)
     getView().setDisplayOptions(DEFAULT_KEEP_SCREEN_ON_STATE, Orientation.UNSPECIFIED);
 
-    // countdown
     countdownPresenter.onViewStop();
-
-    // stopwatch
     stopwatchPresenter.onViewStop();
   }
 

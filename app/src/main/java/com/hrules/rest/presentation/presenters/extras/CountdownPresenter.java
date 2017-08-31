@@ -16,7 +16,6 @@
 
 package com.hrules.rest.presentation.presenters.extras;
 
-import android.content.SharedPreferences;
 import android.support.annotation.ColorInt;
 import android.support.annotation.DrawableRes;
 import android.support.annotation.IdRes;
@@ -66,23 +65,17 @@ public final class CountdownPresenter extends DRMVPPresenter<CountdownPresenter.
     super.bind(view);
     preferences = new Preferences(App.getAppContext());
     vibratorHelper = new VibratorHelper(App.getAppContext());
+
+    TimeManager.INSTANCE.setCountdownTimeMilli(
+        preferences.getLong(AppConstants.PREFS.COUNTDOWN_MILLI, AppConstants.PREFS.DEFAULTS.COUNTDOWN_MILLI));
   }
 
   @Override public void unbind() {
     super.unbind();
-    TimeManager.INSTANCE.removeListener(timeManagerListener);
-    preferences.removeListener(sharedPreferenceChangeListener);
-
     countdownHandler.removeCallbacksAndMessages(null);
   }
 
   public void onViewReady() {
-    getPreferences();
-    preferences.addListener(sharedPreferenceChangeListener);
-
-    TimeManager.INSTANCE.setCountdownTimeMilli(
-        preferences.getLong(AppConstants.PREFS.COUNTDOWN_MILLI, AppConstants.PREFS.DEFAULTS.COUNTDOWN_MILLI));
-
     long minutes = TimeUtils.getExactMinutesFromMilli(
         preferences.getLong(AppConstants.PREFS.COUNTDOWN_MILLI, AppConstants.PREFS.DEFAULTS.COUNTDOWN_MILLI));
     getView().setEditText(ResId.getEdit_minutes(), String.valueOf(minutes));
@@ -93,16 +86,18 @@ public final class CountdownPresenter extends DRMVPPresenter<CountdownPresenter.
   }
 
   public void onViewResume() {
-    getView().startService();
+    getPreferences();
+
     internalOnStateChanged(false);
     updateButtonChangeStateEnabled();
 
     TimeManager.INSTANCE.addListener(timeManagerListener);
+    getView().startService();
   }
 
   public void onViewStop() {
-    getView().hideSoftKeyboardAndClearEditFocus();
     TimeManager.INSTANCE.removeListener(timeManagerListener);
+    getView().hideSoftKeyboardAndClearEditFocus();
   }
 
   private void getPreferences() {
@@ -276,9 +271,6 @@ public final class CountdownPresenter extends DRMVPPresenter<CountdownPresenter.
 
     preferences.save(AppConstants.PREFS.FAVORITES, favoritesSet);
   }
-
-  private final SharedPreferences.OnSharedPreferenceChangeListener sharedPreferenceChangeListener =
-      (sharedPreferences, key) -> getPreferences();
 
   private final TimeManagerListener timeManagerListener = new TimeManagerListener() {
     @Override public void onStateChanged() {

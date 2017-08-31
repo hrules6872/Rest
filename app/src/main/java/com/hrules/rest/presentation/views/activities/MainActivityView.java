@@ -99,6 +99,7 @@ public final class MainActivityView extends DRMVPAppCompatActivity<MainActivityP
   @Override protected void onCreate(@Nullable Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
     initializeViews();
+
     getPresenter().onViewReady();
   }
 

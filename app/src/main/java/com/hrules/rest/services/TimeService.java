@@ -408,6 +408,12 @@ public final class TimeService extends Service {
     }
   }
 
+  private void playStopwatch() {
+    if (prefsSmartStopwatch && TimeManager.INSTANCE.isRunning() && !stopwatchHelper.isRunning()) {
+      stopwatchHelper.play();
+    }
+  }
+
   private void stopStopwatch() {
     if (stopwatchHelper.isRunning()) {
       if (prefsSmartStopwatch || prefsAutoStopStopwatch) {
@@ -440,6 +446,8 @@ public final class TimeService extends Service {
           checkVibrateOnClickState();
           TimeManager.INSTANCE.toggle();
           updateNotification();
+
+          playStopwatch();
         }
 
         @Override public void onActionReplay() {

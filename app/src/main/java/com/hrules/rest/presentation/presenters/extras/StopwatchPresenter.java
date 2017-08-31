@@ -16,13 +16,9 @@
 
 package com.hrules.rest.presentation.presenters.extras;
 
-import android.content.BroadcastReceiver;
-import android.content.Context;
-import android.content.Intent;
-import android.content.IntentFilter;
-import android.content.SharedPreferences;
 import android.support.annotation.IdRes;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import com.hrules.darealmvp.DRMVPPresenter;
 import com.hrules.darealmvp.DRMVPView;
 import com.hrules.rest.App;
@@ -36,6 +32,7 @@ import com.hrules.rest.presentation.commons.TimeUtils;
 import com.hrules.rest.presentation.commons.components.StopwatchTimeLayout;
 import com.hrules.rest.presentation.commons.extensions.StringSpan;
 import com.hrules.rest.presentation.commons.helpers.StopwatchHelper;
+import com.hrules.rest.presentation.commons.receivers.StopwatchReceiver;
 import com.hrules.rest.presentation.commons.resources.ResBoolean;
 import com.hrules.rest.presentation.commons.resources.ResId;
 import com.hrules.rest.presentation.commons.resources.ResInteger;
@@ -56,6 +53,7 @@ public final class StopwatchPresenter extends DRMVPPresenter<StopwatchPresenter.
   private static final int DEFAULT_EXECUTOR_CORE_POOL_SIZE = 1;
 
   private StopwatchHelper stopwatchHelper;
+  private StopwatchReceiver stopwatchReceiver;
 
   private Preferences preferences;
   private boolean prefsSmartStopwatch;
@@ -76,30 +74,29 @@ public final class StopwatchPresenter extends DRMVPPresenter<StopwatchPresenter.
     stopwatchHelper = new StopwatchHelper(preferences);
     vibratorHelper = new VibratorHelper(App.getAppContext());
 
-    registerStopwatchReceiver();
-    TimeManager.INSTANCE.addListener(timeManagerListener);
+    stopwatchReceiver = new StopwatchReceiver(this);
+    stopwatchReceiver.register(App.getAppContext());
   }
 
   @Override public void unbind() {
     super.unbind();
-    unregisterStopwatchReceiver();
-    TimeManager.INSTANCE.removeListener(timeManagerListener);
+    stopwatchReceiver.unregister(App.getAppContext());
 
     scheduledThreadPoolExecutor.shutdown();
     stopwatchHandler.removeCallbacksAndMessages(null);
   }
 
-  public void onViewReady() {
-    getPreferences();
-    preferences.addListener(sharedPreferenceChangeListener);
-  }
-
   public void onViewResume() {
+    getPreferences();
+
     setStopwatchLastTime();
     manageStopwatchState(stopwatchHelper.getStopwatchMilli());
+
+    TimeManager.INSTANCE.addListener(timeManagerListener);
   }
 
   public void onViewStop() {
+    TimeManager.INSTANCE.removeListener(timeManagerListener);
     stopStopwatchRunnable();
   }
 
@@ -204,19 +201,6 @@ public final class StopwatchPresenter extends DRMVPPresenter<StopwatchPresenter.
     manageStopwatchState(AppConstants.PREFS.DEFAULTS.STOPWATCH_MILLI);
   }
 
-  private void registerStopwatchReceiver() {
-    IntentFilter intentFilter = new IntentFilter();
-    intentFilter.addAction(ACTION_SERVICE_SHUTDOWN);
-    App.getAppContext().registerReceiver(stopwatchReceiver, intentFilter);
-  }
-
-  private void unregisterStopwatchReceiver() {
-    try {
-      App.getAppContext().unregisterReceiver(stopwatchReceiver);
-    } catch (IllegalArgumentException ignored) {
-    }
-  }
-
   public void onButtonStopwatchChangeStateClick() {
     if (!prefsSmartStopwatch) {
       if (stopwatchHelper.isRunning()) {
@@ -239,24 +223,19 @@ public final class StopwatchPresenter extends DRMVPPresenter<StopwatchPresenter.
     }
   }
 
-  private final SharedPreferences.OnSharedPreferenceChangeListener sharedPreferenceChangeListener =
-      (sharedPreferences, key) -> getPreferences();
+  public void onStopwatchReceiverReceive(@Nullable String action) {
+    if (action != null && action.equals(ACTION_SERVICE_SHUTDOWN)) {
+      if (prefsSmartStopwatch || prefsAutoStopStopwatch) {
+        setStopwatchLastTime();
+        manageStopwatchState(AppConstants.PREFS.DEFAULTS.STOPWATCH_MILLI);
+      }
+    }
+  }
 
   private final TimeManagerListener timeManagerListener = new TimeManagerListener() {
     @Override public void onStateChanged() {
       if (prefsSmartStopwatch && TimeManager.INSTANCE.isRunning() && !stopwatchHelper.isRunning()) {
         play();
-      }
-    }
-  };
-
-  private final BroadcastReceiver stopwatchReceiver = new BroadcastReceiver() {
-    @Override public void onReceive(@NonNull Context context, Intent intent) {
-      if (intent.getAction().equals(ACTION_SERVICE_SHUTDOWN)) {
-        if (prefsSmartStopwatch || prefsAutoStopStopwatch) {
-          setStopwatchLastTime();
-          manageStopwatchState(AppConstants.PREFS.DEFAULTS.STOPWATCH_MILLI);
-        }
       }
     }
   };
