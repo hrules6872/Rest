@@ -182,15 +182,16 @@ public final class TimeService extends Service {
     Intent notificationIntent = new Intent(this, MainActivityView.class);
     notificationIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
     PendingIntent pendingIntent = PendingIntent.getActivity(this, PendingIntent.FLAG_UPDATE_CURRENT, notificationIntent, 0);
-    builder.setContentIntent(pendingIntent);
-    builder.setPriority(NotificationCompat.PRIORITY_MAX);
-    builder.setVisibility(NotificationCompat.VISIBILITY_PUBLIC);
-    builder.setOngoing(true);
-    builder.setSmallIcon(getSmallIconResId());
-    builder.setOnlyAlertOnce(true);
-    builder.setContent(remoteViewCollapsed);
-    builder.setCustomBigContentView(remoteViewExpanded);
-    return builder.build();
+    return builder.setContentIntent(pendingIntent)
+        .setPriority(NotificationCompat.PRIORITY_MAX)
+        .setVisibility(NotificationCompat.VISIBILITY_PUBLIC)
+        .setOngoing(true)
+        .setSmallIcon(getSmallIconResId())
+        .setOnlyAlertOnce(true)
+        .setContent(remoteViewCollapsed)
+        .setCustomBigContentView(remoteViewExpanded)
+        .setCategory(NotificationCompat.CATEGORY_ALARM)
+        .build();
   }
 
   private void updateNotification() {
