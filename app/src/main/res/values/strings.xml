@@ -18,6 +18,8 @@
   <string name="activity_preferencesTitle">Preferences</string>
   <string name="activity_aboutTitle">About</string>
 
+  <string name="notification_channel_default">Main</string>
+
   <!--text-->
   <string name="text_notificationStop">Close notification</string>
   <string name="text_editSeparator">:</string>

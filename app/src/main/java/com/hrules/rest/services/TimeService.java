@@ -17,6 +17,7 @@
 package com.hrules.rest.services;
 
 import android.app.Notification;
+import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.app.Service;
@@ -27,6 +28,7 @@ import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.content.res.Resources;
 import android.media.AudioManager;
+import android.os.Build;
 import android.os.IBinder;
 import android.support.annotation.NonNull;
 import android.support.v4.app.NotificationCompat;
@@ -47,7 +49,8 @@ import com.hrules.rest.presentation.views.activities.MainActivityView;
 import java.util.concurrent.TimeUnit;
 
 public final class TimeService extends Service {
-  public static final int NOTIFICATION_ID = 22011982;
+  public static final int NOTIFICATION_ID = Integer.MAX_VALUE;
+  public static final String NOTIFICATION_CHANNEL_ID = "main";
 
   public static final String ACTION_SERVICE_SHUTDOWN = "com.hrules.rest.ACTION_SERVICE_SHUTDOWN";
 
@@ -60,7 +63,6 @@ public final class TimeService extends Service {
 
   private static final long REMOTEVIEWS_WORKAROUND_TRIGGER_SECONDS = 5;
 
-  private NotificationCompat.Builder builder;
   private NotificationManager notificationManager;
   private RemoteViews remoteViewCollapsed;
   private RemoteViews remoteViewExpanded;
@@ -114,8 +116,6 @@ public final class TimeService extends Service {
     createAudioHelper();
     registerTimeServiceReceiver();
 
-    builder = new NotificationCompat.Builder(this);
-    notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
     createNotification();
 
     TimeManager.INSTANCE.addListener(timeManagerListener);
@@ -173,16 +173,21 @@ public final class TimeService extends Service {
         resources.getBoolean(R.bool.prefs_controlVibrateButtonsDefault));
   }
 
+  private NotificationManager getNotificationManager() {
+    if (notificationManager == null) {
+      notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+    }
+    return notificationManager;
+  }
+
   private void createNotification() {
     createRemoteViews();
     startForeground(NOTIFICATION_ID, buildNotification());
   }
 
   private Notification buildNotification() {
-    Intent notificationIntent = new Intent(this, MainActivityView.class);
-    notificationIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
-    PendingIntent pendingIntent = PendingIntent.getActivity(this, PendingIntent.FLAG_UPDATE_CURRENT, notificationIntent, 0);
-    return builder.setContentIntent(pendingIntent)
+    NotificationCompat.Builder builder = initNotificationBuilder();
+    return builder.setContentIntent(createNotificationIntent())
         .setPriority(NotificationCompat.PRIORITY_MAX)
         .setVisibility(NotificationCompat.VISIBILITY_PUBLIC)
         .setOngoing(true)
@@ -192,6 +197,28 @@ public final class TimeService extends Service {
         .setCustomBigContentView(remoteViewExpanded)
         .setCategory(NotificationCompat.CATEGORY_ALARM)
         .build();
+  }
+
+  private @NonNull PendingIntent createNotificationIntent() {
+    Intent notificationIntent = new Intent(this, MainActivityView.class);
+    notificationIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
+    return PendingIntent.getActivity(this, PendingIntent.FLAG_UPDATE_CURRENT, notificationIntent, 0);
+  }
+
+  @SuppressWarnings("deprecation") private @NonNull NotificationCompat.Builder initNotificationBuilder() {
+    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+      NotificationChannel channel =
+          new NotificationChannel(TimeService.NOTIFICATION_CHANNEL_ID, getString(R.string.notification_channel_default),
+              NotificationManager.IMPORTANCE_LOW);
+      channel.setLockscreenVisibility(Notification.VISIBILITY_PUBLIC);
+      channel.enableLights(false);
+      channel.enableVibration(false);
+      channel.setSound(null, null);
+      getNotificationManager().createNotificationChannel(channel);
+      return new NotificationCompat.Builder(getApplicationContext(), TimeService.NOTIFICATION_CHANNEL_ID);
+    } else {
+      return new NotificationCompat.Builder(this);
+    }
   }
 
   private void updateNotification() {
@@ -208,17 +235,17 @@ public final class TimeService extends Service {
         lastSecondNotificationUpdate++;
         remoteViewsWorkaroundSecondsCounter++;
 
-        internalUpdateNotification();
+        notifyNotification();
       }
     } else {
-      internalUpdateNotification();
+      notifyNotification();
     }
   }
 
-  private void internalUpdateNotification() {
+  private void notifyNotification() {
     updateRemoteView(remoteViewCollapsed);
     updateRemoteView(remoteViewExpanded);
-    notificationManager.notify(NOTIFICATION_ID, buildNotification());
+    getNotificationManager().notify(NOTIFICATION_ID, buildNotification());
   }
 
   private int getSmallIconResId() {

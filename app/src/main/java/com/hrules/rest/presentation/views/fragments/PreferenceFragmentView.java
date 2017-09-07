@@ -16,7 +16,11 @@
 
 package com.hrules.rest.presentation.views.fragments;
 
+import android.app.NotificationChannel;
+import android.app.NotificationManager;
+import android.content.Context;
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 import android.preference.CheckBoxPreference;
 import android.preference.ListPreference;
@@ -33,6 +37,7 @@ import com.hrules.rest.commons.Preferences;
 import com.hrules.rest.core.alerts.VibratorHelper;
 import com.hrules.rest.presentation.commons.AppUtils;
 import com.hrules.rest.presentation.views.activities.AboutActivityView;
+import com.hrules.rest.services.TimeService;
 
 public final class PreferenceFragmentView extends PreferenceFragment
     implements Preference.OnPreferenceClickListener, Preference.OnPreferenceChangeListener {
@@ -63,6 +68,8 @@ public final class PreferenceFragmentView extends PreferenceFragment
       disableCheckPreference(findPreference(getString(R.string.prefs_controlVibrateButtonsKey)));
     }
     checkSoundAndVibrateState();
+
+    checkSmartStopwatch();
   }
 
   private void disableCheckPreference(@NonNull Preference preference) {
@@ -124,6 +131,17 @@ public final class PreferenceFragmentView extends PreferenceFragment
       disableAllAlerts();
     } else {
       enableAllAlerts();
+    }
+  }
+
+  private void checkSmartStopwatch() {
+    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+      NotificationManager notificationManager = (NotificationManager) getActivity().getSystemService(Context.NOTIFICATION_SERVICE);
+      NotificationChannel notificationChannel = notificationManager.getNotificationChannel(TimeService.NOTIFICATION_CHANNEL_ID);
+      if (notificationChannel != null && notificationChannel.getImportance() == NotificationManager.IMPORTANCE_NONE) {
+        disableCheckPreference(findPreference(getString(R.string.prefs_stopwatchSmartKey)));
+        disableCheckPreference(findPreference(getString(R.string.prefs_stopwatchAutoStopKey)));
+      }
     }
   }
 
