@@ -1,7 +1,6 @@
 package com.hrules.rest.presentation.commons.components;
 
 import android.content.Context;
-import android.os.Build;
 import android.support.annotation.IntDef;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -12,6 +11,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
 import com.hrules.rest.R;
+import com.hrules.rest.commons.SupportVersion;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 
@@ -68,7 +68,7 @@ public final class StopwatchTimeLayout extends FrameLayout {
     int primaryStyle = size == STOPWATCH_SIZE_NORMAL ? R.style.StopwatchPrimarySizeNormal : R.style.StopwatchPrimarySizeLarge;
     int secondaryStyle = size == STOPWATCH_SIZE_NORMAL ? R.style.StopwatchSecondarySizeNormal : R.style.StopwatchSecondarySizeLarge;
 
-    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+    if (SupportVersion.isMarshmallowOrAbove()) {
       textStopwatch.setTextAppearance(primaryStyle);
       textStopwatchLast.setTextAppearance(secondaryStyle);
     } else {

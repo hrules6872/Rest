@@ -21,9 +21,9 @@ import android.media.AudioAttributes;
 import android.media.AudioManager;
 import android.media.SoundPool;
 import android.os.AsyncTask;
-import android.os.Build;
 import android.support.annotation.NonNull;
 import com.hrules.rest.R;
+import com.hrules.rest.commons.SupportVersion;
 import com.hrules.rest.core.commons.ZenModeHelper;
 
 public final class AudioHelper {
@@ -55,7 +55,7 @@ public final class AudioHelper {
 
     audioManager = (AudioManager) context.getSystemService(Context.AUDIO_SERVICE);
 
-    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+    if (SupportVersion.isLollipopOrAbove()) {
       SoundPool.Builder builder = new SoundPool.Builder();
       AudioAttributes audioAttributes = new AudioAttributes.Builder().setLegacyStreamType(streamType).build();
       builder.setAudioAttributes(audioAttributes).setMaxStreams(MAX_STREAM_TYPES);

@@ -19,7 +19,6 @@ package com.hrules.rest.presentation.views.activities;
 import android.app.NotificationManager;
 import android.content.Context;
 import android.content.Intent;
-import android.os.Build;
 import android.os.Bundle;
 import android.service.notification.StatusBarNotification;
 import android.support.annotation.ColorInt;
@@ -47,6 +46,7 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 import butterknife.OnLongClick;
 import com.hrules.rest.R;
+import com.hrules.rest.commons.SupportVersion;
 import com.hrules.rest.core.time.TimeManager;
 import com.hrules.rest.presentation.adapters.FavoritesAdapter;
 import com.hrules.rest.presentation.commons.TimeUtils;
@@ -162,7 +162,7 @@ public final class MainActivityView extends DRMVPAppCompatActivity<MainActivityP
   }
 
   private boolean isNotificationVisible() {
-    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+    if (SupportVersion.isMarshmallowOrAbove()) {
       NotificationManager notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
       StatusBarNotification[] notifications = notificationManager.getActiveNotifications();
       for (StatusBarNotification notification : notifications) {

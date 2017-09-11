@@ -18,9 +18,9 @@ package com.hrules.rest.core.commons;
 
 import android.content.ContentResolver;
 import android.content.Context;
-import android.os.Build;
 import android.provider.Settings;
 import android.support.annotation.NonNull;
+import com.hrules.rest.commons.SupportVersion;
 
 public final class ZenModeHelper {
   private static final String ZEN_MODE = "zen_mode";
@@ -40,7 +40,7 @@ public final class ZenModeHelper {
     resolver = context.getContentResolver();
     checkZenModeState();
 
-    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+    if (SupportVersion.isLollipopOrAbove()) {
       observer = new ZenModeObserver(newState -> checkZenModeState());
       resolver.registerContentObserver(Settings.Global.getUriFor(ZEN_MODE), false, observer);
     }
@@ -52,7 +52,7 @@ public final class ZenModeHelper {
 
   private void checkZenModeState() {
     state = false;
-    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+    if (SupportVersion.isLollipopOrAbove()) {
       try {
         state = Settings.Global.getInt(resolver, ZEN_MODE) != ZEN_MODE_OFF;
       } catch (Settings.SettingNotFoundException ignored) {

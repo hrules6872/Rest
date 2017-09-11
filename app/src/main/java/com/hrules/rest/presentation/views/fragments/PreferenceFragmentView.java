@@ -20,7 +20,6 @@ import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.content.Context;
 import android.content.Intent;
-import android.os.Build;
 import android.os.Bundle;
 import android.preference.CheckBoxPreference;
 import android.preference.ListPreference;
@@ -34,6 +33,7 @@ import android.view.View;
 import com.hrules.rest.App;
 import com.hrules.rest.R;
 import com.hrules.rest.commons.Preferences;
+import com.hrules.rest.commons.SupportVersion;
 import com.hrules.rest.core.alerts.VibratorHelper;
 import com.hrules.rest.presentation.commons.AppUtils;
 import com.hrules.rest.presentation.views.activities.AboutActivityView;
@@ -135,7 +135,7 @@ public final class PreferenceFragmentView extends PreferenceFragment
   }
 
   private void checkSmartStopwatch() {
-    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+    if (SupportVersion.isOreoOrAbove()) {
       NotificationManager notificationManager = (NotificationManager) getActivity().getSystemService(Context.NOTIFICATION_SERVICE);
       NotificationChannel notificationChannel = notificationManager.getNotificationChannel(TimeService.NOTIFICATION_CHANNEL_ID);
       if (notificationChannel != null && notificationChannel.getImportance() == NotificationManager.IMPORTANCE_NONE) {

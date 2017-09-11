@@ -28,7 +28,6 @@ import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.content.res.Resources;
 import android.media.AudioManager;
-import android.os.Build;
 import android.os.IBinder;
 import android.support.annotation.NonNull;
 import android.support.v4.app.NotificationCompat;
@@ -38,6 +37,7 @@ import android.widget.Toast;
 import com.hrules.rest.AppConstants;
 import com.hrules.rest.R;
 import com.hrules.rest.commons.Preferences;
+import com.hrules.rest.commons.SupportVersion;
 import com.hrules.rest.core.alerts.AudioHelper;
 import com.hrules.rest.core.alerts.VibratorHelper;
 import com.hrules.rest.core.commons.ZenModeHelper;
@@ -206,7 +206,7 @@ public final class TimeService extends Service {
   }
 
   @SuppressWarnings("deprecation") private @NonNull NotificationCompat.Builder initNotificationBuilder() {
-    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+    if (SupportVersion.isOreoOrAbove()) {
       NotificationChannel channel =
           new NotificationChannel(TimeService.NOTIFICATION_CHANNEL_ID, getString(R.string.notification_channel_default),
               NotificationManager.IMPORTANCE_LOW);

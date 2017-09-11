@@ -18,7 +18,6 @@ package com.hrules.rest.presentation.views.activities.support;
 
 import android.content.Context;
 import android.content.res.Configuration;
-import android.os.Build;
 import android.os.Bundle;
 import android.preference.PreferenceActivity;
 import android.support.annotation.LayoutRes;
@@ -43,6 +42,7 @@ import android.util.AttributeSet;
 import android.view.MenuInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import com.hrules.rest.commons.SupportVersion;
 
 public abstract class AppCompatPreferenceActivity extends PreferenceActivity {
   private AppCompatDelegate appCompatDelegate;
@@ -64,7 +64,7 @@ public abstract class AppCompatPreferenceActivity extends PreferenceActivity {
       return result;
     }
 
-    if (Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP) {
+    if (!SupportVersion.isLollipopOrAbove()) {
       switch (name) {
         case "Switch":
           return new SwitchCompat(this, attrs);
