@@ -31,12 +31,16 @@ public final class AudioHelper {
   private static final int SOUND_PRIORITY = 1;
   private static final int SOUND_QUALITY = 0;
 
+  private static final float VOLUME_MAX = 1f;
+  private static final float VOLUME_NORMAL = 0.5f;
+
   private static final int DEFAULT_SOUNDPOOL_PLAY_PRIORITY = 1;
   private static final int DEFAULT_SOUNDPOOL_PLAY_NO_LOOP = 0;
   private static final float DEFAULT_SOUNDPOOL_PLAY_RATE = 1f;
 
   private final AudioManager audioManager;
   private final int streamType;
+  private final boolean maxVolumeSound;
 
   private SoundPool soundPool;
   private ToggleMuteTask toggleMuteTask;
@@ -50,8 +54,9 @@ public final class AudioHelper {
 
   private ZenModeHelper zenModeHelper;
 
-  @SuppressWarnings("deprecation") public AudioHelper(@NonNull Context context, int streamType) {
+  @SuppressWarnings("deprecation") public AudioHelper(@NonNull Context context, int streamType, boolean maxVolumeSound) {
     this.streamType = streamType;
+    this.maxVolumeSound = maxVolumeSound;
 
     audioManager = (AudioManager) context.getSystemService(Context.AUDIO_SERVICE);
 
@@ -81,9 +86,9 @@ public final class AudioHelper {
   }
 
   private float getCurrentVolume(int streamType) {
-    int currentVolume = audioManager.getStreamVolume(streamType);
-    int maxVolume = audioManager.getStreamMaxVolume(streamType);
-    return currentVolume / maxVolume;
+    float currentVolume = audioManager.getStreamVolume(streamType);
+    float maxVolume = audioManager.getStreamMaxVolume(streamType);
+    return currentVolume / maxVolume * (streamType == AudioManager.STREAM_MUSIC || maxVolumeSound ? VOLUME_MAX : VOLUME_NORMAL);
   }
 
   public void playShort() {
@@ -153,8 +158,8 @@ public final class AudioHelper {
       volumeMediaPrevious = audioManager.getStreamVolume(AudioManager.STREAM_MUSIC);
 
       shouldChangeNotificationVolume = !zenModeHelper.isZenModeActive();
-      volumeNotificationMax = audioManager.getStreamMaxVolume(AudioManager.STREAM_NOTIFICATION);
       volumeNotificationPrevious = audioManager.getStreamVolume(AudioManager.STREAM_NOTIFICATION);
+      volumeNotificationMax = audioManager.getStreamMaxVolume(AudioManager.STREAM_NOTIFICATION);
     }
 
     @Override protected void onPreExecute() {

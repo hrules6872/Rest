@@ -18,10 +18,11 @@
 <resources>
   <bool name="prefs_alertSoundDefault">true</bool>
   <bool name="prefs_alertUseMediaStreamDefault">false</bool>
-  <bool name="prefs_alertMuteMediaStreamKeyDefault">true</bool>
+  <bool name="prefs_alertMuteMediaStreamDefault">true</bool>
   <bool name="prefs_alertVibrateDefault">true</bool>
+  <bool name="prefs_alertMaxVolumeSoundDefault">true</bool>
 
-  <bool name="prefs_alertHalfwayDefault">false</bool>
+  <bool name="prefs_alertHalfwayDefault">true</bool>
   <bool name="prefs_alertTenSecondsDefault">true</bool>
   <bool name="prefs_alertThreeSecondsDefault">true</bool>
 

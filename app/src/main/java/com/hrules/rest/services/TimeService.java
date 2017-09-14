@@ -78,6 +78,7 @@ public final class TimeService extends Service {
   private boolean prefsThreeSecondsBeep;
   private boolean prefsUseMediaStream;
   private boolean prefsMuteMediaStream;
+  private boolean prefs_alertMaxVolumeSound;
   private boolean prefsSmartStopwatch;
   private boolean prefsAutoStopStopwatch;
   private boolean prefsVibrateButtons;
@@ -161,7 +162,9 @@ public final class TimeService extends Service {
     prefsUseMediaStream = preferences.getBoolean(resources.getString(R.string.prefs_alertUseMediaStreamKey),
         resources.getBoolean(R.bool.prefs_alertUseMediaStreamDefault));
     prefsMuteMediaStream = preferences.getBoolean(resources.getString(R.string.prefs_alertMuteMediaStreamKey),
-        resources.getBoolean(R.bool.prefs_alertMuteMediaStreamKeyDefault));
+        resources.getBoolean(R.bool.prefs_alertMuteMediaStreamDefault));
+    prefs_alertMaxVolumeSound = preferences.getBoolean(resources.getString(R.string.prefs_alertMaxVolumeSoundKey),
+        resources.getBoolean(R.bool.prefs_alertMaxVolumeSoundDefault));
 
     prefsSmartStopwatch = preferences.getBoolean(resources.getString(R.string.prefs_stopwatchSmartKey),
         resources.getBoolean(R.bool.prefs_stopwatchSmartDefault));
@@ -325,7 +328,8 @@ public final class TimeService extends Service {
   }
 
   private void createAudioHelper() {
-    audioHelper = new AudioHelper(this, prefsUseMediaStream ? AudioManager.STREAM_MUSIC : AudioManager.STREAM_NOTIFICATION);
+    audioHelper = new AudioHelper(this, prefsUseMediaStream ? AudioManager.STREAM_MUSIC : AudioManager.STREAM_NOTIFICATION,
+        prefs_alertMaxVolumeSound);
   }
 
   private void releaseAudioHelper() {

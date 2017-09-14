@@ -19,6 +19,7 @@
   <string name="prefs_alertSoundKey">prefs_soundAlertSoundKey</string>
   <string name="prefs_alertUseMediaStreamKey">prefs_alertUseMediaStreamKey</string>
   <string name="prefs_alertMuteMediaStreamKey">prefs_alertMuteMediaStreamKey</string>
+  <string name="prefs_alertMaxVolumeSoundKey">prefs_alertMaxVolumeSoundKey</string>
   <string name="prefs_alertVibrateKey">prefs_soundAlertVibrateKey</string>
 
   <string name="prefs_alertHalfwayKey">prefs_alertHalfwayKey</string>

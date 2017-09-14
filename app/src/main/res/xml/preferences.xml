@@ -22,26 +22,37 @@
     <CheckBoxPreference
         android:defaultValue="@bool/prefs_alertSoundDefault"
         android:key="@string/prefs_alertSoundKey"
-        android:title="@string/prefs_alertSound"/>
+        android:title="@string/prefs_alertSound"
+        />
 
     <CheckBoxPreference
         android:defaultValue="@bool/prefs_alertUseMediaStreamDefault"
         android:dependency="@string/prefs_alertSoundKey"
         android:disableDependentsState="true"
         android:key="@string/prefs_alertUseMediaStreamKey"
-        android:title="@string/prefs_soundUseMediaStream"/>
+        android:title="@string/prefs_soundUseMediaStream"
+        />
 
     <CheckBoxPreference
-        android:defaultValue="@bool/prefs_alertMuteMediaStreamKeyDefault"
+        android:defaultValue="@bool/prefs_alertMuteMediaStreamDefault"
         android:dependency="@string/prefs_alertUseMediaStreamKey"
         android:key="@string/prefs_alertMuteMediaStreamKey"
         android:summary="@string/prefs_soundMuteMediaStreamSummary"
-        android:title="@string/prefs_soundMuteMediaStream"/>
+        android:title="@string/prefs_soundMuteMediaStream"
+        />
+
+    <CheckBoxPreference
+        android:defaultValue="@bool/prefs_alertMaxVolumeSoundDefault"
+        android:dependency="@string/prefs_alertUseMediaStreamKey"
+        android:key="@string/prefs_alertMaxVolumeSoundKey"
+        android:title="@string/prefs_alertMaxVolumeSound"
+        />
 
     <CheckBoxPreference
         android:defaultValue="@bool/prefs_alertVibrateDefault"
         android:key="@string/prefs_alertVibrateKey"
-        android:title="@string/prefs_alertVibrate"/>
+        android:title="@string/prefs_alertVibrate"
+        />
   </PreferenceCategory>
 
   <PreferenceCategory
@@ -51,17 +62,20 @@
         android:defaultValue="@bool/prefs_alertHalfwayDefault"
         android:key="@string/prefs_alertHalfwayKey"
         android:summary="@string/prefs_alertHalfwaySummary"
-        android:title="@string/prefs_alertHalfway"/>
+        android:title="@string/prefs_alertHalfway"
+        />
 
     <CheckBoxPreference
         android:defaultValue="@bool/prefs_alertTenSecondsDefault"
         android:key="@string/prefs_alertTenSecondsKey"
-        android:title="@string/prefs_alertTenSeconds"/>
+        android:title="@string/prefs_alertTenSeconds"
+        />
 
     <CheckBoxPreference
         android:defaultValue="@bool/prefs_alertThreeSecondsDefault"
         android:key="@string/prefs_alertThreeSecondsKey"
-        android:title="@string/prefs_alertThreeSeconds"/>
+        android:title="@string/prefs_alertThreeSeconds"
+        />
   </PreferenceCategory>
 
   <PreferenceCategory
@@ -70,7 +84,8 @@
     <CheckBoxPreference
         android:defaultValue="@bool/prefs_displayKeepScreenOnDefault"
         android:key="@string/prefs_displayKeepScreenOnKey"
-        android:title="@string/prefs_displayKeepScreenOn"/>
+        android:title="@string/prefs_displayKeepScreenOn"
+        />
 
     <ListPreference
         android:defaultValue="@integer/prefs_displayOrientationDefault"
@@ -79,7 +94,8 @@
         android:key="@string/prefs_displayOrientationKey"
         android:negativeButtonText="@null"
         android:positiveButtonText="@null"
-        android:title="@string/prefs_displayOrientation"/>
+        android:title="@string/prefs_displayOrientation"
+        />
   </PreferenceCategory>
 
   <PreferenceCategory
@@ -90,14 +106,16 @@
         android:disableDependentsState="true"
         android:key="@string/prefs_stopwatchSmartKey"
         android:summary="@string/prefs_stopwatchSmartSummary"
-        android:title="@string/prefs_stopwatchSmart"/>
+        android:title="@string/prefs_stopwatchSmart"
+        />
 
     <CheckBoxPreference
         android:defaultValue="@bool/prefs_stopwatchAutoStopDefault"
         android:dependency="@string/prefs_stopwatchSmartKey"
         android:key="@string/prefs_stopwatchAutoStopKey"
         android:summary="@string/prefs_stopwatchAutoStopSummary"
-        android:title="@string/prefs_stopwatchAutoStop"/>
+        android:title="@string/prefs_stopwatchAutoStop"
+        />
 
     <ListPreference
         android:defaultValue="@integer/prefs_stopwatchSizeDefault"
@@ -106,7 +124,8 @@
         android:key="@string/prefs_stopwatchSizeKey"
         android:negativeButtonText="@null"
         android:positiveButtonText="@null"
-        android:title="@string/prefs_stopwatchSize"/>
+        android:title="@string/prefs_stopwatchSize"
+        />
   </PreferenceCategory>
 
   <PreferenceCategory
@@ -115,7 +134,8 @@
     <CheckBoxPreference
         android:defaultValue="@bool/prefs_controlVibrateButtonsDefault"
         android:key="@string/prefs_controlVibrateButtonsKey"
-        android:title="@string/prefs_controlVibrateButtons"/>
+        android:title="@string/prefs_controlVibrateButtons"
+        />
   </PreferenceCategory>
 
   <PreferenceCategory
@@ -123,20 +143,24 @@
 
     <Preference
         android:key="@string/prefs_appRateItKey"
-        android:title="@string/prefs_appRateIt">
+        android:title="@string/prefs_appRateIt"
+        >
       <intent
           android:action="android.intent.action.VIEW"
-          android:data="@string/app_playStoreURL"/>
+          android:data="@string/app_playStoreURL"
+          />
     </Preference>
 
     <Preference
         android:key="@string/prefs_appSendFeedbackKey"
-        android:title="@string/prefs_appSendFeedback">
+        android:title="@string/prefs_appSendFeedback"
+        >
     </Preference>
 
     <Preference
         android:key="@string/prefs_appAboutKey"
-        android:title="@string/prefs_appAbout"/>
+        android:title="@string/prefs_appAbout"
+        />
 
   </PreferenceCategory>
 </PreferenceScreen>

@@ -21,6 +21,7 @@
   <string name="prefs_soundUseMediaStream">Use music stream</string>
   <string name="prefs_soundMuteMediaStream">Mute music stream</string>
   <string name="prefs_soundMuteMediaStreamSummary">Mute music stream while playing alerts</string>
+  <string name="prefs_alertMaxVolumeSound">Use max volume</string>
 
   <string name="prefs_alertVibrate">Vibrate</string>
   <string name="prefs_alertTypeCategory">Alert types</string>
