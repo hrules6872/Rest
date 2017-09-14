@@ -60,6 +60,7 @@ public final class TimeService extends Service {
   private static final long VOLUME_MUTE_HALFWAY_DURATION_MILLI = VOLUME_MUTE_ALERT_DURATION_MILLI;
   private static final long VOLUME_MUTE_TEN_SECONDS_DURATION_MILLI = VOLUME_MUTE_ALERT_DURATION_MILLI / 2;
   private static final long VOLUME_MUTE_THREE_SECONDS_DURATION_MILLI = TimeUnit.SECONDS.toMillis(3) + VOLUME_MUTE_ALERT_DURATION_MILLI;
+  private static final long VOLUME_MUTE_NO_MILLI = 0;
 
   private static final long REMOTEVIEWS_WORKAROUND_TRIGGER_SECONDS = 5;
 
@@ -363,21 +364,21 @@ public final class TimeService extends Service {
         if (dispatchedThreeSecondsBeep3 && !dispatchedThreeSecondsBeep2) {
           dispatchedThreeSecondsBeep2 = timeLeft <= TimeUnit.SECONDS.toMillis(2);
           if (dispatchedThreeSecondsBeep2) {
-            playAlertShort(0);
+            playAlertShort(VOLUME_MUTE_NO_MILLI);
           }
         }
 
         if (dispatchedThreeSecondsBeep3 && dispatchedThreeSecondsBeep2 && !dispatchedThreeSecondsBeep1) {
           dispatchedThreeSecondsBeep1 = timeLeft <= TimeUnit.SECONDS.toMillis(1);
           if (dispatchedThreeSecondsBeep1) {
-            playAlertShort(0);
+            playAlertShort(VOLUME_MUTE_NO_MILLI);
           }
         }
       }
     } else {
       if (!dispatchedAlert) {
         dispatchedAlert = true;
-        playAlertLong(dispatchedThreeSecondsBeep3 ? 0 : VOLUME_MUTE_ALERT_DURATION_MILLI);
+        playAlertLong(dispatchedThreeSecondsBeep3 ? VOLUME_MUTE_NO_MILLI : VOLUME_MUTE_ALERT_DURATION_MILLI);
       }
     }
   }
@@ -396,7 +397,7 @@ public final class TimeService extends Service {
 
   private void playAlertShort(long delay) {
     if (prefsSound) {
-      if (!prefsUseMediaStream && prefsMuteMediaStream && delay != 0) {
+      if (!prefsUseMediaStream && prefsMuteMediaStream && delay != VOLUME_MUTE_NO_MILLI) {
         audioHelper.toggleMute(delay);
       }
       audioHelper.playShort();
@@ -408,7 +409,7 @@ public final class TimeService extends Service {
 
   private void playAlertShort2(long delay) {
     if (prefsSound) {
-      if (!prefsUseMediaStream && prefsMuteMediaStream && delay != 0) {
+      if (!prefsUseMediaStream && prefsMuteMediaStream && delay != VOLUME_MUTE_NO_MILLI) {
         audioHelper.toggleMute(delay);
       }
       audioHelper.playShort2();
@@ -420,7 +421,7 @@ public final class TimeService extends Service {
 
   private void playAlertLong(long delay) {
     if (prefsSound) {
-      if (!prefsUseMediaStream && prefsMuteMediaStream && delay != 0) {
+      if (!prefsUseMediaStream && prefsMuteMediaStream && delay != VOLUME_MUTE_NO_MILLI) {
         audioHelper.toggleMute(delay);
       }
       audioHelper.playLong();
@@ -459,6 +460,7 @@ public final class TimeService extends Service {
     }
 
     @Override public void onCountdownTimeChanged() {
+      resetAlertCounters();
       updateNotification();
     }
 
@@ -473,7 +475,6 @@ public final class TimeService extends Service {
         @Override public void onActionStateChanged() {
           checkVibrateOnClickState();
           TimeManager.INSTANCE.toggle();
-          updateNotification();
 
           playStopwatch();
         }
@@ -481,7 +482,6 @@ public final class TimeService extends Service {
         @Override public void onActionReplay() {
           checkVibrateOnClickState();
           TimeManager.INSTANCE.reStart();
-          updateNotification();
         }
 
         @Override public void onActionExit() {
