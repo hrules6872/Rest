@@ -44,4 +44,14 @@ public final class AppConstants {
       public static final Set<String> FAVORITES = new HashSet<>(Arrays.asList("60", "120", "90", "180"));
     }
   }
+
+  public static final class ACTIONS {
+    public static final String CHANGE_STATE = "com.hrules.rest.CHANGE_STATE";
+    public static final String REPLAY = "com.hrules.rest.REPLAY";
+    public static final String EXIT = "com.hrules.rest.EXIT";
+
+    public static final String STOP_STOPWATCH = "com.hrules.rest.STOP_STOPWATCH";
+
+    public static final String SERVICE_SHUTDOWN = "com.hrules.rest.SERVICE_SHUTDOWN";
+  }
 }

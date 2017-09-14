@@ -21,11 +21,11 @@ import android.content.Context;
 import android.content.Intent;
 import android.support.annotation.NonNull;
 
-public final class TimeServiceReceiver extends BroadcastReceiver {
-  public static final String ACTION_CHANGESTATE = "com.hrules.rest.ACTION_CHANGESTATE";
-  public static final String ACTION_REPLAY = "com.hrules.rest.ACTION_REPLAY";
-  public static final String ACTION_EXIT = "com.hrules.rest.ACTION_EXIT";
+import static com.hrules.rest.AppConstants.ACTIONS.CHANGE_STATE;
+import static com.hrules.rest.AppConstants.ACTIONS.EXIT;
+import static com.hrules.rest.AppConstants.ACTIONS.REPLAY;
 
+public final class TimeServiceReceiver extends BroadcastReceiver {
   private final TimeServiceReceiverListener listener;
 
   interface TimeServiceReceiverListener {
@@ -42,19 +42,19 @@ public final class TimeServiceReceiver extends BroadcastReceiver {
 
   @SuppressWarnings("ConstantConditions") @Override public void onReceive(@NonNull Context context, Intent intent) {
     switch (intent.getAction()) {
-      case ACTION_CHANGESTATE:
+      case CHANGE_STATE:
         if (listener != null) {
           listener.onActionStateChanged();
         }
         break;
 
-      case ACTION_REPLAY:
+      case REPLAY:
         if (listener != null) {
           listener.onActionReplay();
         }
         break;
 
-      case ACTION_EXIT:
+      case EXIT:
         if (listener != null) {
           listener.onActionExit();
         }

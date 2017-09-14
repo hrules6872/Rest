@@ -25,8 +25,8 @@ public final class ResString {
   }
 
   // region TEXT
-  public static @NonNull String getText_smartStopWatchFormatted() {
-    return ResWrapper.getString(R.string.text_smartStopWatchFormatted);
+  public static @NonNull String getText_smartStopwatchFormatted() {
+    return ResWrapper.getString(R.string.text_smartStopwatchFormatted);
   }
 
   public static @NonNull String getText_longClickStopwatch() {

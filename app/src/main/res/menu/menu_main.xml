@@ -16,15 +16,24 @@
   -->
 
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    >
 
   <item
       android:id="@+id/menu_closeNotification"
       android:title="@string/menu_closeNotification"
-      app:showAsAction="never"/>
+      app:showAsAction="never"
+      />
+
+  <item
+      android:id="@+id/menu_stopSmartStopwatch"
+      android:title="@string/menu_stopSmartStopwatch"
+      app:showAsAction="never"
+      />
 
   <item
       android:id="@+id/menu_preferences"
       android:title="@string/menu_preferences"
-      app:showAsAction="never"/>
+      app:showAsAction="never"
+      />
 </menu>

@@ -45,7 +45,9 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import butterknife.OnLongClick;
+import com.hrules.rest.AppConstants;
 import com.hrules.rest.R;
+import com.hrules.rest.commons.Preferences;
 import com.hrules.rest.commons.SupportVersion;
 import com.hrules.rest.core.time.TimeManager;
 import com.hrules.rest.presentation.adapters.FavoritesAdapter;
@@ -61,6 +63,7 @@ import com.hrules.rest.presentation.commons.components.ScaleAnimatedTextView;
 import com.hrules.rest.presentation.commons.components.StopwatchButton;
 import com.hrules.rest.presentation.commons.components.StopwatchTimeLayout;
 import com.hrules.rest.presentation.commons.components.ToolTipView;
+import com.hrules.rest.presentation.commons.helpers.StopwatchHelper;
 import com.hrules.rest.presentation.commons.threads.UIHandler;
 import com.hrules.rest.presentation.models.base.Favorite;
 import com.hrules.rest.presentation.presenters.activities.MainActivityPresenter;
@@ -68,8 +71,9 @@ import com.hrules.rest.presentation.presenters.extras.CountdownPresenter;
 import com.hrules.rest.presentation.presenters.extras.StopwatchPresenter;
 import com.hrules.rest.presentation.views.activities.base.DRMVPAppCompatActivity;
 import com.hrules.rest.services.TimeService;
-import com.hrules.rest.services.TimeServiceReceiver;
 import java.util.List;
+
+import static com.hrules.rest.presentation.commons.resources.base.ResWrapper.getBoolean;
 
 public final class MainActivityView extends DRMVPAppCompatActivity<MainActivityPresenter, MainActivityPresenter.Contract>
     implements MainActivityPresenter.Contract, CountdownPresenter.Contract, StopwatchPresenter.Contract {
@@ -133,17 +137,22 @@ public final class MainActivityView extends DRMVPAppCompatActivity<MainActivityP
 
   @Override public boolean onPrepareOptionsMenu(Menu menu) {
     menu.findItem(R.id.menu_closeNotification).setVisible(isNotificationVisible());
+    menu.findItem(R.id.menu_stopSmartStopwatch).setVisible(isSmartStopwatchRunning());
     return super.onPrepareOptionsMenu(menu);
   }
 
   @Override public boolean onOptionsItemSelected(MenuItem item) {
     switch (item.getItemId()) {
-      case R.id.menu_preferences:
-        launchPreferencesActivity();
-        return true;
-
       case R.id.menu_closeNotification:
         closeNotification();
+        return true;
+
+      case R.id.menu_stopSmartStopwatch:
+        stopSmartWatch();
+        return true;
+
+      case R.id.menu_preferences:
+        launchPreferencesActivity();
         return true;
 
       default:
@@ -175,12 +184,24 @@ public final class MainActivityView extends DRMVPAppCompatActivity<MainActivityP
     return true;
   }
 
+  private boolean isSmartStopwatchRunning() {
+    Preferences preferences = new Preferences(getApplicationContext());
+    boolean prefsSmartStopwatch =
+        preferences.getBoolean(getString(R.string.prefs_stopwatchSmartKey), getBoolean(R.bool.prefs_stopwatchSmartDefault));
+    StopwatchHelper stopwatchHelper = new StopwatchHelper(preferences);
+    return prefsSmartStopwatch && stopwatchHelper.isRunning();
+  }
+
   private void launchPreferencesActivity() {
     startActivity(new Intent(this, PreferenceActivityView.class));
   }
 
   private void closeNotification() {
-    sendBroadcast(new Intent(TimeServiceReceiver.ACTION_EXIT));
+    sendBroadcast(new Intent(AppConstants.ACTIONS.EXIT));
+  }
+
+  private void stopSmartWatch() {
+    sendBroadcast(new Intent(AppConstants.ACTIONS.STOP_STOPWATCH));
   }
 
   @Override public void setDisplayOptions(boolean keepScreenOn, @Orientation final int screenOrientationSensor) {

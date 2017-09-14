@@ -44,7 +44,8 @@ import java.util.concurrent.ScheduledFuture;
 import java.util.concurrent.ScheduledThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 
-import static com.hrules.rest.services.TimeService.ACTION_SERVICE_SHUTDOWN;
+import static com.hrules.rest.AppConstants.ACTIONS.SERVICE_SHUTDOWN;
+import static com.hrules.rest.AppConstants.ACTIONS.STOP_STOPWATCH;
 
 public final class StopwatchPresenter extends DRMVPPresenter<StopwatchPresenter.Contract> {
   private static final long DEFAULT_STOPWATCH_DELAY_MILLI = 0;
@@ -176,7 +177,7 @@ public final class StopwatchPresenter extends DRMVPPresenter<StopwatchPresenter.
       long last =
           preferences.getLong(AppConstants.PREFS.STOPWATCH_MILLI_LAST_BACKUP, AppConstants.PREFS.DEFAULTS.STOPWATCH_MILLI_LAST_BACKUP);
 
-      text = StringSpan.format(ResString.getText_smartStopWatchFormatted(),
+      text = StringSpan.format(ResString.getText_smartStopwatchFormatted(),
           TimeUtils.milliToStopwatchHoursMinutesSecondsMilliString(current, ResWrapper.getResources()),
           TimeUtils.milliToStopwatchHoursMinutesSecondsMilliString(last, ResWrapper.getResources()));
     } else {
@@ -224,10 +225,12 @@ public final class StopwatchPresenter extends DRMVPPresenter<StopwatchPresenter.
   }
 
   public void onStopwatchReceiverReceive(@Nullable String action) {
-    if (action != null && action.equals(ACTION_SERVICE_SHUTDOWN)) {
-      if (prefsSmartStopwatch || prefsAutoStopStopwatch) {
+    if (action != null) {
+      if (action.equals(SERVICE_SHUTDOWN) && (prefsSmartStopwatch || prefsAutoStopStopwatch)) {
         setStopwatchLastTime();
         manageStopwatchState(AppConstants.PREFS.DEFAULTS.STOPWATCH_MILLI);
+      } else if (action.equals(STOP_STOPWATCH)) {
+        stop();
       }
     }
   }

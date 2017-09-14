@@ -52,8 +52,6 @@ public final class TimeService extends Service {
   public static final int NOTIFICATION_ID = Integer.MAX_VALUE;
   public static final String NOTIFICATION_CHANNEL_ID = "main";
 
-  public static final String ACTION_SERVICE_SHUTDOWN = "com.hrules.rest.ACTION_SERVICE_SHUTDOWN";
-
   private static final long MIN_TIME_TO_DISPATCH_HALFWAYALERT_MILLI = TimeUnit.MINUTES.toMillis(1) / 2;
 
   private static final long VOLUME_MUTE_ALERT_DURATION_MILLI = 900;
@@ -124,7 +122,7 @@ public final class TimeService extends Service {
 
   @Override public void onDestroy() {
     stopStopwatch();
-    sendBroadcast(new Intent(ACTION_SERVICE_SHUTDOWN));
+    sendBroadcast(new Intent(AppConstants.ACTIONS.SERVICE_SHUTDOWN));
 
     TimeManager.INSTANCE.removeListener(timeManagerListener);
 
@@ -272,7 +270,7 @@ public final class TimeService extends Service {
     updateRemoteView(remoteView);
     setOnClickPendingIntentOnRemoteView(remoteView);
     remoteView.setOnClickPendingIntent(R.id.button_exit,
-        PendingIntent.getBroadcast(this, 0, new Intent(TimeServiceReceiver.ACTION_EXIT, null), PendingIntent.FLAG_UPDATE_CURRENT));
+        PendingIntent.getBroadcast(this, 0, new Intent(AppConstants.ACTIONS.EXIT, null), PendingIntent.FLAG_UPDATE_CURRENT));
 
     return remoteView;
   }
@@ -288,9 +286,9 @@ public final class TimeService extends Service {
 
   private void setOnClickPendingIntentOnRemoteView(@NonNull RemoteViews remoteView) {
     remoteView.setOnClickPendingIntent(R.id.button_changeState,
-        PendingIntent.getBroadcast(this, 0, new Intent(TimeServiceReceiver.ACTION_CHANGESTATE, null), PendingIntent.FLAG_UPDATE_CURRENT));
+        PendingIntent.getBroadcast(this, 0, new Intent(AppConstants.ACTIONS.CHANGE_STATE, null), PendingIntent.FLAG_UPDATE_CURRENT));
     remoteView.setOnClickPendingIntent(R.id.button_replay,
-        PendingIntent.getBroadcast(this, 0, new Intent(TimeServiceReceiver.ACTION_REPLAY, null), PendingIntent.FLAG_UPDATE_CURRENT));
+        PendingIntent.getBroadcast(this, 0, new Intent(AppConstants.ACTIONS.REPLAY, null), PendingIntent.FLAG_UPDATE_CURRENT));
   }
 
   private void updateRemoteView(@NonNull RemoteViews remoteView) {
@@ -313,9 +311,9 @@ public final class TimeService extends Service {
   private void registerTimeServiceReceiver() {
     timeServiceReceiver = new TimeServiceReceiver(timeServiceReceiverListener);
     IntentFilter intentFilter = new IntentFilter();
-    intentFilter.addAction(TimeServiceReceiver.ACTION_CHANGESTATE);
-    intentFilter.addAction(TimeServiceReceiver.ACTION_REPLAY);
-    intentFilter.addAction(TimeServiceReceiver.ACTION_EXIT);
+    intentFilter.addAction(AppConstants.ACTIONS.CHANGE_STATE);
+    intentFilter.addAction(AppConstants.ACTIONS.REPLAY);
+    intentFilter.addAction(AppConstants.ACTIONS.EXIT);
     registerReceiver(timeServiceReceiver, intentFilter);
   }
 
