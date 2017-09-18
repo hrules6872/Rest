@@ -63,8 +63,7 @@ public final class TimeService extends Service {
   private static final long REMOTEVIEWS_WORKAROUND_TRIGGER_SECONDS = 5;
 
   private NotificationManager notificationManager;
-  private RemoteViews remoteViewCollapsed;
-  private RemoteViews remoteViewExpanded;
+  private RemoteViews remoteViews;
 
   private BroadcastReceiver timeServiceReceiver;
 
@@ -184,30 +183,27 @@ public final class TimeService extends Service {
 
   private void createNotification() {
     createRemoteViews();
-    startForeground(NOTIFICATION_ID, buildNotification());
+    startForeground(NOTIFICATION_ID, getNotification());
   }
 
-  private Notification buildNotification() {
-    NotificationCompat.Builder builder = initNotificationBuilder();
-    return builder.setContentIntent(createNotificationIntent())
+  private @NonNull Notification getNotification() {
+    NotificationCompat.Builder builder = getNotificationBuilder();
+    return builder.setContentIntent(getNotificationIntent())
         .setPriority(NotificationCompat.PRIORITY_MAX)
         .setVisibility(NotificationCompat.VISIBILITY_PUBLIC)
         .setOngoing(true)
         .setSmallIcon(getSmallIconResId())
         .setOnlyAlertOnce(true)
-        .setContent(remoteViewCollapsed)
-        .setCustomBigContentView(remoteViewExpanded)
         .setCategory(NotificationCompat.CATEGORY_ALARM)
+        .setStyle(new NotificationCompat.DecoratedCustomViewStyle())
+        .setCustomContentView(remoteViews)
+        .setCustomBigContentView(remoteViews)
+        .addAction(getActionExit())
+        .setShowWhen(false)
         .build();
   }
 
-  private @NonNull PendingIntent createNotificationIntent() {
-    Intent notificationIntent = new Intent(this, MainActivityView.class);
-    notificationIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
-    return PendingIntent.getActivity(this, PendingIntent.FLAG_UPDATE_CURRENT, notificationIntent, 0);
-  }
-
-  @SuppressWarnings("deprecation") private @NonNull NotificationCompat.Builder initNotificationBuilder() {
+  @SuppressWarnings("deprecation") private @NonNull NotificationCompat.Builder getNotificationBuilder() {
     if (SupportVersion.isOreoOrAbove()) {
       NotificationChannel channel =
           new NotificationChannel(TimeService.NOTIFICATION_CHANNEL_ID, getString(R.string.notification_channel_default),
@@ -221,6 +217,59 @@ public final class TimeService extends Service {
     } else {
       return new NotificationCompat.Builder(this);
     }
+  }
+
+  private @NonNull PendingIntent getNotificationIntent() {
+    Intent notificationIntent = new Intent(this, MainActivityView.class);
+    notificationIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
+    return PendingIntent.getActivity(this, PendingIntent.FLAG_UPDATE_CURRENT, notificationIntent, 0);
+  }
+
+  private int getSmallIconResId() {
+    if (TimeManager.INSTANCE.isRunning()) {
+      if (TimeManager.INSTANCE.isCountdownOver()) {
+        return R.drawable.ic_notification_over;
+      } else {
+        return R.drawable.ic_notification_running;
+      }
+    } else {
+      return R.drawable.ic_notification;
+    }
+  }
+
+  private @NonNull NotificationCompat.Action getActionExit() {
+    return new NotificationCompat.Action(R.drawable.ic_exit, getString(R.string.text_notificationStop),
+        PendingIntent.getBroadcast(this, 0, new Intent(AppConstants.ACTIONS.EXIT, null), PendingIntent.FLAG_UPDATE_CURRENT));
+  }
+
+  private void createRemoteViews() {
+    remoteViews = new RemoteViews(getPackageName(), R.layout.layout_notification);
+    updateRemoteViews(remoteViews);
+    setOnClickPendingIntentOnRemoteViews(remoteViews);
+  }
+
+  private void updateRemoteViews(@NonNull RemoteViews remoteView) {
+    if (TimeManager.INSTANCE.isRunning()) {
+      remoteView.setImageViewResource(R.id.button_changeState, R.drawable.ic_stop);
+      remoteView.setViewVisibility(R.id.button_replay, View.VISIBLE);
+    } else {
+      remoteView.setImageViewResource(R.id.button_changeState, R.drawable.ic_play);
+      remoteView.setViewVisibility(R.id.button_replay, View.INVISIBLE);
+    }
+
+    remoteView.setViewVisibility(R.id.button_changeState,
+        TimeManager.INSTANCE.getCountdownTimeMilli() == 0 ? View.INVISIBLE : View.VISIBLE);
+
+    remoteView.setTextViewText(R.id.text_countDown,
+        TimeUtils.milliToMinutesSecondsString(TimeUtils.getCountdownMilliUnsigned(), getResources()));
+    remoteView.setTextColor(R.id.text_countDown, TimeUtils.getNotificationTextColorFromMilli());
+  }
+
+  private void setOnClickPendingIntentOnRemoteViews(@NonNull RemoteViews remoteView) {
+    remoteView.setOnClickPendingIntent(R.id.button_changeState,
+        PendingIntent.getBroadcast(this, 0, new Intent(AppConstants.ACTIONS.CHANGE_STATE, null), PendingIntent.FLAG_UPDATE_CURRENT));
+    remoteView.setOnClickPendingIntent(R.id.button_replay,
+        PendingIntent.getBroadcast(this, 0, new Intent(AppConstants.ACTIONS.REPLAY, null), PendingIntent.FLAG_UPDATE_CURRENT));
   }
 
   private void updateNotification() {
@@ -245,70 +294,8 @@ public final class TimeService extends Service {
   }
 
   private void notifyNotification() {
-    updateRemoteView(remoteViewCollapsed);
-    updateRemoteView(remoteViewExpanded);
-    getNotificationManager().notify(NOTIFICATION_ID, buildNotification());
-  }
-
-  private int getSmallIconResId() {
-    if (TimeManager.INSTANCE.isRunning()) {
-      if (TimeManager.INSTANCE.isCountdownOver()) {
-        return R.drawable.ic_notification_over;
-      } else {
-        return R.drawable.ic_notification_running;
-      }
-    } else {
-      return R.drawable.ic_notification;
-    }
-  }
-
-  private void createRemoteViews() {
-    remoteViewCollapsed = getRemoteViewCollapsed();
-    remoteViewExpanded = getRemoteViewExpanded();
-  }
-
-  private RemoteViews getRemoteViewExpanded() {
-    RemoteViews remoteView = new RemoteViews(getPackageName(), R.layout.layout_notification_expanded);
-
-    updateRemoteView(remoteView);
-    setOnClickPendingIntentOnRemoteView(remoteView);
-    remoteView.setOnClickPendingIntent(R.id.button_exit,
-        PendingIntent.getBroadcast(this, 0, new Intent(AppConstants.ACTIONS.EXIT, null), PendingIntent.FLAG_UPDATE_CURRENT));
-
-    return remoteView;
-  }
-
-  private RemoteViews getRemoteViewCollapsed() {
-    RemoteViews remoteView = new RemoteViews(getPackageName(), R.layout.layout_notification);
-
-    updateRemoteView(remoteView);
-    setOnClickPendingIntentOnRemoteView(remoteView);
-
-    return remoteView;
-  }
-
-  private void setOnClickPendingIntentOnRemoteView(@NonNull RemoteViews remoteView) {
-    remoteView.setOnClickPendingIntent(R.id.button_changeState,
-        PendingIntent.getBroadcast(this, 0, new Intent(AppConstants.ACTIONS.CHANGE_STATE, null), PendingIntent.FLAG_UPDATE_CURRENT));
-    remoteView.setOnClickPendingIntent(R.id.button_replay,
-        PendingIntent.getBroadcast(this, 0, new Intent(AppConstants.ACTIONS.REPLAY, null), PendingIntent.FLAG_UPDATE_CURRENT));
-  }
-
-  private void updateRemoteView(@NonNull RemoteViews remoteView) {
-    if (TimeManager.INSTANCE.isRunning()) {
-      remoteView.setImageViewResource(R.id.button_changeState, R.drawable.ic_stop);
-      remoteView.setViewVisibility(R.id.button_replay, View.VISIBLE);
-    } else {
-      remoteView.setImageViewResource(R.id.button_changeState, R.drawable.ic_play);
-      remoteView.setViewVisibility(R.id.button_replay, View.INVISIBLE);
-    }
-
-    remoteView.setViewVisibility(R.id.button_changeState,
-        TimeManager.INSTANCE.getCountdownTimeMilli() == 0 ? View.INVISIBLE : View.VISIBLE);
-
-    remoteView.setTextViewText(R.id.text_countDown,
-        TimeUtils.milliToMinutesSecondsString(TimeUtils.getCountdownMilliUnsigned(), getResources()));
-    remoteView.setTextColor(R.id.text_countDown, TimeUtils.getNotificationTextColorFromMilli());
+    updateRemoteViews(remoteViews);
+    getNotificationManager().notify(NOTIFICATION_ID, getNotification());
   }
 
   private void registerTimeServiceReceiver() {
