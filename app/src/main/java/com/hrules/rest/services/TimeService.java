@@ -428,7 +428,7 @@ public final class TimeService extends Service {
 
   private void playStopwatch() {
     if (prefsSmartStopwatch && TimeManager.INSTANCE.isRunning() && !stopwatchHelper.isRunning()) {
-      stopwatchHelper.play();
+      stopwatchHelper.start();
     }
   }
 

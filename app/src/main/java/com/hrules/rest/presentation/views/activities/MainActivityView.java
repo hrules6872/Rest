@@ -137,7 +137,8 @@ public final class MainActivityView extends DRMVPAppCompatActivity<MainActivityP
 
   @Override public boolean onPrepareOptionsMenu(Menu menu) {
     menu.findItem(R.id.menu_closeNotification).setVisible(isNotificationVisible());
-    menu.findItem(R.id.menu_stopSmartStopwatch).setVisible(isSmartStopwatchRunning());
+    menu.findItem(R.id.menu_startSmartStopwatch).setVisible(isSmartStopwatch() && !isSmartStopwatchRunning());
+    menu.findItem(R.id.menu_stopSmartStopwatch).setVisible(isSmartStopwatch() && isSmartStopwatchRunning());
     return super.onPrepareOptionsMenu(menu);
   }
 
@@ -145,6 +146,10 @@ public final class MainActivityView extends DRMVPAppCompatActivity<MainActivityP
     switch (item.getItemId()) {
       case R.id.menu_closeNotification:
         closeNotification();
+        return true;
+
+      case R.id.menu_startSmartStopwatch:
+        startSmartWatch();
         return true;
 
       case R.id.menu_stopSmartStopwatch:
@@ -184,12 +189,15 @@ public final class MainActivityView extends DRMVPAppCompatActivity<MainActivityP
     return true;
   }
 
+  private boolean isSmartStopwatch() {
+    Preferences preferences = new Preferences(getApplicationContext());
+    return preferences.getBoolean(getString(R.string.prefs_stopwatchSmartKey), getBoolean(R.bool.prefs_stopwatchSmartDefault));
+  }
+
   private boolean isSmartStopwatchRunning() {
     Preferences preferences = new Preferences(getApplicationContext());
-    boolean prefsSmartStopwatch =
-        preferences.getBoolean(getString(R.string.prefs_stopwatchSmartKey), getBoolean(R.bool.prefs_stopwatchSmartDefault));
     StopwatchHelper stopwatchHelper = new StopwatchHelper(preferences);
-    return prefsSmartStopwatch && stopwatchHelper.isRunning();
+    return stopwatchHelper.isRunning();
   }
 
   private void launchPreferencesActivity() {
@@ -200,8 +208,12 @@ public final class MainActivityView extends DRMVPAppCompatActivity<MainActivityP
     sendBroadcast(new Intent(AppConstants.ACTIONS.EXIT));
   }
 
+  private void startSmartWatch() {
+    getPresenter().startSmartWatch();
+  }
+
   private void stopSmartWatch() {
-    sendBroadcast(new Intent(AppConstants.ACTIONS.STOP_STOPWATCH));
+    getPresenter().stopSmartWatch();
   }
 
   @Override public void setDisplayOptions(boolean keepScreenOn, @Orientation final int screenOrientationSensor) {

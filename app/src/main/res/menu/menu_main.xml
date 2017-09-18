@@ -26,6 +26,12 @@
       />
 
   <item
+      android:id="@+id/menu_startSmartStopwatch"
+      android:title="@string/menu_startSmartStopwatch"
+      app:showAsAction="never"
+      />
+
+  <item
       android:id="@+id/menu_stopSmartStopwatch"
       android:title="@string/menu_stopSmartStopwatch"
       app:showAsAction="never"

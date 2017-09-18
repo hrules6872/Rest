@@ -11,7 +11,7 @@ public final class StopwatchHelper {
     this.preferences = preferences;
   }
 
-  public void play() {
+  public void start() {
     long stopwatchStartTime = System.currentTimeMillis();
     preferences.save(AppConstants.PREFS.STOPWATCH_MILLI, stopwatchStartTime);
     preferences.save(AppConstants.PREFS.STOPWATCH_MILLI_BACKUP, stopwatchStartTime);

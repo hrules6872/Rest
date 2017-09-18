@@ -50,8 +50,6 @@ public final class AppConstants {
     public static final String REPLAY = "com.hrules.rest.REPLAY";
     public static final String EXIT = "com.hrules.rest.EXIT";
 
-    public static final String STOP_STOPWATCH = "com.hrules.rest.STOP_STOPWATCH";
-
     public static final String SERVICE_SHUTDOWN = "com.hrules.rest.SERVICE_SHUTDOWN";
   }
 }

@@ -24,7 +24,6 @@ import android.support.annotation.NonNull;
 import com.hrules.rest.presentation.presenters.extras.StopwatchPresenter;
 
 import static com.hrules.rest.AppConstants.ACTIONS.SERVICE_SHUTDOWN;
-import static com.hrules.rest.AppConstants.ACTIONS.STOP_STOPWATCH;
 
 public final class StopwatchReceiver extends BroadcastReceiver {
   private final StopwatchPresenter presenter;
@@ -36,7 +35,6 @@ public final class StopwatchReceiver extends BroadcastReceiver {
   public void register(@NonNull Context context) {
     IntentFilter intentFilter = new IntentFilter();
     intentFilter.addAction(SERVICE_SHUTDOWN);
-    intentFilter.addAction(STOP_STOPWATCH);
     context.registerReceiver(this, intentFilter);
   }
 

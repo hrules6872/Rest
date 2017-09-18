@@ -44,6 +44,7 @@
   <!--menu-->
   <string name="menu_preferences">Preferences</string>
   <string name="menu_closeNotification">Close notification</string>
+  <string name="menu_startSmartStopwatch">Start Smart stopwatch</string>
   <string name="menu_stopSmartStopwatch">Stop Smart stopwatch</string>
 
   <!--app utils-->

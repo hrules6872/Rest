@@ -45,7 +45,6 @@ import java.util.concurrent.ScheduledThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 
 import static com.hrules.rest.AppConstants.ACTIONS.SERVICE_SHUTDOWN;
-import static com.hrules.rest.AppConstants.ACTIONS.STOP_STOPWATCH;
 
 public final class StopwatchPresenter extends DRMVPPresenter<StopwatchPresenter.Contract> {
   private static final long DEFAULT_STOPWATCH_DELAY_MILLI = 0;
@@ -188,14 +187,14 @@ public final class StopwatchPresenter extends DRMVPPresenter<StopwatchPresenter.
     getView().setStopwatchTimeLastTime(text);
   }
 
-  private void play() {
-    stopwatchHelper.play();
+  public void startStopwatch() {
+    stopwatchHelper.start();
 
     setStopwatchLastTime();
     manageStopwatchState(stopwatchHelper.getStopwatchMilli());
   }
 
-  private void stop() {
+  public void stopStopwatch() {
     stopwatchHelper.stop(prefsSmartStopwatch);
 
     setStopwatchLastTime();
@@ -209,7 +208,7 @@ public final class StopwatchPresenter extends DRMVPPresenter<StopwatchPresenter.
       } else {
         // stopwatch will be started
         checkVibrateOnClickState();
-        play();
+        startStopwatch();
       }
     }
   }
@@ -219,26 +218,22 @@ public final class StopwatchPresenter extends DRMVPPresenter<StopwatchPresenter.
       if (stopwatchHelper.isRunning()) {
         // stopwatch will be stopped
         checkVibrateOnClickState();
-        stop();
+        stopStopwatch();
       }
     }
   }
 
   public void onStopwatchReceiverReceive(@Nullable String action) {
-    if (action != null) {
-      if (action.equals(SERVICE_SHUTDOWN) && (prefsSmartStopwatch || prefsAutoStopStopwatch)) {
-        setStopwatchLastTime();
-        manageStopwatchState(AppConstants.PREFS.DEFAULTS.STOPWATCH_MILLI);
-      } else if (action.equals(STOP_STOPWATCH)) {
-        stop();
-      }
+    if (action != null && action.equals(SERVICE_SHUTDOWN) && (prefsSmartStopwatch || prefsAutoStopStopwatch)) {
+      setStopwatchLastTime();
+      manageStopwatchState(AppConstants.PREFS.DEFAULTS.STOPWATCH_MILLI);
     }
   }
 
   private final TimeManagerListener timeManagerListener = new TimeManagerListener() {
     @Override public void onStateChanged() {
       if (prefsSmartStopwatch && TimeManager.INSTANCE.isRunning() && !stopwatchHelper.isRunning()) {
-        play();
+        startStopwatch();
       }
     }
   };

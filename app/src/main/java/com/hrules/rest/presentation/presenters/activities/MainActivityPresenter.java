@@ -142,6 +142,14 @@ public final class MainActivityPresenter extends DRMVPPresenter<MainActivityPres
   //endregion
 
   // region STOPWATCH
+  public void startSmartWatch() {
+    stopwatchPresenter.startStopwatch();
+  }
+
+  public void stopSmartWatch() {
+    stopwatchPresenter.stopStopwatch();
+  }
+
   public void onButtonStopwatchChangeStateClick() {
     stopwatchPresenter.onButtonStopwatchChangeStateClick();
   }
